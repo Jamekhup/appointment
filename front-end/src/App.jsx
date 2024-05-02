@@ -14,9 +14,9 @@ import Dashboard from "./pages/Auth/Dashboard";
 import Appointment from "./pages/Auth/Appointment/Appointment";
 import AppointmentList from "./pages/Auth/Appointment/AppointmentList";
 
-import Customer from "./pages/Auth/Customer/Customer";
-import CreateCustomer from "./pages/Auth/Customer/CreateCustomer";
-import EditCustomer from "./pages/Auth/Customer/EditCustomer";
+import Patient from "./pages/Auth/Patient/Patient";
+import CreatePatient from "./pages/Auth/Patient/CreatePatient";
+import EditPatient from "./pages/Auth/Patient/EditPatient";
 
 import Service from "./pages/Auth/Service/Service";
 import CreateService from "./pages/Auth/Service/CreateService";
@@ -29,6 +29,7 @@ import EditEmployee from "./pages/Auth/Employee/EditEmployee";
 import Setting from "./pages/Auth/Setting";
 
 import NotFound from "./pages/Auth/NotFound";
+import Payments from "./pages/Auth/PaymentRecord/Payments";
 
 function App() {
     return (
@@ -47,9 +48,11 @@ function App() {
                 <Route path="appointment" element={<Appointment />} />
                 <Route path="list" element={<AppointmentList />} />
 
-                <Route path="customer" element={<Customer />} />
-                <Route path="customer/create" element={<CreateCustomer />} />
-                <Route path="customer/edit/:id" element={<EditCustomer />} />
+                <Route path="patient" element={<Patient />} />
+                <Route path="patient/create" element={<CreatePatient />} />
+                <Route path="patient/edit/:id" element={<EditPatient />} />
+
+                <Route path="payments" element={<Payments />} />
 
                 <Route path="service" element={<Service />} />
                 <Route path="service/create" element={<CreateService />} />

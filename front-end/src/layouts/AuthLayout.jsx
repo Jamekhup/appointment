@@ -16,7 +16,8 @@ import axios from "../axios";
 import DashboardImage from "../assets/dashboard.svg";
 import AppointmentImage from "../assets/appointment.svg";
 import ListImage from "../assets/list.svg";
-import CustomerImage from "../assets/customer.svg";
+import PatientImage from "../assets/patient.svg";
+import paymentImage from "../assets/payments.svg";
 import ServiceImage from "../assets/service.svg";
 import EmployeeImage from "../assets/employee.svg";
 import SettingImage from "../assets/setting.svg";
@@ -98,15 +99,26 @@ const AuthLayout = () => {
                             </span>
                         </NavLink>
                         <NavLink
-                            to={"/app/customer"}
+                            to={"/app/patient"}
                             className={({ isActive }) =>
                                 isActive
                                     ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
                                     : "flex justify-start items-center gap-2 px-2 py-2.5"
                             }
                         >
-                            <img src={CustomerImage} alt="" />
-                            <span className="text-slate-600">Customers</span>
+                            <img src={PatientImage} alt="" />
+                            <span className="text-slate-600">Patients</span>
+                        </NavLink>
+                        <NavLink
+                            to={"/app/payments"}
+                            className={({ isActive }) =>
+                                isActive
+                                    ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                    : "flex justify-start items-center gap-2 px-2 py-2.5"
+                            }
+                        >
+                            <img src={paymentImage} alt="" />
+                            <span className="text-slate-600">Payment Rec</span>
                         </NavLink>
                         <NavLink
                             to={"/app/service"}
@@ -173,7 +185,7 @@ const AuthLayout = () => {
                             </svg>
                         </div>
                         <div
-                            className="flex justify-self-start items-center gap-2.5 sticky top-0 z-50 
+                            className="flex justify-self-start items-center gap-2.5 sticky top-0 z-50
                         drop-shadow-md cursor-pointer"
                             onClick={() => setToggleLogout(!toggleLogout)}
                         >
