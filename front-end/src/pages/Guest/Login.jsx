@@ -108,7 +108,7 @@ const Login = () => {
 
                             {loading ? (
                                 <PrimaryButton
-                                    type="submit"
+                                    type="button"
                                     disabled
                                     className="block w-full text-center mx-auto mt-4 animate-pulse"
                                 >

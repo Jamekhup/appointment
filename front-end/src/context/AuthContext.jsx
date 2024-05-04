@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
         axios
             .post("/login", data)
             .then((response) => {
+                console.log(response);
                 if (response.data.status === "success") {
                     setLoading(false);
                     setUser(response.data);

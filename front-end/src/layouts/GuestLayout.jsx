@@ -1,14 +1,22 @@
-import { useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import useAuthContext from "../context/AuthContext";
 
 const GuestLayout = () => {
-    return (
-        <div className="flex justify-center items-center">
-            <div className="w-full">
-                <Outlet />
+    const { user } = useAuthContext();
+
+    if (user) {
+        return <Navigate to="/app/dashboard" />;
+    }
+
+    if (user === null) {
+        return (
+            <div className="flex justify-center items-center">
+                <div className="w-full">
+                    <Outlet />
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 };
 
 export default GuestLayout;

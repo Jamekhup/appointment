@@ -17,6 +17,16 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->tinyInteger('role')->comment('1=admin,2=employee');
+            $table->tinyInteger('dashboard_access')->comment('0=no,1=yes');
+            $table->tinyInteger('appointment_access')->comment('0=no,1=yes');
+            $table->tinyInteger('appointment_list_access')->comment('0=no,1=yes');
+            $table->tinyInteger('patient_access')->comment('0=no,1=yes');
+            $table->tinyInteger('payment_record_access')->comment('0=no,1=yes');
+            $table->tinyInteger('service_access')->comment('0=no,1=yes');
+            $table->tinyInteger('employee_access')->comment('0=no,1=yes');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

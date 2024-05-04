@@ -13,6 +13,24 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('title');
+            $table->string('frist_name');
+            $table->string('last_name');
+            $table->date('dob');
+            $table->string('street');
+            $table->string('house_number');
+            $table->street('city');
+            $table->integer('postal_code');
+            $table->string('house_doctor')->nullable();
+            $table->string('recommended_doctor')->nullable();
+            $table->string('health_insurance_company')->nullable();
+            $table->tinyInteger('payment_free')->comment('0=no,1=yes');
+            $table->tinyInteger('treatment_in_6_month')->nullable()->comment('0=no,1=yes');
+            $table->tinyInteger('private_patient')->nullable()->comment('0=no,1=yes');
+            $table->longText('special_need')->nullable();
+            $table->longText('patient_signature')->nullable();
+            $table->string('created_by');
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

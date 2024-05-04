@@ -9,4 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
     use HasFactory, HasUuids;
+
+    protected $fillable = [
+        'name',
+        'price',
+        'description',
+        'created_by',
+        'updated_by',
+    ];
 }
