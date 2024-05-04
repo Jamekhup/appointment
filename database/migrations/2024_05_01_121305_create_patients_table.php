@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('dob');
             $table->string('street');
             $table->string('house_number');
-            $table->street('city');
+            $table->string('city');
             $table->integer('postal_code');
             $table->string('house_doctor')->nullable();
             $table->string('recommended_doctor')->nullable();
