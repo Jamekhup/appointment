@@ -66,97 +66,115 @@ const AuthLayout = () => {
                             </h1>
                         </div>
                         <div className="flex flex-col gap-y-3 justify-start gap-1.5 text-sm">
-                            <NavLink
-                                to={"/app/dashboard"}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
-                                        : "flex justify-start items-center gap-2 px-2 py-2.5"
-                                }
-                            >
-                                <img src={DashboardImage} alt="" />
-                                <span className="text-slate-600">
-                                    Dashboard
-                                </span>
-                            </NavLink>
-                            <NavLink
-                                to={"/app/appointment"}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
-                                        : "flex justify-start items-center gap-2 px-2 py-2.5"
-                                }
-                            >
-                                <img src={AppointmentImage} alt="" />
-                                <span className="text-slate-600">
-                                    Appointment
-                                </span>
-                            </NavLink>
-                            <NavLink
-                                to={"/app/list"}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
-                                        : "flex justify-start items-center gap-2 px-2 py-2.5"
-                                }
-                            >
-                                <img src={ListImage} alt="" />
-                                <span className="text-slate-600">
-                                    Appointment Lists
-                                </span>
-                            </NavLink>
-                            <NavLink
-                                to={"/app/patient"}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
-                                        : "flex justify-start items-center gap-2 px-2 py-2.5"
-                                }
-                            >
-                                <img src={PatientImage} alt="" />
-                                <span className="text-slate-600">Patients</span>
-                            </NavLink>
-                            <NavLink
-                                to={"/app/payments"}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
-                                        : "flex justify-start items-center gap-2 px-2 py-2.5"
-                                }
-                            >
-                                <img src={paymentImage} alt="" />
-                                <span className="text-slate-600">
-                                    Payment Rec
-                                </span>
-                            </NavLink>
-                            <NavLink
-                                to={"/app/service"}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
-                                        : "flex justify-start items-center gap-2 px-2 py-2.5"
-                                }
-                            >
-                                <img src={ServiceImage} alt="" />
-                                <span className="text-slate-600">Services</span>
-                            </NavLink>
-                            <NavLink
-                                to={"/app/employee"}
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
-                                        : "flex justify-start items-center gap-2 px-2 py-2.5"
-                                }
-                            >
-                                <img
-                                    src={EmployeeImage}
-                                    alt=""
-                                    className="w-4"
-                                />
-                                <span className="text-slate-600">
-                                    Employees
-                                </span>
-                            </NavLink>
+                            {user.appointmentAccess == 1 && (
+                                <NavLink
+                                    to={"/app/dashboard"}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                            : "flex justify-start items-center gap-2 px-2 py-2.5"
+                                    }
+                                >
+                                    <img src={DashboardImage} alt="" />
+                                    <span className="text-slate-600">
+                                        Dashboard
+                                    </span>
+                                </NavLink>
+                            )}
+                            {user.appointmentAccess == 1 && (
+                                <NavLink
+                                    to={"/app/appointment"}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                            : "flex justify-start items-center gap-2 px-2 py-2.5"
+                                    }
+                                >
+                                    <img src={AppointmentImage} alt="" />
+                                    <span className="text-slate-600">
+                                        Appointment
+                                    </span>
+                                </NavLink>
+                            )}
+                            {user.appointmentListAccess == 1 && (
+                                <NavLink
+                                    to={"/app/list"}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                            : "flex justify-start items-center gap-2 px-2 py-2.5"
+                                    }
+                                >
+                                    <img src={ListImage} alt="" />
+                                    <span className="text-slate-600">
+                                        Appointment Lists
+                                    </span>
+                                </NavLink>
+                            )}
+                            {user.patientAccess == 1 && (
+                                <NavLink
+                                    to={"/app/patient"}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                            : "flex justify-start items-center gap-2 px-2 py-2.5"
+                                    }
+                                >
+                                    <img src={PatientImage} alt="" />
+                                    <span className="text-slate-600">
+                                        Patients
+                                    </span>
+                                </NavLink>
+                            )}
+                            {user.paymentAccess == 1 && (
+                                <NavLink
+                                    to={"/app/payments"}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                            : "flex justify-start items-center gap-2 px-2 py-2.5"
+                                    }
+                                >
+                                    <img src={paymentImage} alt="" />
+                                    <span className="text-slate-600">
+                                        Payment Rec
+                                    </span>
+                                </NavLink>
+                            )}
+                            {user.serviceAccess == 1 && (
+                                <NavLink
+                                    to={"/app/service"}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                            : "flex justify-start items-center gap-2 px-2 py-2.5"
+                                    }
+                                >
+                                    <img src={ServiceImage} alt="" />
+                                    <span className="text-slate-600">
+                                        Services
+                                    </span>
+                                </NavLink>
+                            )}
+                            {user.employeeAccess == 1 && (
+                                <NavLink
+                                    to={"/app/employee"}
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                            : "flex justify-start items-center gap-2 px-2 py-2.5"
+                                    }
+                                >
+                                    <img
+                                        src={EmployeeImage}
+                                        alt=""
+                                        className="w-4"
+                                    />
+                                    <span className="text-slate-600">
+                                        Employees
+                                    </span>
+                                </NavLink>
+                            )}
                             <NavLink
                                 to={"/app/setting"}
                                 className={({ isActive }) =>

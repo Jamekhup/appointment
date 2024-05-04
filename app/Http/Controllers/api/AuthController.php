@@ -33,22 +33,18 @@ class AuthController extends Controller
                     return response()->json(['status' => 'fail', 'message' => 'Your email is not verified yet'], 422);
                     $request->user()->currentAccessToken()->delete();
                 } else {
-                    $user = User::select('id', 'name')->where('id', Auth::user()->id)->whereNotNull('email_verified_at')->first();
+                    $user = User::select('id', 'name', 'dashboard_access', 'appointment_access', 'appointment_list_access', 'patient_access', 'payment_record_access', 'service_access', 'employee_access')->where('id', Auth::user()->id)->whereNotNull('email_verified_at')->first();
                     return response()->json([
                         'status' => 'success',
                         'id' => $user->id,
-                        // 'role' => $user->role,
-                        // 'productAccess' => $user->product_access,
-                        // 'itemsToSellAccess' => $user->items_to_sell_access,
-                        // 'eventAccess' => $user->event_access,
-                        // 'internalAccess' => $user->internal_account_access,
-                        // 'contractorAccess' => $user->contractor_account_access,
-                        // 'participatorAccess' => $user->participator_account_access,
-                        // 'dashboardReportAccess' => $user->dashboard_report_access,
-                        // 'supportAccess' => $user->support_access,
-                        // 'registrationListAccess' => $user->registration_list_access,
-                        // 'orderListAccess' => $user->order_list_access,
-                        // 'countryAccess' => $user->country_access,
+                        'role' => $user->role,
+                        'dashboardAccess' => $user->dashboard_access,
+                        'appointmentAccess' => $user->appointment_access,
+                        'appointmentListAccess' => $user->appointment_list_access,
+                        'patientAccess' => $user->patient_access,
+                        'paymentAccess' => $user->payment_record_access,
+                        'serviceAccess' => $user->service_access,
+                        'employeeAccess' => $user->employee_access,
                         'user' => $user->name,
                         'token' => auth()->user()->createToken('app_sys')->plainTextToken
                     ], 200);
