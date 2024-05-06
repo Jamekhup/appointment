@@ -4,9 +4,11 @@ import Header from "../../../components/MetaTitle";
 import PrimaryButton from "../../../components/PrimaryButton";
 import { useEffect, useState } from "react";
 import axios from "../../../axios";
+import Swal from "sweetalert2";
 import useAuthContext from "../../../context/AuthContext";
 import CreateEmployee from "./CreateEmployee";
 import EditEmployee from "./EditEmployee";
+import Loading from "../../../components/Loading";
 
 const Employee = () => {
     const { user } = useAuthContext();
@@ -52,21 +54,31 @@ const Employee = () => {
     };
 
     const handleDelete = (id) => {
-        setLoading(true);
-        axios
-            .delete("/employee/delete/" + id, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                setEmployee((prev) => prev.filter((p) => p.id !== id));
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.log(error);
-                setLoading(false);
-            });
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#4B4A4A",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete",
+            position: "top",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .delete("/employee/delete/" + id, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        setEmployee((prev) => prev.filter((p) => p.id !== id));
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        });
     };
 
     useEffect(() => {
@@ -76,12 +88,14 @@ const Employee = () => {
     return (
         <>
             <Header title="Employee" />
-            <div className="font-serif font-medium text-lg">Employee</div>
-            <div className="flex justify-end items-center gap-x-2 mb-1">
-                <PrimaryButton onClick={() => setOpenCreateModal(true)}>
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                    <span>Create</span>
-                </PrimaryButton>
+            <div className="flex justify-between items-center">
+                <div className="font-serif font-medium text-lg">Employee</div>
+                <div className="flex justify-end items-center gap-x-2 mb-1">
+                    <PrimaryButton onClick={() => setOpenCreateModal(true)}>
+                        <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                        <span>Create</span>
+                    </PrimaryButton>
+                </div>
             </div>
             <div className="w-full overflow-auto">
                 <table className="w-full">
@@ -97,12 +111,15 @@ const Employee = () => {
                                 Email
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Access
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Action
                             </th>
                         </tr>
                     </thead>
                     <tbody className="text-slate-600">
-                        {!loading &&
+                        {!loading ? (
                             employee?.map((emp, i) => (
                                 <tr className="text-[15px] font-normal" key={i}>
                                     <td className="border border-separate py-1 pl-2">
@@ -113,6 +130,74 @@ const Employee = () => {
                                     </td>
                                     <td className="border border-separate pl-2">
                                         {emp.email}
+                                    </td>
+                                    <td className="border border-separate pl-2">
+                                        <div className="flex justify-start flex-wrap gap-1 items-center text-xs my-1">
+                                            {emp.dashboard_access == 1 && (
+                                                <span
+                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                text-slate-600"
+                                                >
+                                                    Dashboard
+                                                </span>
+                                            )}
+
+                                            {emp.appointment_access == 1 && (
+                                                <span
+                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                text-slate-600"
+                                                >
+                                                    Appointment
+                                                </span>
+                                            )}
+
+                                            {emp.appointment_list_access ==
+                                                1 && (
+                                                <span
+                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                text-slate-600"
+                                                >
+                                                    Appointment List
+                                                </span>
+                                            )}
+
+                                            {emp.patient_access == 1 && (
+                                                <span
+                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                text-slate-600"
+                                                >
+                                                    Patient
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex justify-start flex-wrap gap-1 items-center text-xs my-1">
+                                            {emp.payment_record_access == 1 && (
+                                                <span
+                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                text-slate-600"
+                                                >
+                                                    Payment Record
+                                                </span>
+                                            )}
+
+                                            {emp.service_access == 1 && (
+                                                <span
+                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                text-slate-600"
+                                                >
+                                                    Service
+                                                </span>
+                                            )}
+
+                                            {emp.employee_access == 1 && (
+                                                <span
+                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                text-slate-600"
+                                                >
+                                                    Employee
+                                                </span>
+                                            )}
+                                        </div>
                                     </td>
                                     <td className="border border-separate pl-2">
                                         <span
@@ -137,7 +222,14 @@ const Employee = () => {
                                         </span>
                                     </td>
                                 </tr>
-                            ))}
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={5}>
+                                    <Loading />
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

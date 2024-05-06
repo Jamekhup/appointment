@@ -137,7 +137,7 @@ const AuthLayout = () => {
                                 >
                                     <img src={paymentImage} alt="" />
                                     <span className="text-slate-600">
-                                        Payment Rec
+                                        Payment Record
                                     </span>
                                 </NavLink>
                             )}

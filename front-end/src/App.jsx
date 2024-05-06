@@ -19,17 +19,14 @@ import CreatePatient from "./pages/Auth/Patient/CreatePatient";
 import EditPatient from "./pages/Auth/Patient/EditPatient";
 
 import Service from "./pages/Auth/Service/Service";
-import CreateService from "./pages/Auth/Service/CreateService";
-import EditService from "./pages/Auth/Service/EditService";
 
 import Employee from "./pages/Auth/Employee/Employee";
-import CreateEmployee from "./pages/Auth/Employee/CreateEmployee";
-import EditEmployee from "./pages/Auth/Employee/EditEmployee";
 
 import Setting from "./pages/Auth/Setting";
 
 import NotFound from "./pages/Auth/NotFound";
 import Payments from "./pages/Auth/PaymentRecord/Payments";
+import PatientDetail from "./pages/Auth/Patient/PatientDetail";
 
 function App() {
     return (
@@ -49,18 +46,15 @@ function App() {
                 <Route path="list" element={<AppointmentList />} />
 
                 <Route path="patient" element={<Patient />} />
+                <Route path="patient/detail/:id" element={<PatientDetail />} />
                 <Route path="patient/create" element={<CreatePatient />} />
                 <Route path="patient/edit/:id" element={<EditPatient />} />
 
                 <Route path="payments" element={<Payments />} />
 
                 <Route path="service" element={<Service />} />
-                <Route path="service/create" element={<CreateService />} />
-                <Route path="service/edit/:id" element={<EditService />} />
 
                 <Route path="employee" element={<Employee />} />
-                <Route path="employee/create" element={<CreateEmployee />} />
-                <Route path="employee/edit/:id" element={<EditEmployee />} />
 
                 <Route path="setting" element={<Setting />} />
             </Route>
