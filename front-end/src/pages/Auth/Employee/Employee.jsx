@@ -9,11 +9,13 @@ import useAuthContext from "../../../context/AuthContext";
 import CreateEmployee from "./CreateEmployee";
 import EditEmployee from "./EditEmployee";
 import Loading from "../../../components/Loading";
+import TextInput from "../../../components/TextInput";
 
 const Employee = () => {
     const { user } = useAuthContext();
     const [employee, setEmployee] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
 
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -88,17 +90,23 @@ const Employee = () => {
     return (
         <>
             <Header title="Employee" />
-            <div className="flex justify-between items-center">
-                <div className="font-serif font-medium text-lg">Employee</div>
-                <div className="flex justify-end items-center gap-x-2 mb-1">
+            <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center mb-2">
+                <TextInput
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search Employee by Name"
+                    className="!py-1 md:w-[30%] w-full"
+                />
+                <div className="flex justify-end items-center gap-x-2">
                     <PrimaryButton onClick={() => setOpenCreateModal(true)}>
                         <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                        <span>Create</span>
+                        <span>Add New Employee</span>
                     </PrimaryButton>
                 </div>
             </div>
-            <div className="w-full overflow-auto">
-                <table className="w-full">
+            <div className="overflow-x-hidden">
+                <table className="w-full table-auto">
                     <thead className="bg-[#4b4a4a] uppercase text-white border">
                         <tr className="h-7">
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
@@ -120,109 +128,125 @@ const Employee = () => {
                     </thead>
                     <tbody className="text-slate-600">
                         {!loading ? (
-                            employee?.map((emp, i) => (
-                                <tr className="text-[15px] font-normal" key={i}>
-                                    <td className="border border-separate py-1 pl-2">
-                                        {i + 1}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {emp.name}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {emp.email}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <div className="flex justify-start flex-wrap gap-1 items-center text-xs my-1">
-                                            {emp.dashboard_access == 1 && (
-                                                <span
-                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                            employee &&
+                            employee
+                                .filter((s) =>
+                                    s.name
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                )
+                                .map((emp, i) => (
+                                    <tr
+                                        className="text-[15px] font-normal"
+                                        key={i}
+                                    >
+                                        <td className="border border-separate py-1 pl-2">
+                                            {i + 1}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {emp.name}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {emp.email}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <div className="flex justify-start flex-wrap gap-1 items-center text-xs my-1">
+                                                {emp.dashboard_access == 1 && (
+                                                    <span
+                                                        className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
                                                 text-slate-600"
-                                                >
-                                                    Dashboard
-                                                </span>
-                                            )}
+                                                    >
+                                                        Dashboard
+                                                    </span>
+                                                )}
 
-                                            {emp.appointment_access == 1 && (
-                                                <span
-                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                {emp.appointment_access ==
+                                                    1 && (
+                                                    <span
+                                                        className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
                                                 text-slate-600"
-                                                >
-                                                    Appointment
-                                                </span>
-                                            )}
+                                                    >
+                                                        Appointment
+                                                    </span>
+                                                )}
 
-                                            {emp.appointment_list_access ==
-                                                1 && (
-                                                <span
-                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                {emp.appointment_list_access ==
+                                                    1 && (
+                                                    <span
+                                                        className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
                                                 text-slate-600"
-                                                >
-                                                    Appointment List
-                                                </span>
-                                            )}
+                                                    >
+                                                        Appointment List
+                                                    </span>
+                                                )}
 
-                                            {emp.patient_access == 1 && (
-                                                <span
-                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                {emp.patient_access == 1 && (
+                                                    <span
+                                                        className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
                                                 text-slate-600"
-                                                >
-                                                    Patient
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div className="flex justify-start flex-wrap gap-1 items-center text-xs my-1">
-                                            {emp.payment_record_access == 1 && (
-                                                <span
-                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                    >
+                                                        Patient
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex justify-start flex-wrap gap-1 items-center text-xs my-1">
+                                                {emp.payment_record_access ==
+                                                    1 && (
+                                                    <span
+                                                        className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
                                                 text-slate-600"
-                                                >
-                                                    Payment Record
-                                                </span>
-                                            )}
+                                                    >
+                                                        Payment Record
+                                                    </span>
+                                                )}
 
-                                            {emp.service_access == 1 && (
-                                                <span
-                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                {emp.service_access == 1 && (
+                                                    <span
+                                                        className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
                                                 text-slate-600"
-                                                >
-                                                    Service
-                                                </span>
-                                            )}
+                                                    >
+                                                        Service
+                                                    </span>
+                                                )}
 
-                                            {emp.employee_access == 1 && (
-                                                <span
-                                                    className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
+                                                {emp.employee_access == 1 && (
+                                                    <span
+                                                        className="bg-green-200 w-fit px-2 py-[1px] rounded-lg
                                                 text-slate-600"
-                                                >
-                                                    Employee
-                                                </span>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <span
-                                            className="pr-4 cursor-pointer"
-                                            title="Edit Employee"
-                                            onClick={() => {
-                                                setOpenEditModal(true);
-                                                setOpenEditModalData(emp);
-                                            }}
-                                        >
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </span>
-                                        <span
-                                            className="cursor-pointer"
-                                            title="Delete Employee"
-                                            onClick={() => handleDelete(emp.id)}
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faTrashCan}
-                                                className="text-rose-500"
-                                            />
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))
+                                                    >
+                                                        Employee
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <span
+                                                className="pr-4 cursor-pointer"
+                                                title="Edit Employee"
+                                                onClick={() => {
+                                                    setOpenEditModal(true);
+                                                    setOpenEditModalData(emp);
+                                                }}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faEdit}
+                                                />
+                                            </span>
+                                            <span
+                                                className="cursor-pointer"
+                                                title="Delete Employee"
+                                                onClick={() =>
+                                                    handleDelete(emp.id)
+                                                }
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faTrashCan}
+                                                    className="text-rose-500"
+                                                />
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))
                         ) : (
                             <tr>
                                 <td colSpan={5}>

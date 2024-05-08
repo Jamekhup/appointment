@@ -13,10 +13,13 @@ import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
 import Loading from "../../../components/Loading";
 import Swal from "sweetalert2";
+import TextInput from "../../../components/TextInput";
 
 const Patient = () => {
     const [patients, setPatients] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    const [search, setSearch] = useState("");
 
     const { user } = useAuthContext();
 
@@ -73,8 +76,14 @@ const Patient = () => {
     return (
         <>
             <Header title="Patients" />
-            <div className="flex justify-between items-center">
-                <div className="font-serif font-medium text-lg">Patients</div>
+            <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center mb-2">
+                <TextInput
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search Patient by Name"
+                    className="!py-1 md:w-[30%] w-full"
+                />
                 <div className="flex justify-end items-center gap-x-2 mb-1">
                     <NavLink to={"create"}>
                         <PrimaryButton>
@@ -111,51 +120,67 @@ const Patient = () => {
                 <tbody className="text-slate-600">
                     {!loading ? (
                         patients &&
-                        patients.map((pa, i) => (
-                            <tr className="text-[15px] font-normal" key={i}>
-                                <td className="border border-separate py-1 pl-2">
-                                    {i + 1}
-                                </td>
-                                <td className="border border-separate pl-2">
-                                    {pa.first_name} {pa.last_name}
-                                </td>
-                                <td className="border border-separate pl-2">
-                                    {pa.dob}
-                                </td>
-                                <td className="border border-separate pl-2">
-                                    {pa.street + ", "}
-                                    {pa.house_number + ", "}
-                                    {pa.city + ", "}
-                                    {pa.postal_code}
-                                </td>
-                                <td className="border border-separate pl-2">
-                                    <NavLink
-                                        to={"/app/patient/detail/" + pa.id}
-                                        className="flex justify-start items-center gap-1
+                        patients
+                            .filter(
+                                (s) =>
+                                    s.first_name
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase()) ||
+                                    s.last_name
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                            )
+                            .map((pa, i) => (
+                                <tr className="text-[15px] font-normal" key={i}>
+                                    <td className="border border-separate py-1 pl-2">
+                                        {i + 1}
+                                    </td>
+                                    <td className="border border-separate pl-2">
+                                        {pa.first_name} {pa.last_name}
+                                    </td>
+                                    <td className="border border-separate pl-2">
+                                        {pa.dob}
+                                    </td>
+                                    <td className="border border-separate pl-2">
+                                        {pa.street + ", "}
+                                        {pa.house_number + ", "}
+                                        {pa.city + ", "}
+                                        {pa.postal_code}
+                                    </td>
+                                    <td className="border border-separate pl-2">
+                                        <NavLink
+                                            to={"/app/patient/detail/" + pa.id}
+                                            className="flex justify-start items-center gap-1
                                     bg-amber-300 rounded-md px-2 py-[1px] w-fit text-xs"
-                                    >
-                                        <FontAwesomeIcon icon={faCircleInfo} />
-                                        <span>Detail</span>
-                                    </NavLink>
-                                </td>
-                                <td className="border border-separate pl-2">
-                                    <NavLink to={"/app/patient/edit/" + pa.id}>
-                                        <span className="pr-4 cursor-pointer">
-                                            <FontAwesomeIcon icon={faEdit} />
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faCircleInfo}
+                                            />
+                                            <span>Detail</span>
+                                        </NavLink>
+                                    </td>
+                                    <td className="border border-separate pl-2">
+                                        <NavLink
+                                            to={"/app/patient/edit/" + pa.id}
+                                        >
+                                            <span className="pr-4 cursor-pointer">
+                                                <FontAwesomeIcon
+                                                    icon={faEdit}
+                                                />
+                                            </span>
+                                        </NavLink>
+                                        <span
+                                            className="cursor-pointer"
+                                            onClick={() => deletePatient(pa.id)}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faTrashCan}
+                                                className="text-rose-500"
+                                            />
                                         </span>
-                                    </NavLink>
-                                    <span
-                                        className="cursor-pointer"
-                                        onClick={() => deletePatient(pa.id)}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faTrashCan}
-                                            className="text-rose-500"
-                                        />
-                                    </span>
-                                </td>
-                            </tr>
-                        ))
+                                    </td>
+                                </tr>
+                            ))
                     ) : (
                         <tr>
                             <td colSpan={6}>

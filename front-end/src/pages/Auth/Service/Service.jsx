@@ -9,11 +9,13 @@ import Loading from "../../../components/Loading";
 import Swal from "sweetalert2";
 import CreateService from "./CreateService";
 import EditService from "./EditService";
+import TextInput from "../../../components/TextInput";
 
 const Service = () => {
     const { user } = useAuthContext();
     const [service, setService] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
 
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
@@ -98,9 +100,15 @@ const Service = () => {
     return (
         <>
             <Header title="Service" />
-            <div className="flex justify-between items-center">
-                <div className="font-serif font-medium text-lg">Services</div>
-                <div className="flex justify-end items-center gap-x-2 mb-1">
+            <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center mb-2">
+                <TextInput
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search Service by Name"
+                    className="!py-1 md:w-[30%] w-full"
+                />
+                <div className="flex justify-end items-center gap-x-2">
                     <PrimaryButton onClick={() => setOpenCreateModal(true)}>
                         <FontAwesomeIcon icon={faPlus} className="mr-2" />
                         <span>Add New Service</span>
@@ -108,7 +116,7 @@ const Service = () => {
                 </div>
             </div>
             <div className="w-full overflow-auto">
-                <table className="w-full">
+                <table className="w-full table-fixed">
                     <thead className="bg-[#4b4a4a] uppercase text-white border">
                         <tr className="h-7">
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
@@ -130,46 +138,62 @@ const Service = () => {
                     </thead>
                     <tbody className="text-slate-600 text-sm">
                         {!loading ? (
-                            service?.map((ser, i) => (
-                                <tr className="text-[15px] font-normal" key={i}>
-                                    <td className="border border-separate py-1 pl-2">
-                                        {i + 1}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {ser.name}
-                                    </td>
-                                    <td className="border border-separate pl-2 font-mono">
-                                        {ser.price ? "DDK " + ser.price : "-"}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {ser.description
-                                            ? ser.description
-                                            : "-"}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <span
-                                            className="pr-4 cursor-pointer"
-                                            title="Edit Employee"
-                                            onClick={() => {
-                                                setOpenEditModal(true);
-                                                setEditModalData(ser);
-                                            }}
-                                        >
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </span>
-                                        <span
-                                            className="cursor-pointer"
-                                            title="Delete Employee"
-                                            onClick={() => handleDelete(ser.id)}
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faTrashCan}
-                                                className="text-rose-500"
-                                            />
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))
+                            service &&
+                            service
+                                .filter((s) =>
+                                    s.name
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                )
+                                .map((ser, i) => (
+                                    <tr
+                                        className="text-[15px] font-normal"
+                                        key={i}
+                                    >
+                                        <td className="border border-separate py-1 pl-2">
+                                            {i + 1}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {ser.name}
+                                        </td>
+                                        <td className="border border-separate pl-2 font-mono">
+                                            {ser.price
+                                                ? "DDK " + ser.price
+                                                : "-"}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {ser.description
+                                                ? ser.description
+                                                : "-"}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <span
+                                                className="pr-4 cursor-pointer"
+                                                title="Edit Employee"
+                                                onClick={() => {
+                                                    setOpenEditModal(true);
+                                                    setEditModalData(ser);
+                                                }}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faEdit}
+                                                />
+                                            </span>
+                                            <span
+                                                className="cursor-pointer"
+                                                title="Delete Employee"
+                                                onClick={() =>
+                                                    handleDelete(ser.id)
+                                                }
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faTrashCan}
+                                                    className="text-rose-500"
+                                                />
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))
                         ) : (
                             <tr>
                                 <td colSpan={5}>
