@@ -35,7 +35,6 @@ const Patient = () => {
                 if (res.data.status == "success") {
                     setPatients(res.data.patients);
                     setLoading(false);
-                    console.log(res);
                 }
             });
     };

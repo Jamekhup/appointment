@@ -15,6 +15,7 @@ import Appointment from "./pages/Auth/Appointment/Appointment";
 import AppointmentList from "./pages/Auth/Appointment/AppointmentList";
 
 import Patient from "./pages/Auth/Patient/Patient";
+import PatientDetail from "./pages/Auth/Patient/PatientDetail";
 import CreatePatient from "./pages/Auth/Patient/CreatePatient";
 import EditPatient from "./pages/Auth/Patient/EditPatient";
 
@@ -26,7 +27,8 @@ import Setting from "./pages/Auth/Setting";
 
 import NotFound from "./pages/Auth/NotFound";
 import Payments from "./pages/Auth/PaymentRecord/Payments";
-import PatientDetail from "./pages/Auth/Patient/PatientDetail";
+import PaymentDetail from "./pages/Auth/PaymentRecord/PaymentDetail";
+
 
 function App() {
     return (
@@ -46,11 +48,12 @@ function App() {
                 <Route path="list" element={<AppointmentList />} />
 
                 <Route path="patient" element={<Patient />} />
-                <Route path="patient/detail/:id" element={<PatientDetail />} />
+                <Route path="patient/detail/:id" element={<PatientDetail />} errorElement={<NotFound />} />
                 <Route path="patient/create" element={<CreatePatient />} />
                 <Route path="patient/edit/:id" element={<EditPatient />} />
 
                 <Route path="payments" element={<Payments />} />
+                <Route path="payments/detail/:id" element={<PaymentDetail/>} />
 
                 <Route path="service" element={<Service />} />
 

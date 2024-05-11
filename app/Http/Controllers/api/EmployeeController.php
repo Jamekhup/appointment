@@ -53,6 +53,9 @@ class EmployeeController extends Controller
         if ($employee) {
             $employee->name = $request->name;
             $employee->email = $request->email;
+            if($request->password){
+                $employee->password = $request->password;
+            }
             $employee->dashboard_access = $request->dashboardAccess;
             $employee->appointment_access = $request->appointmentAccess;
             $employee->appointment_list_access = $request->appointmentListAccess;
@@ -61,6 +64,7 @@ class EmployeeController extends Controller
             $employee->service_access = $request->serviceAccess;
             $employee->employee_access = $request->employeeAccess;
             $employee->updated_by = Auth::user()->name;
+            $employee->updated_at = now();
             if ($employee->save()) {
                 return response()->json($employee);
             }

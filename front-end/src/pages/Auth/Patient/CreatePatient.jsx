@@ -157,6 +157,7 @@ const CreatePatient = () => {
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             placeholder="John"
+                            required
                         />
                         {errors && errors.firstName && (
                             <div className="text-xs mt-1 font-medium text-red-600">
@@ -173,6 +174,7 @@ const CreatePatient = () => {
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
                             placeholder="Smith"
+                            required
                         />
                         {errors && errors.lastName && (
                             <div className="text-xs mt-1 font-medium text-red-600">
@@ -188,6 +190,7 @@ const CreatePatient = () => {
                             type="date"
                             value={dob}
                             onChange={(e) => setDob(e.target.value)}
+                            required
                         />
                         {errors && errors.dob && (
                             <div className="text-xs mt-1 font-medium text-red-600">
@@ -204,6 +207,7 @@ const CreatePatient = () => {
                             value={street}
                             onChange={(e) => setStreet(e.target.value)}
                             placeholder="Street Name"
+                            required
                         />
                         {errors && errors.street && (
                             <div className="text-xs mt-1 font-medium text-red-600">
@@ -220,6 +224,7 @@ const CreatePatient = () => {
                             value={houseNumber}
                             onChange={(e) => setHouseNumber(e.target.value)}
                             placeholder="House Number"
+                            required
                         />
                         {errors && errors.houseNumber && (
                             <div className="text-xs mt-1 font-medium text-red-600">
@@ -236,6 +241,7 @@ const CreatePatient = () => {
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
                             placeholder="City Name"
+                            required
                         />
                         {errors && errors.city && (
                             <div className="text-xs mt-1 font-medium text-red-600">
@@ -252,6 +258,7 @@ const CreatePatient = () => {
                             value={postalCode}
                             onChange={(e) => setPostalCode(e.target.value)}
                             placeholder="989098"
+                            required
                         />
                         {errors && errors.postalCode && (
                             <div className="text-xs mt-1 font-medium text-red-600">

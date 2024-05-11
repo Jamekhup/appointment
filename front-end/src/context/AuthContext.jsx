@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
                 console.log(response);
                 if (response.data.status === "success") {
                     setLoading(false);
-                    setUser(response.data);
                     Cookies.set("app_sys", JSON.stringify(response.data), {
                         expires: 20,
                     });

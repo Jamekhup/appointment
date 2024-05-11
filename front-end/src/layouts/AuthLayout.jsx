@@ -40,7 +40,6 @@ const AuthLayout = () => {
         Cookies.remove("app_sys");
         navigate("/");
     };
-
     if (user) {
         return (
             <>
@@ -222,7 +221,7 @@ const AuthLayout = () => {
                             drop-shadow-md cursor-pointer"
                                 onClick={() => setToggleLogout(!toggleLogout)}
                             >
-                                <p>User Name</p>
+                                <p>{user.user}</p>
                                 <FontAwesomeIcon icon={faCaretDown} />
                             </div>
 

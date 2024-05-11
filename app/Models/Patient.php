@@ -30,4 +30,8 @@ class Patient extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function paymentRecords(){
+        return $this->hasOne(PaymentRecord::class,'patient_id','id');
+    }
 }

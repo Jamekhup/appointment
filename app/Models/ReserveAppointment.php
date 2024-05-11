@@ -6,16 +6,15 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Doctor extends Model
+class ReserveAppointment extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory,HasUuids;
 
     protected $fillable = [
-        'title',
-        'first_name',
-        'last_name',
-        'position',
-        'created_by',
-        'updated_by',
+       'date',
+       'from_time',
+       'to_time',
+       'created_by',
+       'updated_by',
     ];
 }

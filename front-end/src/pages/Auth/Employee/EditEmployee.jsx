@@ -5,6 +5,9 @@ import PrimaryButton from "../../../components/PrimaryButton";
 import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
+
 const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
     const [name, setName] = useState(editData?.name);
     const [email, setEmail] = useState(editData?.email);
@@ -33,6 +36,10 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
     const [errors, setErrors] = useState(null);
     const { user } = useAuthContext();
 
+    const [password, setPassword] = useState("");
+
+    const [showHidePassword, setShowHidePassword] = useState(false);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
@@ -42,6 +49,7 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 {
                     name,
                     email,
+                    password,
                     dashboardAccess,
                     appointmentAccess,
                     appointmentListAccess,
@@ -76,6 +84,19 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
             });
     };
 
+    const togglePassword = () => {
+        let pass = document.getElementById("password");
+        if (password) {
+            if (pass.type === "password") {
+                pass.type = "text";
+                setShowHidePassword(true);
+            } else {
+                pass.type = "password";
+                setShowHidePassword(false);
+            }
+        }
+    };
+
     return (
         <Modal show={show} onClose={close} maxWidth={maxWidth}>
             <div className="flex justify-between items-center bg-gray-300 p-2 px-4 rounded-t-md">
@@ -99,6 +120,7 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Enter Employee Name"
+                        required
                     />
                     {errors && errors.name && (
                         <div className="text-xs mt-1 font-medium text-red-600">
@@ -114,12 +136,35 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter Employee Email"
+                        required
                     />
                     {errors && errors.email && (
                         <div className="text-xs mt-1 font-medium text-red-600">
                             {errors.email[0]}
                         </div>
                     )}
+                </div>
+
+                <div className="flex flex-col relative">
+                    <label htmlFor="password">Password (Optional)</label>
+                    <TextInput
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="New Employee Password"
+                    />
+                    <FontAwesomeIcon
+                        icon={showHidePassword ? faEye : faEyeSlash}
+                        className="absolute top-9 right-2 text-sm text-slate-500 cursor-pointer"
+                        onClick={() => togglePassword()}
+                    />
+                    {errors && errors.password && (
+                        <div className="text-xs mt-1 font-medium text-red-600">
+                            {errors.password[0]}
+                        </div>
+                    )}
+
                 </div>
 
                 <div className="font-medium -mb-1 mt-2 col-span-1 md:col-span-2 xl:col-span-3">

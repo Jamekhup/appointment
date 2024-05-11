@@ -60,7 +60,7 @@ const Service = () => {
         );
         Swal.fire({
             title: "Success!",
-            text: "New Service Updated successfully",
+            text: "Service Updated successfully",
             icon: "success",
         });
     };
