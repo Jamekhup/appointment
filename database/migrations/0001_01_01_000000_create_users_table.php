@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('color');
             $table->tinyInteger('role')->comment('1=admin,2=employee');
             $table->tinyInteger('dashboard_access')->comment('0=no,1=yes');
             $table->tinyInteger('appointment_access')->comment('0=no,1=yes');

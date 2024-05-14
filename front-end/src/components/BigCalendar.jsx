@@ -13,14 +13,14 @@ const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
             events={event}
             startAccessor="start"
             endAccessor="end"
-            style={{ height: 480 }}
-            defaultView="day"
+            style={{ height: 520 }}
+            defaultView="week"
             getNow={() => new Date()}
             views={["day", "week", "month"]}
-            // onSelectEvent={handleSelectEvent}
+            onSelectEvent={handleSelectEvent}
             min={moment("2024-01-03T08:00:00").toDate()}
-            max={moment("2024-01-03T19:40:00").toDate()}
-            // eventPropGetter={eventPropGetter}
+            max={moment("2024-01-03T20:40:00").toDate()}
+            eventPropGetter={eventPropGetter}
         />
     );
 };

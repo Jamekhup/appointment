@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -13,7 +14,8 @@ class PatientController extends Controller
     public function index()
     {
         $patients = Patient::orderBy('created_at', 'desc')->get();
-        return response()->json(['status' => 'success', 'patients' => $patients]);
+        $services = Service::orderBy('created_at', 'desc')->get();
+        return response()->json(['status' => 'success', 'patients' => $patients, 'services' => $services]);
     }
 
     public function detail($id)
@@ -65,10 +67,7 @@ class PatientController extends Controller
 
 
         if ($patient->save()) {
-            return response()->json([
-                'status' => 'success',
-                'data' => $patient
-            ]);
+            return response()->json(['status' => 'success', 'data' => $patient]);
         } else {
             return response()->json(['status' => 'fail', 'message' => 'Something went wrong'], 422);
         }
