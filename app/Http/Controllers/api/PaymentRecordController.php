@@ -25,6 +25,13 @@ class PaymentRecordController extends Controller
 
     public function detail($id){
 
+        $payment = PaymentRecord::with('patient')->find($id);
+        if($payment){
+            return response()->json(['status' =>'success', 'payment' => $payment]);
+        }else{
+            return response()->json(['status' => 'fail','message' => 'Something went wrong'], 422);
+        }
+
     }
 
     public function create_existed(Request $request){

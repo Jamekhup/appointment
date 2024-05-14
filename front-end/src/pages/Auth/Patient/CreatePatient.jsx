@@ -132,8 +132,8 @@ const CreatePatient = () => {
                     <div className="flex flex-col text-sm">
                         <label htmlFor="title">Title</label>
                         <select
-                            className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
-                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
+                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         >
@@ -310,7 +310,7 @@ const CreatePatient = () => {
                     <div className="flex flex-col text-sm">
                         <label htmlFor="title">Payment Free (Yes or No)</label>
                         <select
-                            className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
+                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                             value={paymentFree}
                             onChange={(e) => setPaymentFree(e.target.value)}

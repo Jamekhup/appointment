@@ -356,7 +356,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         <div className="flex flex-col">
                                             <label>Full Covered By Insurance Company</label>
                                             <select 
-                                                className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={coveredByInsuranceCompany}
                                                 onChange={(e) => setCoveredByInsuranceCompany(e.target.value)}
                                                 required
@@ -400,7 +400,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         <div className="flex flex-col">
                                             <label>Home Visit</label>
                                             <select 
-                                                className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={homeVisit}
                                                 onChange={(e) => setHomeVisit(e.target.value)}
                                                 required
@@ -490,7 +490,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         <div className="flex flex-col text-sm">
                                             <label htmlFor="title">Title</label>
                                             <select
-                                                className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={title}
                                                 onChange={(e) => setTitle(e.target.value)}
@@ -668,7 +668,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         <div className="flex flex-col text-sm">
                                             <label htmlFor="title">Payment Free (Yes or No)</label>
                                             <select
-                                                className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={paymentFree}
                                                 onChange={(e) => setPaymentFree(e.target.value)}
@@ -689,7 +689,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                                 Treatment in Six Month (Yes or No)
                                             </label>
                                             <select
-                                                className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={treatmentInSixMonth}
                                                 onChange={(e) =>
@@ -712,7 +712,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                                 Private Patient (Yes or No)
                                             </label>
                                             <select
-                                                className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={privatePatient}
                                                 onChange={(e) => setPrivatePatient(e.target.value)}
@@ -769,7 +769,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         <div className="flex flex-col">
                                             <label>Full Covered By Insurance Company</label>
                                             <select 
-                                                className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={newCoveredByInsuranceCompany}
                                                 onChange={(e) => setNewCoveredByInsuranceCompany(e.target.value)}
                                                 required
@@ -813,7 +813,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         <div className="flex flex-col">
                                             <label>Home Visit</label>
                                             <select 
-                                                className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={newHomeVisit}
                                                 onChange={(e) => setNewHomeVisit(e.target.value)}
                                                 required

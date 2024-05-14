@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
-import Loading from "../../../components/Loading";
 import LoadingState from "../../../components/Loading";
 
 const PatientDetail = () => {

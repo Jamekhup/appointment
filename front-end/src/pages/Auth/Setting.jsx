@@ -146,7 +146,7 @@ const Setting = () => {
                                     </tr>
                                     <tr>
                                         <td className="border border-gray-100 px-3 py-2">
-                                            Account Create By
+                                            Account Created By
                                         </td>
                                         <td className="border border-gray-100 px-3 py-2">
                                             {getUser.created_by ? getUser.created_by : '-'}
@@ -155,7 +155,7 @@ const Setting = () => {
 
                                     <tr>
                                         <td className="border border-gray-100 px-3 py-2">
-                                            Account Create At
+                                            Account Created At
                                         </td>
                                         <td className="border border-gray-100 px-3 py-2">
                                             {getUser.created_at.replace(/T|.000000Z/gi,' ')}
