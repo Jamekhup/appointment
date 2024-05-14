@@ -23,12 +23,13 @@ export const AuthProvider = ({ children }) => {
         axios
             .post("/login", data)
             .then((response) => {
-                console.log(response);
                 if (response.data.status === "success") {
                     setLoading(false);
+                    setUser(response.data);
                     Cookies.set("app_sys", JSON.stringify(response.data), {
                         expires: 20,
                     });
+
 
                     const from =
                         location.state?.from?.pathname || "/app/dashboard";
