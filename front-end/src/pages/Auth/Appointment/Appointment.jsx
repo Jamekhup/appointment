@@ -100,7 +100,7 @@ const Appointment = () => {
     return (
         <>
             <Header title="Appointment" />
-            <div className="flex justify-between items-center gap-x-2 mb-4">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-y-2 gap-x-2 mb-4">
                 <PrimaryButton
                     onClick={() => setOpenReserveModal(true)}
                     className="bg-rose-500 hover:bg-rose-400 focus:bg-rose-500"
@@ -136,7 +136,7 @@ const Appointment = () => {
                         setOpenEventModal(false);
                         setEventData(null);
                     }}
-                    maxWidth="w-full sm:w-5/6 md:w-2/3 -mt-40 md:-mt-60"
+                    maxWidth="w-full sm:w-5/6 md:w-2/3 -mt-20 md:-mt-40"
                     eventData={eventData}
                     cancelled={handleCancel}
                     finished={handleFinish}

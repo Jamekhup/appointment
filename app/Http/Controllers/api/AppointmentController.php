@@ -15,7 +15,7 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        $appointments = Appointment::with('patient', 'user')->where('status', 0)->get();
+        $appointments = Appointment::with('patient', 'user', 'service')->where('status', 0)->get();
         $reserved = ReserveAppointment::all();
 
         $events = [];
@@ -31,7 +31,8 @@ class AppointmentController extends Controller
                     ' ( ' . $appointment['service']['name'] . ' ) ',
 
                 'backgroundColor' => $appointment['user']['color'],
-                'status' => $appointment['status']
+                'status' => $appointment['status'],
+                'data' => $appointment
             ];
         }
 
@@ -116,7 +117,7 @@ class AppointmentController extends Controller
                 $appointment->comment = $request->comment;
                 $appointment->created_by = Auth::user()->name;
                 if ($appointment->save()) {
-                    $get_appointment = Appointment::with('patient', 'user')->find($appointment->id);
+                    $get_appointment = Appointment::with('patient', 'user', 'service')->find($appointment->id);
                     $event = $this->event($get_appointment);
 
                     DB::commit();
@@ -155,7 +156,7 @@ class AppointmentController extends Controller
                 'message' => date('Y-m-d', strtotime($request->date)) . " " . date('H:i:s', strtotime($request->time)) . ' Reserved'
             ]);
         } else {
-            $appointment = Appointment::with('patient', 'user')->where('id', $id)->first();
+            $appointment = Appointment::with('patient', 'user', 'service')->where('id', $id)->first();
             if ($appointment) {
                 $appointment->service_id = $request->serviceId;
                 $appointment->user_id = Auth::user()->id;
