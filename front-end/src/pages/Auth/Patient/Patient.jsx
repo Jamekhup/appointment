@@ -14,34 +14,44 @@ import useAuthContext from "../../../context/AuthContext";
 import Loading from "../../../components/Loading";
 import Swal from "sweetalert2";
 import TextInput from "../../../components/TextInput";
+import Pagination from "../../../components/Pagination";
 
 const Patient = () => {
     const [patients, setPatients] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const [search, setSearch] = useState("");
+    const [pagination, setPagination] = useState("");
 
     const { user } = useAuthContext();
 
-    const getPatients = () => {
+    const url = "/patient";
+
+    const getPatients = (url) => {
         setLoading(true);
         axios
-            .get("/patient", {
+            .get(url, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
             })
             .then((res) => {
                 if (res.data.status == "success") {
-                    setPatients(res.data.patients);
+                    setPatients(res.data.patients.data);
+                    setPagination(res.data.patients);
                     setLoading(false);
                 }
             });
     };
 
     useEffect(() => {
-        getPatients();
+        getPatients(url);
     }, []);
+
+    const handlePagination = (paginate_url) => {
+        getPatients(paginate_url ?? url);
+        window.scrollTo(0, 0);
+    };
 
     const deletePatient = (id) => {
         Swal.fire({
@@ -189,6 +199,13 @@ const Patient = () => {
                     )}
                 </tbody>
             </table>
+
+            {pagination && (
+                <Pagination
+                    onPaginate={handlePagination}
+                    data={pagination}
+                />
+            )}
         </>
     );
 };

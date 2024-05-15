@@ -884,7 +884,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                 type={loading ? "button" : "submit"}
                                 className=" px-4 mt-2"
                             >
-                                {loading ? "Submittin..." : "Submit"}
+                                {loading ? "Submitting..." : "Submit"}
                             </PrimaryButton>
                         </form>
                     )

@@ -140,7 +140,7 @@ const AppointmentDetail = () => {
                                         Price
                                     </td>
                                     <td className="border-b border-gray-200 px-3 py-1.5 font-mono">
-                                        {appointment.service.price}
+                                        € {appointment.service.price}
                                     </td>
                                 </tr>
                                 <tr>

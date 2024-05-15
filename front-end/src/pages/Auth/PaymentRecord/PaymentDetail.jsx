@@ -36,7 +36,7 @@ const PaymentDetail = () => {
             }
 
             if(res.data.status == 'fail'){
-                navigate('/app/payment');
+                navigate('/app/payments');
             }
             setLoading(false);
         })
@@ -216,7 +216,7 @@ useEffect(() => {
                                             Cost
                                         </td>
                                         <td className="border border-gray-200 px-3 py-1.5">
-                                            DKK {payment.cost}
+                                            € {payment.cost}
                                         </td>
                                     </tr>
 
@@ -225,7 +225,7 @@ useEffect(() => {
                                            Additional Payment
                                         </td>
                                         <td className="border border-gray-200 px-3 py-1.5">
-                                            {payment.additional_payment ? 'DKK ' .payment.additional_payment : '-'}
+                                            {payment && payment.additional_payment ? '€ ' + payment.additional_payment : '-'}
                                         </td>
                                     </tr>
 
@@ -252,7 +252,7 @@ useEffect(() => {
                                             Cost 3
                                         </td>
                                         <td className="border border-gray-200 px-3 py-1.5">
-                                            {payment.cost3 ? 'DKK ' .payment.cost3 : '-'}
+                                            {payment.cost3 ? '€ ' + payment.cost3 : '-'}
                                         </td>
                                     </tr>
 
@@ -261,7 +261,7 @@ useEffect(() => {
                                             Additional Payment 4
                                         </td>
                                         <td className="border border-gray-200 px-3 py-1.5">
-                                            {payment.additional_payment_4 ? 'DKK '. payment.additional_payment_4 : '-'}
+                                            {payment.additional_payment_4 ? '€ '+ payment.additional_payment_4 : '-'}
                                         </td>
                                     </tr>
 
@@ -270,7 +270,7 @@ useEffect(() => {
                                             Today Payment
                                         </td>
                                         <td className="border border-gray-200 px-3 py-1.5">
-                                            DKK {payment.total_payment}
+                                            € {payment.total_payment}
                                         </td>
                                     </tr>
 

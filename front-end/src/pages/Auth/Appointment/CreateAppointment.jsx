@@ -37,10 +37,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const selectPatient = (value) => {
         setControlPatientSearch(false);
         setSearchPatient("");
-        setSelectedPatient({
-            ...value,
-            full_name: value.first_name + " " + value.last_name,
-        });
+        setSelectedPatient(value.first_name + " " + value.last_name);
         setPatientId(value.id);
     };
 
@@ -64,7 +61,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const getPatients = () => {
         setFetching(true);
         axios
-            .get("/patient", {
+            .get("/patient/get-all", {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -74,7 +71,6 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     setPatients(res.data.patients);
                     setServices(res.data.services);
                     setPatientId(res.data.patients[0].id);
-                    setServiceId(res.data.services[0].id);
                     setFetching(false);
                 }
             });
@@ -484,7 +480,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                             <TextInput
                                 type="text"
                                 value={
-                                    searchPatient || selectedPatient?.full_name
+                                    selectedPatient ? selectedPatient : searchPatient
                                 }
                                 onChange={(e) => handlePatientSearch(e)}
                                 placeholder="Search ..."
@@ -561,6 +557,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                 required
                                 onChange={(e) => setServiceId(e.target.value)}
                             >
+                                <option value="">Select Service</option>
                                 {services &&
                                     services.map((service, i) => (
                                         <option key={i} value={service.id}>

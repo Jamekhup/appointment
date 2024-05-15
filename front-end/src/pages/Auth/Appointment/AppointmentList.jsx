@@ -12,6 +12,7 @@ import { NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
 import EditAppointment from "./EditAppointment";
 import Loading from "../../../components/Loading";
+import Pagination from "../../../components/Pagination";
 
 const AppointmentList = () => {
     const { user } = useAuthContext();
@@ -20,16 +21,20 @@ const AppointmentList = () => {
     const [editData, setEditData] = useState(false);
     const [fetching, setFetching] = useState(false);
 
-    const getData = () => {
+    const url = "/appointment-list";
+    const [pagination, setPagination] = useState(null);
+
+    const getData = (url) => {
         setFetching(true);
         axios
-            .get("appointment-list", {
+            .get(url, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
             })
             .then((res) => {
-                setAppointments(res.data.appointments);
+                setAppointments(res.data.appointments.data);
+                setPagination(res.data.appointments);
                 setFetching(false);
             })
             .catch((err) => {
@@ -81,8 +86,13 @@ const AppointmentList = () => {
     };
 
     useEffect(() => {
-        getData();
+        getData(url);
     }, []);
+
+    const handlePagination = (paginate_url) => {
+        getData(paginate_url ?? url);
+        window.scrollTo(0, 0);
+    };
 
     return (
         <>
@@ -213,6 +223,13 @@ const AppointmentList = () => {
                         )}
                     </tbody>
                 </table>
+
+                {pagination && (
+                    <Pagination
+                        onPaginate={handlePagination}
+                        data={pagination}
+                    />
+                )}
             </div>
             {editData && (
                 <EditAppointment

@@ -55,7 +55,7 @@ class AppointmentController extends Controller
 
     public function appointmentList()
     {
-        $appointments = Appointment::all();
+        $appointments = Appointment::orderBy('created_at','DESC')->paginate(30);
         return response()->json(['appointments' => $appointments]);
     }
 

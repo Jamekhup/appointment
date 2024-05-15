@@ -13,7 +13,7 @@ const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
             events={event}
             startAccessor="start"
             endAccessor="end"
-            style={{ height: 520 }}
+            style={{ height: 720 }}
             defaultView="week"
             getNow={() => new Date()}
             views={["day", "week", "month"]}

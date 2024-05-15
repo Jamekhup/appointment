@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Exports\PaymentRecordExport;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\PaymentRecord;
@@ -9,17 +10,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentRecordController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
 
         $patient = Patient::all();
-        $payment = PaymentRecord::with('patient')->orderBy('created_at', 'DESC')->get();
+        $payment = PaymentRecord::with('patient')->
+        when($request->dateRange, function ($query, $date) {
+            $query->whereDate('issue_date', '>=', Carbon::parse($date[0])->addDay()->format('Y-m-d'))
+                ->whereDate('issue_date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
+        })->orderBy('created_at', 'DESC')->paginate(30);
 
-        if($patient || $payment){
+        if($payment){
             return response()->json(['status' =>'success', 'patient' => $patient, 'payment' => $payment]);
         }
+
 
     }
 
@@ -81,6 +89,14 @@ class PaymentRecordController extends Controller
 
     }
 
+
+    public function export(Request $request){
+
+        $export = Excel::download(new PaymentRecordExport($request->dateRange[0], $request->dateRange[1]), 'payment-record.csv', \Maatwebsite\Excel\Excel::XLSX);
+        ob_end_clean();
+        return $export;
+    }
+
     public function create_new(Request $request){
 
         try {
@@ -140,7 +156,67 @@ class PaymentRecordController extends Controller
 
     }
 
+
+    public function edit($id){
+        $payment = PaymentRecord::with('patient')->find($id);
+        $patients = Patient::all();
+        if($payment){
+            return response()->json(['status' =>'success', 'payment' => $payment, 'patient' => $patients]);
+        }else{
+            return response()->json(['status' => 'fail','message' => 'Something went wrong'], 422);
+        }
+    }
+
     public function update(Request $request, $id){
+
+        // $input = Validator::make($request->all(), [
+        //     'patient_id' =>'required',
+        //     'treatment' => 'required',
+        //     'doctorName' =>'required',
+        //     'coveredByInsuranceCompnany' =>'required',
+        //     'number' =>'required',
+        //     'cost' =>'required',
+        //     'homeVisit' =>'required',
+        //     'totalPayment' =>'required'
+        // ]);
+
+        // if ($input->fails()) {
+        //     return response()->json(['status' => 'fail', 'errors' => $input->errors()], 422);
+        // }
+
+
+        try {
+            $payment = PaymentRecord::find($id);
+            if($payment){
+
+                if($request->patient_id){
+                    $payment->patient_id = $request->patient_id;
+                }
+                $payment->issue_date = date('Y-m-d');
+                $payment->treatment = $request->treatment;
+                $payment->doctor_name = $request->doctorName;
+                $payment->full_covered_by_insurance_company = $request->coveredByInsuranceCompany;
+                $payment->number = $request->number;
+                $payment->cost = $request->cost;
+                $payment->additional_payment = $request->additionalPayment;
+                $payment->home_visit = $request->homeVisit;
+                $payment->number2 = $request->number2;
+                $payment->cost3 = $request->cost3;
+                $payment->additional_payment_4 = $request->additionalPayment4;
+                $payment->total_payment = $request->totalPayment;
+                $payment->received_by = Auth::user()->name;
+                $payment->received_date = date('Y-m-d');
+                $payment->remark = $request->remark;
+                $payment->updated_by = Auth::user()->name;
+                $payment->updated_at = date('Y-m-d H:i:s');
+
+                if($payment->save()){
+                    return response()->json(['status' =>'success', 'payment' => $payment]);
+                }
+            }
+        } catch (\Throwable $th) {
+            return response()->json($th);
+        }
 
     }
 

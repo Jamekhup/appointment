@@ -3,7 +3,7 @@ const Pagination = ({ onPaginate, data }) => {
         <div className="flex mt-6 justify-center gap-2">
             <div className="flex flex-wrap gap-y-2">
                 {data.links &&
-                    data.next_page_url &&
+                    data.per_page < data.total &&
                     data.links.map((link, index) =>
                         link.label === "..." ? (
                             <div key={index}>
@@ -23,9 +23,9 @@ const Pagination = ({ onPaginate, data }) => {
                                     dangerouslySetInnerHTML={{
                                         __html: link.label,
                                     }}
-                                    className={`border border-slate-300 px-4 mr-2 py-1 rounded-md hover:bg-green-400 hover:text-white ${
+                                    className={`border border-slate-300 px-4 mr-2 py-1 rounded-md hover:bg-blue-400 hover:text-white ${
                                         link.active
-                                            ? "bg-green-500 text-white"
+                                            ? "bg-blue-300 text-white"
                                             : ""
                                     } ${
                                         link.label === "..."

@@ -1,4 +1,4 @@
-import { faEdit, faPlus, faTrashCan,faCircleInfo,faPrint } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPlus, faTrashCan,faCircleInfo,faPrint,faFileExcel} from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../components/MetaTitle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PrimaryButton from "../../../components/PrimaryButton";
@@ -13,6 +13,8 @@ import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
 import StatusLoading from "../../../components/Loading";
 import { Link } from "react-router-dom";
+import Pagination from "../../../components/Pagination";
+import saveAs from "file-saver";
 
 
 const Payments = () => {
@@ -21,6 +23,7 @@ const Payments = () => {
     const [paymentRecord, setPaymentRecord] = useState(null);
     const [patients, setPatients] = useState(null);
 
+    const [pagination, setPagination] = useState('');
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
 
@@ -41,23 +44,53 @@ const Payments = () => {
         }
     ]);
 
-    const getData = () => {
+
+    const url = "/payment-record";
+
+    const getData = async (url) => {
         setLoading(true);
-        axios
-            .get("/payment-record", {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                setPaymentRecord(response.data.payment);
-                setPatients(response.data.patient);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.log(error);
-                setLoading(false);
-            });
+
+        let res = null;
+
+        if (startDate && endDate) {
+            res = await axios
+                .get(url, 
+                    {
+                    params: { dateRange: dateRange },
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+
+                if(res){
+                    setPaymentRecord(res.data.payment.data);
+                    setPagination(res.data.payment);
+                    setPatients(res.data.patient);
+                    setLoading(false);
+                }else{
+                    console.log(error);
+                    setLoading(false);
+                }
+        } else {
+            res = await axios
+                .get(url, 
+                    {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                })
+
+                if(res){
+                    setPaymentRecord(res.data.payment.data);
+                    setPagination(res.data.payment);
+                    setPatients(res.data.patient);
+                    setLoading(false);
+                }else{
+                    console.log(error);
+                    setLoading(false);
+                }
+        }
+        
     };
 
     const handleCreate = (data) => {
@@ -117,10 +150,40 @@ const Payments = () => {
     };
 
     useEffect(() => {
-        getData();
-    }, []);
+        getData(url);
+    }, [dateRange]);
 
 
+    const handlePagination = (paginate_url) => {
+        getData(paginate_url ?? url);
+        window.scrollTo(0, 0);
+    };
+
+    //handle export
+    const exportData = () => {
+        try {
+            axios.post(
+                "/payment-record/export",
+                { dateRange },
+                {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                }
+            ).then((res) => {
+                const blob = new Blob([res.data], {
+                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                });
+                saveAs(blob, "Payment-Record.xlsx");
+            })
+
+            
+            
+        } catch (err) {
+            console.log(err);
+        }
+    }
+ 
     return (
         <>
             <Header title="Payment Records" />
@@ -140,16 +203,26 @@ const Payments = () => {
                         showIcon
                         calendarIconClassname="react-date-range-picker"
                         className="bg-white h-[30px] rounded-md outline-none border border-slate-300 shadow-sm w-full cursor-pointer placeholder:text-sm placeholder:pl-1 focus:border-slate-400"
-                        placeholderText=" Filter By Date"
+                        placeholderText=" Filter By Issue Date"
                     />
 
                     <TextInput type="text" placeholder="Search by Patient Name" value={search} onChange={(e) => setSearch(e.target.value)} className="!py-1 !mt-0" />
                 </div>
 
-                <PrimaryButton onClick={() => setOpenCreateModal(true)}>
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                    <span>Add New Payment Record</span>
-                </PrimaryButton>
+                <div className="flex gap-2 items-center">
+                    <PrimaryButton onClick={() => setOpenCreateModal(true)}>
+                        <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                        <span>Add New Payment Record</span>
+                    </PrimaryButton>
+                    <button className="inline-flex items-center gap-2 justify-center px-4 py-2 bg-blue-300 border border-transparent rounded-md
+                    font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-400
+                    focus:outline-none focus:ring-0 focus:ring-blue-400 focus:ring-offset-2 transition ease-in-out
+                    duration-150"
+                    onClick={exportData}>
+                        <FontAwesomeIcon icon={faFileExcel} />
+                        <span>Export</span>
+                    </button>
+                </div>
             </div>
             <table className="w-[32rem] sm:w-full rounded-lg">
                 <thead className="bg-[#4b4a4a] uppercase text-white border">
@@ -216,9 +289,11 @@ const Payments = () => {
                                         </a>
                                     </td>
                                     <td className="border border-separate pl-2">
-                                        <span className="pr-4 cursor-pointer">
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </span>
+                                        <Link to={`/app/payments/edit/${pr.id}`}>
+                                            <span className="pr-4 cursor-pointer">
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </span>
+                                        </Link>
                                         <span className="cursor-pointer">
                                             <FontAwesomeIcon
                                                 icon={faTrashCan}
@@ -239,6 +314,13 @@ const Payments = () => {
                     }
                 </tbody>
             </table>
+
+            {pagination && (
+                <Pagination
+                    onPaginate={handlePagination}
+                    data={pagination}
+                />
+            )}
 
 
             <CreatePayment

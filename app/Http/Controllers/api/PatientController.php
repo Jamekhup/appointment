@@ -13,8 +13,13 @@ class PatientController extends Controller
 {
     public function index()
     {
-        $patients = Patient::orderBy('created_at', 'desc')->get();
-        $services = Service::orderBy('created_at', 'desc')->get();
+        $patients = Patient::orderBy('created_at', 'desc')->paginate(30);
+        return response()->json(['status' => 'success', 'patients' => $patients]);
+    }
+
+    public function get_all(){
+        $patients = Patient::all();
+        $services = Service::all();
         return response()->json(['status' => 'success', 'patients' => $patients, 'services' => $services]);
     }
 
@@ -72,6 +77,8 @@ class PatientController extends Controller
             return response()->json(['status' => 'fail', 'message' => 'Something went wrong'], 422);
         }
     }
+
+
     public function update(Request $request, $id)
     {
         $input = Validator::make($request->all(), [
