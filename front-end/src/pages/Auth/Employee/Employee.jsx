@@ -122,6 +122,9 @@ const Employee = () => {
                                 Access
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Color
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Action
                             </th>
                         </tr>
@@ -218,6 +221,14 @@ const Employee = () => {
                                                     </span>
                                                 )}
                                             </div>
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <div
+                                                className="rounded-sm px-1 py-2 mr-2"
+                                                style={{
+                                                    backgroundColor: emp.color,
+                                                }}
+                                            ></div>
                                         </td>
                                         <td className="border border-separate pl-2">
                                             <span

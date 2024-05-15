@@ -4,7 +4,6 @@ import TextInput from "../../../components/TextInput";
 import PrimaryButton from "../../../components/PrimaryButton";
 import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 
@@ -164,7 +163,6 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                             {errors.password[0]}
                         </div>
                     )}
-
                 </div>
 
                 <div className="font-medium -mb-1 mt-2 col-span-1 md:col-span-2 xl:col-span-3">
