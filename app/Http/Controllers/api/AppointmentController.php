@@ -15,7 +15,11 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        $appointments = Appointment::with('patient', 'user', 'service')->where('status', 0)->get();
+        if (Auth::user()->appointment_access == 1) {
+            $appointments = Appointment::with('patient', 'user', 'service')->where('status', 0)->get();
+        } else {
+            $appointments = Appointment::with('patient', 'user', 'service')->where('user_id', Auth::user()->id)->where('status', 0)->get();
+        }
         $reserved = ReserveAppointment::all();
 
         $events = [];
@@ -139,6 +143,7 @@ class AppointmentController extends Controller
             'patientId' => 'required',
             'date' => 'required',
             'time' => 'required',
+            'status' => 'required',
         ]);
 
         if ($input->fails()) {
@@ -163,6 +168,7 @@ class AppointmentController extends Controller
                 $appointment->doctor_name = $request->doctor;
                 $appointment->date = $request->date;
                 $appointment->time = $request->time;
+                $appointment->status = $request->status;
                 $appointment->comment = $request->comment;
                 $appointment->updated_by = Auth::user()->name;
                 if ($appointment->save()) {
@@ -171,6 +177,14 @@ class AppointmentController extends Controller
                 }
             }
             return response()->json(['status' => 'fail', 'message' => "Something went wrong"], 422);
+        }
+    }
+
+    public function detail($id)
+    {
+        $appointment = Appointment::with('user', 'service', 'patient')->where('id', $id)->first();
+        if ($appointment) {
+            return response()->json(['status' => 'success', 'data' => $appointment]);
         }
     }
 

@@ -165,7 +165,10 @@ const AppointmentList = () => {
                                     </td>
                                     <td className="border border-separate pl-2">
                                         <NavLink
-                                            // to={"/app/patient/detail/" + pa.id}
+                                            to={
+                                                "/app/list/detail/" +
+                                                appointment.id
+                                            }
                                             className="flex justify-start items-center gap-1
                                     bg-amber-300 rounded-md px-2 py-[1px] w-fit text-xs"
                                         >

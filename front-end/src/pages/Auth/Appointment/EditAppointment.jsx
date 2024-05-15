@@ -14,6 +14,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
     const [time, setTime] = useState(editData.time);
     const [comment, setComment] = useState(editData.comment);
     const [doctor, setDoctor] = useState(editData.doctor_name);
+    const [status, setStatus] = useState(0);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(false);
     const [error, setError] = useState(null);
@@ -52,6 +53,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
                     time,
                     comment,
                     doctor,
+                    status,
                 },
                 {
                     headers: {
@@ -180,6 +182,24 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
                     {error && error.time && (
                         <div className="text-xs mt-1 font-medium text-red-600">
                             {error.time[0]}
+                        </div>
+                    )}
+                </div>
+                <div className="flex flex-col text-sm">
+                    <label htmlFor="time">Status</label>
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
+                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
+                    >
+                        <option value={0}>Active</option>
+                        <option value={1}>Finish</option>
+                        <option value={2}>Cancel</option>
+                    </select>
+                    {error && error.status && (
+                        <div className="text-xs mt-1 font-medium text-red-600">
+                            {error.status[0]}
                         </div>
                     )}
                 </div>
