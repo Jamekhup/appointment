@@ -65,7 +65,7 @@ const AuthLayout = () => {
                             </h1>
                         </div>
                         <div className="flex flex-col gap-y-3 justify-start gap-1.5 text-sm">
-                            {user.appointmentAccess == 1 && (
+                            {user.dashboardAccess == 1 && (
                                 <NavLink
                                     to={"/app/dashboard"}
                                     className={({ isActive }) =>
@@ -80,21 +80,19 @@ const AuthLayout = () => {
                                     </span>
                                 </NavLink>
                             )}
-                            {user.appointmentAccess == 1 && (
-                                <NavLink
-                                    to={"/app/appointment"}
-                                    className={({ isActive }) =>
-                                        isActive
-                                            ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
-                                            : "flex justify-start items-center gap-2 px-2 py-2.5"
-                                    }
-                                >
-                                    <img src={AppointmentImage} alt="" />
-                                    <span className="text-slate-600">
-                                        Appointment
-                                    </span>
-                                </NavLink>
-                            )}
+                            <NavLink
+                                to={"/app/appointment"}
+                                className={({ isActive }) =>
+                                    isActive
+                                        ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                        : "flex justify-start items-center gap-2 px-2 py-2.5"
+                                }
+                            >
+                                <img src={AppointmentImage} alt="" />
+                                <span className="text-slate-600">
+                                    Appointment
+                                </span>
+                            </NavLink>
                             {user.appointmentListAccess == 1 && (
                                 <NavLink
                                     to={"/app/list"}

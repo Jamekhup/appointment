@@ -33,7 +33,7 @@ class AuthController extends Controller
                     return response()->json(['status' => 'fail', 'message' => 'Your email is not verified yet'], 422);
                     $request->user()->currentAccessToken()->delete();
                 } else {
-                    $user = User::select('id', 'name', 'dashboard_access', 'appointment_access', 'appointment_list_access', 'patient_access', 'payment_record_access', 'service_access', 'employee_access')->where('id', Auth::user()->id)->whereNotNull('email_verified_at')->first();
+                    $user = User::select('id', 'role', 'name', 'dashboard_access', 'appointment_access', 'appointment_list_access', 'patient_access', 'payment_record_access', 'service_access', 'employee_access')->where('id', Auth::user()->id)->whereNotNull('email_verified_at')->first();
                     return response()->json([
                         'status' => 'success',
                         'id' => $user->id,

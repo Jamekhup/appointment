@@ -85,6 +85,14 @@ const Appointment = () => {
         []
     );
 
+    const handleCancel = (id) => {
+        setEvent((prev) => prev.filter((p) => p.id !== id));
+    };
+
+    const handleFinish = (data) => {
+        setEvent((prev) => prev.filter((p) => p.id !== data.id));
+    };
+
     useEffect(() => {
         getEvent();
     }, []);
@@ -92,14 +100,21 @@ const Appointment = () => {
     return (
         <>
             <Header title="Appointment" />
-            <div className="flex justify-between items-center gap-x-2 mb-4">
-                <PrimaryButton onClick={() => setOpenReserveModal(true)}>
-                    <span>Reserve Booking</span>
-                </PrimaryButton>
-                <PrimaryButton onClick={() => setOpenCreateModal(true)}>
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                    <span>Add New Appointment</span>
-                </PrimaryButton>
+            <div className="flex flex-col md:flex-row justify-between items-center gap-y-2 gap-x-2 mb-4">
+                {user && user.appointmentAccess == 1 && (
+                    <>
+                        <PrimaryButton
+                            onClick={() => setOpenReserveModal(true)}
+                            className="bg-rose-500 hover:bg-rose-400 focus:bg-rose-500"
+                        >
+                            <span>Reserve Booking</span>
+                        </PrimaryButton>
+                        <PrimaryButton onClick={() => setOpenCreateModal(true)}>
+                            <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                            <span>Add New Appointment</span>
+                        </PrimaryButton>
+                    </>
+                )}
             </div>
             <div>
                 {event && (
@@ -125,8 +140,10 @@ const Appointment = () => {
                         setOpenEventModal(false);
                         setEventData(null);
                     }}
-                    maxWidth="w-full sm:w-5/6 md:w-2/3 mt-0 sm:-mt-24 md:-mt-32"
+                    maxWidth="w-full sm:w-5/6 md:w-2/3 -mt-20 md:-mt-40"
                     eventData={eventData}
+                    cancelled={handleCancel}
+                    finished={handleFinish}
                 />
             )}
 

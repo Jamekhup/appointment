@@ -28,6 +28,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/appointment', [AppointmentController::class, 'index']);
     Route::get('/appointment-list', [AppointmentController::class, 'appointmentList']);
     Route::post('/appointment/create', [AppointmentController::class, 'create']);
+    Route::put('/appointment/update/{id}', [AppointmentController::class, 'update']);
+    Route::get('/appointment/detail/{id}', [AppointmentController::class, 'detail']);
+    Route::put('/appointment/finished/{id}', [AppointmentController::class, 'finished']);
+    Route::put('/appointment/cancelled/{id}', [AppointmentController::class, 'cancelled']);
+    Route::delete('/appointment/delete/{id}', [AppointmentController::class, 'delete']);
 
     Route::get('/reserve-appointment', [ReservationController::class, 'index']);
     Route::post('/reserve-appointment/create', [ReservationController::class, 'create']);
