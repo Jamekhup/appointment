@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faCircleInfo,
     faEdit,
+    faFileExcel,
     faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
@@ -13,6 +14,7 @@ import Swal from "sweetalert2";
 import EditAppointment from "./EditAppointment";
 import Loading from "../../../components/Loading";
 import Pagination from "../../../components/Pagination";
+import ReactDatePicker from "react-datepicker";
 
 const AppointmentList = () => {
     const { user } = useAuthContext();
@@ -20,6 +22,9 @@ const AppointmentList = () => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [editData, setEditData] = useState(false);
     const [fetching, setFetching] = useState(false);
+    const [filterByStatus, setFilterByStatus] = useState(null);
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [startDate, endDate] = dateRange;
 
     const url = "/appointment-list";
     const [pagination, setPagination] = useState(null);
@@ -28,6 +33,7 @@ const AppointmentList = () => {
         setFetching(true);
         axios
             .get(url, {
+                params: { dateRange: dateRange },
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -87,7 +93,7 @@ const AppointmentList = () => {
 
     useEffect(() => {
         getData(url);
-    }, []);
+    }, [dateRange]);
 
     const handlePagination = (paginate_url) => {
         getData(paginate_url ?? url);
@@ -98,7 +104,75 @@ const AppointmentList = () => {
         <>
             <Header title="Appointment List" />
             <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center mb-2">
-                <p>Appointment Lists</p>
+                <div>
+                    <ReactDatePicker
+                        selectsRange={true}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onChange={(update) => {
+                            setDateRange(update);
+                        }}
+                        dateFormat="yyyy/MM/dd"
+                        isClearable={true}
+                        showIcon
+                        calendarIconClassname="react-date-range-picker"
+                        className="bg-white h-[30px] rounded-md outline-none border border-slate-300 shadow-sm w-full cursor-pointer placeholder:text-sm placeholder:pl-1 focus:border-slate-400"
+                        placeholderText=" Filter By Appointment Date"
+                    />
+                </div>
+                <div className="flex justify-between items-center">
+                    <div className="bg-blue-200 rounded-md flex justify-between items-center mr-3">
+                        <div
+                            className={`px-5 py-1 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans rounded-l-md ${
+                                filterByStatus == null
+                                    ? "shadow-blue-400 bg-blue-300"
+                                    : "bg-blue-200 hover:bg-blue-300"
+                            }`}
+                            onClick={() => setFilterByStatus(null)}
+                        >
+                            All
+                        </div>
+                        <div
+                            className={`px-3 py-1 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans ${
+                                filterByStatus == 0
+                                    ? "shadow-blue-400 bg-blue-300"
+                                    : "bg-blue-200 hover:bg-blue-300"
+                            }`}
+                            onClick={() => setFilterByStatus(0)}
+                        >
+                            Active
+                        </div>
+                        <div
+                            className={`px-3 py-1 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans ${
+                                filterByStatus == 1
+                                    ? "shadow-blue-400 bg-blue-300"
+                                    : "bg-blue-200 hover:bg-blue-300"
+                            }`}
+                            onClick={() => setFilterByStatus(1)}
+                        >
+                            Finished
+                        </div>
+                        <div
+                            className={`px-3 py-1 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans rounded-r-md ${
+                                filterByStatus == 2
+                                    ? "shadow-blue-400 bg-blue-300"
+                                    : "bg-blue-200 hover:bg-blue-300"
+                            }`}
+                            onClick={() => setFilterByStatus(2)}
+                        >
+                            Cancelled
+                        </div>
+                    </div>
+                    <button
+                        className="inline-flex items-center gap-2 justify-center px-4 py-[5.5px] bg-blue-300 border border-transparent rounded-md
+                    font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-400
+                    focus:outline-none focus:ring-0 focus:ring-blue-400 focus:ring-offset-2 transition ease-in-out
+                    duration-150"
+                    >
+                        <FontAwesomeIcon icon={faFileExcel} />
+                        <span>Export</span>
+                    </button>
+                </div>
             </div>
 
             <div className="overflow-x-hidden">
@@ -130,90 +204,101 @@ const AppointmentList = () => {
                     </thead>
                     <tbody className="text-slate-600">
                         {!fetching &&
-                            appointments?.map((appointment, i) => (
-                                <tr className="text-[15px] font-normal" key={i}>
-                                    <td className="border border-separate py-1 pl-2">
-                                        {appointment.date}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {appointment.time}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {appointment.finish_date_time
-                                            ? appointment.finish_date_time
-                                            : "-"}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <div className="flex items-center w-fit outline-none border border-slate-300 rounded-md px-2">
-                                            <span
-                                                className={`inline-block w-2 h-2 rounded-full mr-1 ${
-                                                    appointment.status == 0 &&
-                                                    "bg-green-500"
-                                                } ${
-                                                    appointment.status == 1 &&
-                                                    "bg-blue-500"
-                                                }
+                            appointments
+                                ?.filter((app) =>
+                                    filterByStatus == null
+                                        ? app
+                                        : app.status == filterByStatus
+                                )
+                                .map((appointment, i) => (
+                                    <tr
+                                        className="text-[15px] font-normal"
+                                        key={i}
+                                    >
+                                        <td className="border border-separate py-1 pl-2">
+                                            {appointment.date}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {appointment.time}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {appointment.finish_date_time
+                                                ? appointment.finish_date_time
+                                                : "-"}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <div className="flex items-center w-fit outline-none border border-slate-300 rounded-md px-2">
+                                                <span
+                                                    className={`inline-block w-2 h-2 rounded-full mr-1 ${
+                                                        appointment.status ==
+                                                            0 && "bg-green-500"
+                                                    } ${
+                                                        appointment.status ==
+                                                            1 && "bg-blue-500"
+                                                    }
                                                         ${
                                                             appointment.status ==
                                                                 2 &&
                                                             "bg-red-500"
                                                         }
                                                 }}`}
-                                            ></span>
-                                            <span className="text-[13px]">
-                                                {appointment.status == 0 &&
-                                                    "Active"}
-                                                {appointment.status == 1 &&
-                                                    "Finished"}
-                                                {appointment.status == 2 &&
-                                                    "Cancelled"}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {appointment.created_by}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <NavLink
-                                            to={
-                                                "/app/list/detail/" +
-                                                appointment.id
-                                            }
-                                            className="flex justify-start items-center gap-1
+                                                ></span>
+                                                <span className="text-[13px]">
+                                                    {appointment.status == 0 &&
+                                                        "Active"}
+                                                    {appointment.status == 1 &&
+                                                        "Finished"}
+                                                    {appointment.status == 2 &&
+                                                        "Cancelled"}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {appointment.created_by}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <NavLink
+                                                to={
+                                                    "/app/list/detail/" +
+                                                    appointment.id
+                                                }
+                                                className="flex justify-start items-center gap-1
                                     bg-amber-300 rounded-md px-2 py-[1px] w-fit text-xs"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faCircleInfo}
-                                            />
-                                            <span>Detail</span>
-                                        </NavLink>
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <span
-                                            className="pr-4 cursor-pointer"
-                                            title="Edit Employee"
-                                            onClick={() => {
-                                                setOpenEditModal(true);
-                                                setEditData(appointment);
-                                            }}
-                                        >
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </span>
-                                        <span
-                                            className="cursor-pointer"
-                                            title="Delete Employee"
-                                            onClick={() =>
-                                                handleDelete(appointment.id)
-                                            }
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faTrashCan}
-                                                className="text-rose-500"
-                                            />
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faCircleInfo}
+                                                />
+                                                <span>Detail</span>
+                                            </NavLink>
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <span
+                                                className="pr-4 cursor-pointer"
+                                                title="Edit Employee"
+                                                onClick={() => {
+                                                    setOpenEditModal(true);
+                                                    setEditData(appointment);
+                                                }}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faEdit}
+                                                />
+                                            </span>
+                                            <span
+                                                className="cursor-pointer"
+                                                title="Delete Employee"
+                                                onClick={() =>
+                                                    handleDelete(appointment.id)
+                                                }
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faTrashCan}
+                                                    className="text-rose-500"
+                                                />
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
                         {fetching && (
                             <tr>
                                 <td colSpan={7}>

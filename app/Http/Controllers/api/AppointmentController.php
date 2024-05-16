@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\ReserveAppointment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -53,9 +54,12 @@ class AppointmentController extends Controller
         return response()->json(['events' => $events]);
     }
 
-    public function appointmentList()
+    public function appointmentList(Request $request)
     {
-        $appointments = Appointment::orderBy('created_at','DESC')->paginate(30);
+        $appointments = Appointment::when($request->dateRange, function ($query, $date) {
+            $query->whereDate('date', '>=', Carbon::parse($date[0])->addDay()->format('Y-m-d'))
+                ->whereDate('date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
+        })->orderBy('created_at', 'DESC')->paginate(30);
         return response()->json(['appointments' => $appointments]);
     }
 

@@ -46,8 +46,8 @@ const AuthLayout = () => {
                 <div
                     className={
                         toggleNav
-                            ? "flex justify-start items-start gap-1.5"
-                            : "flex justify-start items-start"
+                            ? "flex justify-start items-start gap-1.5 font-inter"
+                            : "flex justify-start items-start font-inter"
                     }
                 >
                     {/* start sidenav */}

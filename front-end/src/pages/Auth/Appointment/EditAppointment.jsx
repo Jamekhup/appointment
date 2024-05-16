@@ -14,7 +14,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
     const [time, setTime] = useState(editData.time);
     const [comment, setComment] = useState(editData.comment);
     const [doctor, setDoctor] = useState(editData.doctor_name);
-    const [status, setStatus] = useState(0);
+    const [status, setStatus] = useState(editData.status);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(false);
     const [error, setError] = useState(null);
@@ -24,7 +24,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
     const getPatients = () => {
         setFetching(true);
         axios
-            .get("/patient", {
+            .get("/patient/get-all", {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
