@@ -14,7 +14,6 @@ import useAuthContext from "../../../context/AuthContext";
 import StatusLoading from "../../../components/Loading";
 import { Link } from "react-router-dom";
 import Pagination from "../../../components/Pagination";
-import saveAs from "file-saver";
 
 
 const Payments = () => {
@@ -159,30 +158,6 @@ const Payments = () => {
         window.scrollTo(0, 0);
     };
 
-    //handle export
-    const exportData = () => {
-        try {
-            axios.post(
-                "/payment-record/export",
-                { dateRange },
-                {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                }
-            ).then((res) => {
-                const blob = new Blob([res.data], {
-                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                });
-                saveAs(blob, "Payment-Record.xlsx");
-            })
-
-            
-            
-        } catch (err) {
-            console.log(err);
-        }
-    }
  
     return (
         <>
@@ -218,7 +193,7 @@ const Payments = () => {
                     font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-400
                     focus:outline-none focus:ring-0 focus:ring-blue-400 focus:ring-offset-2 transition ease-in-out
                     duration-150"
-                    onClick={exportData}>
+                    >
                         <FontAwesomeIcon icon={faFileExcel} />
                         <span>Export</span>
                     </button>
