@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/reserve-appointment', [ReservationController::class, 'index']);
     Route::post('/reserve-appointment/create', [ReservationController::class, 'create']);
+    Route::delete('/reserve-appointment/delete/{id}', [ReservationController::class, 'delete']);
 
     Route::get('/employee', [EmployeeController::class, 'index']);
     Route::post('/employee/create', [EmployeeController::class, 'create']);

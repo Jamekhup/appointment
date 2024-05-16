@@ -85,12 +85,15 @@ const Appointment = () => {
         []
     );
 
-    const handleCancel = (id) => {
-        setEvent((prev) => prev.filter((p) => p.id !== id));
+    const handleCancel = (data) => {
+        setEvent((prev) => prev.filter((p) => p.id !== data.id));
     };
 
     const handleFinish = (data) => {
         setEvent((prev) => prev.filter((p) => p.id !== data.id));
+    };
+    const handleDelete = (id) => {
+        setEvent((prev) => prev.filter((p) => p.id !== id));
     };
 
     useEffect(() => {
@@ -101,20 +104,20 @@ const Appointment = () => {
         <>
             <Header title="Appointment" />
             <div className="flex flex-col md:flex-row justify-between items-center gap-y-2 gap-x-2 mb-4">
-                {user && user.appointmentAccess == 1 && (
-                    <>
-                        <PrimaryButton
-                            onClick={() => setOpenReserveModal(true)}
-                            className="bg-rose-500 hover:bg-rose-400 focus:bg-rose-500"
-                        >
-                            <span>Reserve Booking</span>
-                        </PrimaryButton>
-                        <PrimaryButton onClick={() => setOpenCreateModal(true)}>
-                            <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                            <span>Add New Appointment</span>
-                        </PrimaryButton>
-                    </>
-                )}
+                {/* {user && user.appointmentAccess == 1 && (
+                    <> */}
+                <PrimaryButton
+                    onClick={() => setOpenReserveModal(true)}
+                    className="bg-rose-500 hover:bg-rose-400 focus:bg-rose-500"
+                >
+                    <span>Reserve Booking</span>
+                </PrimaryButton>
+                <PrimaryButton onClick={() => setOpenCreateModal(true)}>
+                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                    <span>Add New Appointment</span>
+                </PrimaryButton>
+                {/* </>
+                )} */}
             </div>
             <div>
                 {event && (
@@ -144,6 +147,7 @@ const Appointment = () => {
                     eventData={eventData}
                     cancelled={handleCancel}
                     finished={handleFinish}
+                    deleteReserve={handleDelete}
                 />
             )}
 
