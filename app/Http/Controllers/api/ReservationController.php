@@ -51,6 +51,17 @@ class ReservationController extends Controller
         }
     }
 
+    public function delete($id)
+    {
+        if (Auth::user()->appointment_access == 1) {
+            $reserved = ReserveAppointment::where('id', $id)->first();
+            if ($reserved) {
+                $reserved->delete();
+                return response()->json($id);
+            }
+        }
+        abort(403);
+    }
     private function event($reserved)
     {
         $event = [

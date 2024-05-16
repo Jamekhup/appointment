@@ -11,6 +11,7 @@ const EventModal = ({
     eventData,
     finished,
     cancelled,
+    deleteReserve,
 }) => {
     const { user } = useAuthContext();
     const [loading, setLoading] = useState(false);
@@ -57,6 +58,25 @@ const EventModal = ({
             })
             .catch((error) => {
                 console.log(error);
+                setLoading(false);
+            });
+    };
+
+    const handleDelete = () => {
+        setLoading(true);
+        axios
+            .delete("/reserve-appointment/delete/" + eventData.id, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            })
+            .then((response) => {
+                deleteReserve(response.data);
+                setLoading(false);
+                close();
+            })
+            .catch((error) => {
+                setError(error.response.data.message);
                 setLoading(false);
             });
     };
@@ -204,32 +224,33 @@ const EventModal = ({
                         </div>
                     )}
 
-                    {eventData.title == "Reserved" ? (
-                        <PrimaryButton
-                            type="button"
-                            className="!bg-red-500 border px-4 mt-4 hover:!bg-red-400"
-                            onClick={() => close()}
-                        >
-                            Close
-                        </PrimaryButton>
-                    ) : (
-                        <div className="flex items-center gap-x-2">
+                    {user.appointmentAccess == 1 &&
+                        (eventData.title == "Reserved" ? (
                             <PrimaryButton
                                 type="button"
-                                className="px-4 mt-4"
-                                onClick={() => handleFinished()}
+                                className="!bg-red-500 border px-4 mt-4 hover:!bg-red-400"
+                                onClick={() => handleDelete()}
                             >
-                                Finished
+                                Delete
                             </PrimaryButton>
-                            <PrimaryButton
-                                type="button"
-                                className="bg-transparent border !border-slate-800 px-4 mt-4 !text-gray-800 hover:bg-transparent hover:text-gray-800"
-                                onClick={() => handleCancel()}
-                            >
-                                Cancelled
-                            </PrimaryButton>
-                        </div>
-                    )}
+                        ) : (
+                            <div className="flex items-center gap-x-2">
+                                <PrimaryButton
+                                    type="button"
+                                    className="px-4 mt-4"
+                                    onClick={() => handleFinished()}
+                                >
+                                    Finished
+                                </PrimaryButton>
+                                <PrimaryButton
+                                    type="button"
+                                    className="bg-transparent border !border-slate-800 px-4 mt-4 !text-gray-800 hover:bg-transparent hover:text-gray-800"
+                                    onClick={() => handleCancel()}
+                                >
+                                    Cancelled
+                                </PrimaryButton>
+                            </div>
+                        ))}
                 </form>
             </div>
         </Modal>

@@ -15,6 +15,7 @@ import EditAppointment from "./EditAppointment";
 import Loading from "../../../components/Loading";
 import Pagination from "../../../components/Pagination";
 import ReactDatePicker from "react-datepicker";
+import { ExportToExcel } from "../PaymentRecord/ExportToExcel";
 
 const AppointmentList = () => {
     const { user } = useAuthContext();
@@ -25,6 +26,7 @@ const AppointmentList = () => {
     const [filterByStatus, setFilterByStatus] = useState(null);
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
+    const [dataToExport, setDataToExport] = useState([]);
 
     const url = "/appointment-list";
     const [pagination, setPagination] = useState(null);
@@ -41,6 +43,33 @@ const AppointmentList = () => {
             .then((res) => {
                 setAppointments(res.data.appointments.data);
                 setPagination(res.data.appointments);
+                const toExpot = res.data.appointments.data.map((data, i) => ({
+                    no: i + 1,
+                    service: data.service.name,
+                    patient:
+                        data.patient.title +
+                        " " +
+                        data.patient.first_name +
+                        " " +
+                        data.patient.last_name,
+                    doctor: data.doctor_name,
+                    "appointment date": data.date,
+                    "appointment time": data.time,
+                    status:
+                        data.status == 0
+                            ? "Active"
+                            : data.status == 1
+                            ? "Finished"
+                            : data.status == 2
+                            ? "Cancelled"
+                            : "-",
+                    comment: data.comment,
+                    "start date time": data.start_date_time,
+                    "finish date time": data.finish_date_time,
+                    "created by": data.created_by,
+                    "updated by": data.updated_by ? data.updated_by : "-",
+                }));
+                setDataToExport(toExpot);
                 setFetching(false);
             })
             .catch((err) => {
@@ -163,15 +192,12 @@ const AppointmentList = () => {
                             Cancelled
                         </div>
                     </div>
-                    <button
-                        className="inline-flex items-center gap-2 justify-center px-4 py-[5.5px] bg-blue-300 border border-transparent rounded-md
-                    font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-400
-                    focus:outline-none focus:ring-0 focus:ring-blue-400 focus:ring-offset-2 transition ease-in-out
-                    duration-150"
-                    >
-                        <FontAwesomeIcon icon={faFileExcel} />
-                        <span>Export</span>
-                    </button>
+                    {appointments && (
+                        <ExportToExcel
+                            apiData={dataToExport}
+                            fileName={"appointment_records"}
+                        />
+                    )}
                 </div>
             </div>
 

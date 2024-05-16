@@ -56,11 +56,14 @@ class AppointmentController extends Controller
 
     public function appointmentList(Request $request)
     {
-        $appointments = Appointment::when($request->dateRange, function ($query, $date) {
-            $query->whereDate('date', '>=', Carbon::parse($date[0])->addDay()->format('Y-m-d'))
-                ->whereDate('date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
-        })->orderBy('created_at', 'DESC')->paginate(30);
-        return response()->json(['appointments' => $appointments]);
+        if (Auth::user()->appointment_list_access == 1) {
+            $appointments = Appointment::with('user', 'patient', 'service')->when($request->dateRange, function ($query, $date) {
+                $query->whereDate('date', '>=', Carbon::parse($date[0])->addDay()->format('Y-m-d'))
+                    ->whereDate('date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
+            })->orderBy('created_at', 'DESC')->paginate(30);
+            return response()->json(['appointments' => $appointments]);
+        }
+        abort(403);
     }
 
     public function create(Request $request)
@@ -142,88 +145,103 @@ class AppointmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $input = Validator::make($request->all(), [
-            'serviceId' => 'required',
-            'patientId' => 'required',
-            'date' => 'required',
-            'time' => 'required',
-            'status' => 'required',
-        ]);
-
-        if ($input->fails()) {
-            return response()->json(['status' => 'fail', 'message' => $input->errors()], 422);
-        }
-
-        $reserved = ReserveAppointment::where('date', date('Y-m-d', strtotime($request->date)))
-            ->where('from_time', '<=', date('H:i:s', strtotime($request->time)))
-            ->where('to_time', '>=', date('H:i:s', strtotime($request->time)))
-            ->first();
-
-        if ($reserved) {
-            return response()->json([
-                'status' => 'reserved',
-                'message' => date('Y-m-d', strtotime($request->date)) . " " . date('H:i:s', strtotime($request->time)) . ' Reserved'
+        if (Auth::user()->appointment_list_access == 1) {
+            $input = Validator::make($request->all(), [
+                'serviceId' => 'required',
+                'patientId' => 'required',
+                'date' => 'required',
+                'time' => 'required',
+                'status' => 'required',
             ]);
-        } else {
-            $appointment = Appointment::with('patient', 'user', 'service')->where('id', $id)->first();
-            if ($appointment) {
-                $appointment->service_id = $request->serviceId;
-                $appointment->user_id = Auth::user()->id;
-                $appointment->doctor_name = $request->doctor;
-                $appointment->date = $request->date;
-                $appointment->time = $request->time;
-                $appointment->status = $request->status;
-                $appointment->comment = $request->comment;
-                $appointment->updated_by = Auth::user()->name;
-                if ($appointment->save()) {
 
-                    return response()->json(['status' => 'success', 'data' => $appointment]);
-                }
+            if ($input->fails()) {
+                return response()->json(['status' => 'fail', 'message' => $input->errors()], 422);
             }
-            return response()->json(['status' => 'fail', 'message' => "Something went wrong"], 422);
+
+            $reserved = ReserveAppointment::where('date', date('Y-m-d', strtotime($request->date)))
+                ->where('from_time', '<=', date('H:i:s', strtotime($request->time)))
+                ->where('to_time', '>=', date('H:i:s', strtotime($request->time)))
+                ->first();
+
+            if ($reserved) {
+                return response()->json([
+                    'status' => 'reserved',
+                    'message' => date('Y-m-d', strtotime($request->date)) . " " . date('H:i:s', strtotime($request->time)) . ' Reserved'
+                ]);
+            } else {
+                $appointment = Appointment::with('patient', 'user', 'service')->where('id', $id)->first();
+                if ($appointment) {
+                    $appointment->service_id = $request->serviceId;
+                    $appointment->user_id = Auth::user()->id;
+                    $appointment->doctor_name = $request->doctor;
+                    $appointment->date = $request->date;
+                    $appointment->time = $request->time;
+                    $appointment->status = $request->status;
+                    $appointment->comment = $request->comment;
+                    $appointment->updated_by = Auth::user()->name;
+                    if ($appointment->save()) {
+
+                        return response()->json(['status' => 'success', 'data' => $appointment]);
+                    }
+                }
+                return response()->json(['status' => 'fail', 'message' => "Something went wrong"], 422);
+            }
         }
+        abort(403);
     }
 
     public function detail($id)
     {
-        $appointment = Appointment::with('user', 'service', 'patient')->where('id', $id)->first();
-        if ($appointment) {
-            return response()->json(['status' => 'success', 'data' => $appointment]);
+        if (Auth::user()->appointment_list_access == 1) {
+            $appointment = Appointment::with('user', 'service', 'patient')->where('id', $id)->first();
+            if ($appointment) {
+                return response()->json(['status' => 'success', 'data' => $appointment]);
+            }
         }
+        abort(403);
     }
 
     public function finished($id)
     {
-        $appointment = Appointment::where('id', $id)->first();
-        if ($appointment) {
-            $appointment->finish_date_time = now();
-            $appointment->status = 1;
-            $appointment->updated_by = Auth::user()->name;
-            $appointment->save();
+        if (Auth::user()->appointment_access == 1) {
+            $appointment = Appointment::where('id', $id)->first();
+            if ($appointment) {
+                $appointment->finish_date_time = now();
+                $appointment->status = 1;
+                $appointment->updated_by = Auth::user()->name;
+                $appointment->save();
 
-            return response()->json(['data' => $appointment]);
+                return response()->json(['data' => $appointment]);
+            }
         }
+        abort(403);
     }
 
     public function cancelled($id)
     {
-        $appointment = Appointment::where('id', $id)->first();
-        if ($appointment) {
-            $appointment->status = 2;
-            $appointment->updated_by = Auth::user()->name;
-            $appointment->save();
+        if (Auth::user()->appointment_access == 1) {
+            $appointment = Appointment::where('id', $id)->first();
+            if ($appointment) {
+                $appointment->status = 2;
+                $appointment->updated_by = Auth::user()->name;
+                $appointment->save();
 
-            return response()->json(['data' => $appointment]);
+                return response()->json(['data' => $appointment]);
+            }
         }
+        abort(403);
     }
 
     public function delete($id)
     {
-        $appointment = Appointment::where('id', $id)->first();
-        if ($appointment) {
-            $appointment->delete();
-            return response()->json(201);
+        if (Auth::user()->appointment_list_access == 1) {
+            $appointment = Appointment::where('id', $id)->first();
+            if ($appointment) {
+                $appointment->delete();
+                return response()->json(201);
+            }
         }
+        abort(403);
     }
 
     private function event($appointment)
@@ -237,12 +255,9 @@ class AppointmentController extends Controller
                 $appointment['patient']['first_name'] . ' ' .
                 $appointment['patient']['last_name'] .
                 ' ( ' . $appointment['service']['name'] . ' ) ',
-
-            // 'service_name' => $appointment['service']['name'] . ' with ' . $appointment['user']['name'],
-            // 'customer_phone' => $event['customer']['phone'],
-            // 'customer_name' => $event['customer']['name'],
             'backgroundColor' => $appointment['user']['color'],
-            'status' => $appointment['status']
+            'status' => $appointment['status'],
+            'data' => $appointment
         ];
         return $event;
     }
