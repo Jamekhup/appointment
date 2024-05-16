@@ -75,8 +75,11 @@ const Patient = () => {
                     .then((res) => {
                         if (res.data.status == "success") {
                             setLoading(false);
-                            getPatients();
+                            getPatients(url);
                         }
+                    })
+                    .catch(() => {
+                        setLoading(false);
                     });
             }
         });
@@ -201,10 +204,7 @@ const Patient = () => {
             </table>
 
             {pagination && (
-                <Pagination
-                    onPaginate={handlePagination}
-                    data={pagination}
-                />
+                <Pagination onPaginate={handlePagination} data={pagination} />
             )}
         </>
     );

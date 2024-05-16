@@ -36,76 +36,75 @@ const CreatePatient = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        try {
-            axios
-                .post(
-                    "/patient/create",
-                    {
-                        title,
-                        firstName,
-                        lastName,
-                        dob,
-                        street,
-                        houseNumber,
-                        city,
-                        postalCode,
-                        houseDoctor,
-                        recommendedDoctor,
-                        insuranceCompany,
-                        paymentFree,
-                        treatmentInSixMonth,
-                        privatePatient,
-                        specialNeed,
+        axios
+            .post(
+                "/patient/create",
+                {
+                    title,
+                    firstName,
+                    lastName,
+                    dob,
+                    street,
+                    houseNumber,
+                    city,
+                    postalCode,
+                    houseDoctor,
+                    recommendedDoctor,
+                    insuranceCompany,
+                    paymentFree,
+                    treatmentInSixMonth,
+                    privatePatient,
+                    specialNeed,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
                     },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    }
-                )
-                .then((res) => {
-                    if (res.data.status == "success") {
-                        setLoading(false);
-                        setTitle("");
-                        setFirstName("");
-                        setLastName("");
-                        setDob("");
-                        setStreet("");
-                        setHouseNumber("");
-                        setCity("");
-                        setPostalCode("");
-                        setHouseDoctor("");
-                        setRecommendedDoctor("");
-                        setInsuranceCompany("");
-                        setPaymentFree("");
-                        setTreatmentInSixMonth("");
-                        setPrivatePatient("");
-                        setSpecialNeed("");
-                        Swal.fire({
-                            title: "Success!",
-                            text: "New Patient added successfully",
-                            icon: "success",
-                            position: "top",
-                            timer: 4500,
-                        });
-                        navigate("/app/patient");
-                    } else {
-                        setLoading(false);
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Something went wrong. Please try again",
-                            icon: "error",
-                            position: "top",
-                            timer: 4500,
-                        });
-                    }
-                });
-        } catch (error) {
-            if (error.response.status === 422) {
-                setErrors(error.response.data.message);
-                setLoading(false);
-            }
-        }
+                }
+            )
+            .then((res) => {
+                if (res.data.status == "success") {
+                    setLoading(false);
+                    setTitle("");
+                    setFirstName("");
+                    setLastName("");
+                    setDob("");
+                    setStreet("");
+                    setHouseNumber("");
+                    setCity("");
+                    setPostalCode("");
+                    setHouseDoctor("");
+                    setRecommendedDoctor("");
+                    setInsuranceCompany("");
+                    setPaymentFree("");
+                    setTreatmentInSixMonth("");
+                    setPrivatePatient("");
+                    setSpecialNeed("");
+                    Swal.fire({
+                        title: "Success!",
+                        text: "New Patient added successfully",
+                        icon: "success",
+                        position: "top",
+                        timer: 4500,
+                    });
+                    navigate("/app/patient");
+                } else {
+                    setLoading(false);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Something went wrong. Please try again",
+                        icon: "error",
+                        position: "top",
+                        timer: 4500,
+                    });
+                }
+            })
+            .catch((error) => {
+                if (error.response.status === 422) {
+                    setErrors(error.response.data.message);
+                    setLoading(false);
+                }
+            });
     };
 
     return (
@@ -126,13 +125,13 @@ const CreatePatient = () => {
 
             <form onSubmit={handleSubmit} className="mt-5 mb-3">
                 <div
-                    className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 
+                    className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1
                 gap-x-2.5 sm:gap-y-4 gap-y-2.5 items-start"
                 >
                     <div className="flex flex-col text-sm">
                         <label htmlFor="title">Title</label>
                         <select
-                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
+                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -310,7 +309,7 @@ const CreatePatient = () => {
                     <div className="flex flex-col text-sm">
                         <label htmlFor="title">Payment Free (Yes or No)</label>
                         <select
-                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
+                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                             value={paymentFree}
                             onChange={(e) => setPaymentFree(e.target.value)}
@@ -331,7 +330,7 @@ const CreatePatient = () => {
                             Treatment in Six Month (Yes or No)
                         </label>
                         <select
-                            className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
+                            className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                             value={treatmentInSixMonth}
                             onChange={(e) =>
@@ -354,7 +353,7 @@ const CreatePatient = () => {
                             Private Patient (Yes or No)
                         </label>
                         <select
-                            className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
+                            className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                             value={privatePatient}
                             onChange={(e) => setPrivatePatient(e.target.value)}
@@ -374,7 +373,7 @@ const CreatePatient = () => {
                 <div className="w-full flex flex-col mt-4 mb-1">
                     <label className="text-sm">Special Need (Optional)</label>
                     <textarea
-                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 
+                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600
                     focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                         rows={7}
                         value={specialNeed}

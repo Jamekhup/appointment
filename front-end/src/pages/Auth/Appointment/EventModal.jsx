@@ -214,7 +214,7 @@ const EventModal = ({
                                 <div className="flex justify-between items-center">
                                     <div>{eventData.data.service.name}</div>
                                     <div className="font-mono">
-                                        {eventData.data.service.price}
+                                        € {eventData.data.service.price}
                                     </div>
                                 </div>
                                 <div>
