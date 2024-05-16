@@ -10,7 +10,7 @@ const GuestLayout = () => {
 
     if (user === null) {
         return (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center font-inter">
                 <div className="w-full">
                     <Outlet />
                 </div>
