@@ -206,6 +206,12 @@ const AppointmentList = () => {
                     <thead className="bg-[#4b4a4a] uppercase text-white border">
                         <tr className="h-7">
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Patient Name
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Doctor Name
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Date
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
@@ -241,6 +247,12 @@ const AppointmentList = () => {
                                         className="text-[15px] font-normal"
                                         key={i}
                                     >
+                                        <td className="border border-separate py-1 pl-2">
+                                            {appointment.patient.title} {appointment.patient.first_name} {appointment.patient.last_name}
+                                        </td>
+                                        <td className="border border-separate py-1 pl-2">
+                                            {appointment.doctor_name}
+                                        </td>
                                         <td className="border border-separate py-1 pl-2">
                                             {appointment.date}
                                         </td>
