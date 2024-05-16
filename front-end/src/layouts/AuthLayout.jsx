@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-    NavLink,
-    Navigate,
-    Outlet,
-    useLocation,
-    useNavigate,
-} from "react-router-dom";
+import { NavLink, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faSignOut } from "@fortawesome/free-solid-svg-icons";
 import useAuthContext from "../context/AuthContext";
@@ -26,7 +20,6 @@ const AuthLayout = () => {
     const navigate = useNavigate();
 
     const { setUser, user } = useAuthContext();
-    const location = useLocation();
 
     const [toggleNav, setToggleNav] = useState(true);
     const [toggleLogout, setToggleLogout] = useState(false);
@@ -65,21 +58,21 @@ const AuthLayout = () => {
                             </h1>
                         </div>
                         <div className="flex flex-col gap-y-3 justify-start gap-1.5 text-sm">
-                            {user.dashboardAccess == 1 && (
-                                <NavLink
-                                    to={"/app/dashboard"}
-                                    className={({ isActive }) =>
-                                        isActive
-                                            ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
-                                            : "flex justify-start items-center gap-2 px-2 py-2.5"
-                                    }
-                                >
-                                    <img src={DashboardImage} alt="" />
-                                    <span className="text-slate-600">
-                                        Dashboard
-                                    </span>
-                                </NavLink>
-                            )}
+                            {/* {user.dashboardAccess == 1 && ( */}
+                            <NavLink
+                                to={"/app/dashboard"}
+                                className={({ isActive }) =>
+                                    isActive
+                                        ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
+                                        : "flex justify-start items-center gap-2 px-2 py-2.5"
+                                }
+                            >
+                                <img src={DashboardImage} alt="" />
+                                <span className="text-slate-600">
+                                    Dashboard
+                                </span>
+                            </NavLink>
+                            {/* )} */}
                             <NavLink
                                 to={"/app/appointment"}
                                 className={({ isActive }) =>

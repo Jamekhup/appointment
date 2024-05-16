@@ -10,7 +10,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const [patients, setPatients] = useState(null);
     const [services, setServices] = useState(null);
     const [patientId, setPatientId] = useState("");
-    const [serviceId, setServiceId] = useState("");
+    const [serviceId, setServiceId] = useState("select");
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
     const [comment, setComment] = useState("");
@@ -480,7 +480,9 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                             <TextInput
                                 type="text"
                                 value={
-                                    selectedPatient ? selectedPatient : searchPatient
+                                    selectedPatient
+                                        ? selectedPatient
+                                        : searchPatient
                                 }
                                 onChange={(e) => handlePatientSearch(e)}
                                 placeholder="Search ..."
@@ -557,10 +559,20 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                 required
                                 onChange={(e) => setServiceId(e.target.value)}
                             >
-                                <option value="">Select Service</option>
+                                <option
+                                    value="select"
+                                    disabled
+                                    className="bg-white"
+                                >
+                                    Select Services
+                                </option>
                                 {services &&
                                     services.map((service, i) => (
-                                        <option key={i} value={service.id}>
+                                        <option
+                                            key={i}
+                                            value={service.id}
+                                            className="bg-white"
+                                        >
                                             {service.name}
                                         </option>
                                     ))}

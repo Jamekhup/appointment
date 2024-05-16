@@ -31,6 +31,7 @@ import PaymentDetail from "./pages/Auth/PaymentRecord/PaymentDetail";
 import AppointmentDetail from "./pages/Auth/Appointment/AppointmentDetail";
 import EditPayment from "./pages/Auth/PaymentRecord/EditPayment";
 import PaymentExportPdf from "./pages/Auth/PaymentRecord/PaymentExportPdf";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
     return (
@@ -47,26 +48,38 @@ function App() {
                 <Route path="dashboard" element={<Dashboard />} />
 
                 <Route path="appointment" element={<Appointment />} />
-                <Route path="list" element={<AppointmentList />} />
-                <Route path="list/detail/:id" element={<AppointmentDetail />} />
 
-                <Route path="patient" element={<Patient />} />
-                <Route
-                    path="patient/detail/:id"
-                    element={<PatientDetail />}
-                    errorElement={<NotFound />}
-                />
-                <Route path="patient/create" element={<CreatePatient />} />
-                <Route path="patient/edit/:id" element={<EditPatient />} />
+                <Route element={<ProtectedRoute />}>
+                    <Route path="list" element={<AppointmentList />} />
+                    <Route
+                        path="list/detail/:id"
+                        element={<AppointmentDetail />}
+                    />
 
-                <Route path="payments" element={<Payments />} />
-                <Route path="payments/detail/:id" element={<PaymentDetail />} />
-                <Route path="payments/edit/:id" element={<EditPayment />} />
-                <Route path="payments/export/:id" element={<PaymentExportPdf />} />
+                    <Route path="patient" element={<Patient />} />
+                    <Route
+                        path="patient/detail/:id"
+                        element={<PatientDetail />}
+                        errorElement={<NotFound />}
+                    />
+                    <Route path="patient/create" element={<CreatePatient />} />
+                    <Route path="patient/edit/:id" element={<EditPatient />} />
 
-                <Route path="service" element={<Service />} />
+                    <Route path="payments" element={<Payments />} />
+                    <Route
+                        path="payments/detail/:id"
+                        element={<PaymentDetail />}
+                    />
+                    <Route path="payments/edit/:id" element={<EditPayment />} />
+                    <Route
+                        path="payments/export/:id"
+                        element={<PaymentExportPdf />}
+                    />
 
-                <Route path="employee" element={<Employee />} />
+                    <Route path="service" element={<Service />} />
+
+                    <Route path="employee" element={<Employee />} />
+                </Route>
 
                 <Route path="setting" element={<Setting />} />
             </Route>
