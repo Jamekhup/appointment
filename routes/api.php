@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\AppointmentController;
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\DashbaordController;
 use App\Http\Controllers\api\EmployeeController;
 use App\Http\Controllers\api\PatientController;
 use App\Http\Controllers\api\PaymentRecordController;
@@ -25,6 +26,9 @@ Route::post('/reset-password', [AuthController::class, 'reset_password'])
 
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
+    Route::get('/dashboard',[DashbaordController::class, 'dashboard']);
+
     Route::get('/appointment', [AppointmentController::class, 'index']);
     Route::get('/appointment-list', [AppointmentController::class, 'appointmentList']);
     Route::post('/appointment/create', [AppointmentController::class, 'create']);
