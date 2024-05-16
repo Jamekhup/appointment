@@ -30,6 +30,7 @@ import Payments from "./pages/Auth/PaymentRecord/Payments";
 import PaymentDetail from "./pages/Auth/PaymentRecord/PaymentDetail";
 import AppointmentDetail from "./pages/Auth/Appointment/AppointmentDetail";
 import EditPayment from "./pages/Auth/PaymentRecord/EditPayment";
+import PaymentExportPdf from "./pages/Auth/PaymentRecord/PaymentExportPdf";
 
 function App() {
     return (
@@ -61,6 +62,7 @@ function App() {
                 <Route path="payments" element={<Payments />} />
                 <Route path="payments/detail/:id" element={<PaymentDetail />} />
                 <Route path="payments/edit/:id" element={<EditPayment />} />
+                <Route path="payments/export/:id" element={<PaymentExportPdf />} />
 
                 <Route path="service" element={<Service />} />
 

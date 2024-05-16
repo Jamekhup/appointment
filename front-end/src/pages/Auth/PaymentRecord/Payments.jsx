@@ -1,4 +1,4 @@
-import { faEdit, faPlus, faTrashCan,faCircleInfo,faPrint,faFileExcel} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPlus, faTrashCan,faCircleInfo,faPrint} from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../components/MetaTitle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PrimaryButton from "../../../components/PrimaryButton";
@@ -14,6 +14,8 @@ import useAuthContext from "../../../context/AuthContext";
 import StatusLoading from "../../../components/Loading";
 import { Link } from "react-router-dom";
 import Pagination from "../../../components/Pagination";
+import { ExportToExcel } from "./ExportToExcel";
+
 
 
 const Payments = () => {
@@ -21,6 +23,8 @@ const Payments = () => {
     const { user } = useAuthContext();
     const [paymentRecord, setPaymentRecord] = useState(null);
     const [patients, setPatients] = useState(null);
+
+    const [dataToExport, setDataToExport] = useState([]);
 
     const [pagination, setPagination] = useState('');
     const [dateRange, setDateRange] = useState([null, null]);
@@ -65,7 +69,41 @@ const Payments = () => {
                     setPaymentRecord(res.data.payment.data);
                     setPagination(res.data.payment);
                     setPatients(res.data.patient);
+                    
+                    const toExpot =  res.data.payment.data.map((data,i) => (
+                            {
+                                'no' : i + 1,
+                                'patient name' : data.patient.title + ' ' + data.patient.first_name + ' ' + data.patient.last_name,
+                                'date of birth' : data.patient.dob,
+                                'address' : data.patient.house_number + ' ' + data.patient.street + ' ' + data.patient.city + ' ' + data.patient.postal_code,
+                                'insurance company' : data.patient.health_insurance_company,
+                                'house doctor' : data.patient.house_doctor,
+                                'recommended doctor' : data.patient.recommended_doctor,
+                                'payment free' : data.patient.payment_free == 1 ? 'Yes' : 'No',
+                                'treatment in six months' : data.patient.treatment_in_6_month == 1 ? 'Yes' : 'No',
+                                'private patient' : data.patient.private_patient == 1 ? 'Yes' : 'No',
+                                'issue date' : data.issue_date,
+                                'treatment' : data.treatment,
+                                'doctor name' : data.doctor_name,
+                                'covered by insurance company' : data.full_covered_by_insurance_company == 1 ? 'Yes' : 'No',
+                                'number' : data.number,
+                                'cost' : '€ ' + data.cost,
+                                'additional payment' : data.additional_payment ?  '€ '+ data.additional_payment : '-',
+                                'home visit' : data.home_visit == 1? 'Yes' : 'No',
+                                'number2' : data.number2,
+                                'cost3' : '€ '+ data.cost3,
+                                'additional payment 4' : data.additional_payment_4 ? '€ '+ data.additional_payment_4 : '-',
+                                'total payment' : '€ '+ data.total_payment,
+                                'received by' : data.received_by,
+                                'received date' : data.received_date,
+                                'remark' : data.remark,
+                                'created by' : data.created_by,
+                                'last updated by' : data.updated_by ? data.updated_by : '-'
+                            }
+                        ) )
+                    
                     setLoading(false);
+                    setDataToExport(toExpot);
                 }else{
                     console.log(error);
                     setLoading(false);
@@ -83,7 +121,40 @@ const Payments = () => {
                     setPaymentRecord(res.data.payment.data);
                     setPagination(res.data.payment);
                     setPatients(res.data.patient);
-                    setLoading(false);
+                    const toExpot =  res.data.payment.data.map((data,i) => (
+                        {
+                            'no' : i + 1,
+                            'patient name' : data.patient.title + ' ' + data.patient.first_name + ' ' + data.patient.last_name,
+                            'date of birth' : data.patient.dob,
+                            'address' : data.patient.house_number + ' ' + data.patient.street + ' ' + data.patient.city + ' ' + data.patient.postal_code,
+                            'insurance company' : data.patient.health_insurance_company,
+                            'house doctor' : data.patient.house_doctor,
+                            'recommended doctor' : data.patient.recommended_doctor,
+                            'payment free' : data.patient.payment_free == 1 ? 'Yes' : 'No',
+                            'treatment in six months' : data.patient.treatment_in_6_month == 1 ? 'Yes' : 'No',
+                            'private patient' : data.patient.private_patient == 1 ? 'Yes' : 'No',
+                            'issue date' : data.issue_date,
+                            'treatment' : data.treatment,
+                            'doctor name' : data.doctor_name,
+                            'covered by insurance company' : data.full_covered_by_insurance_company == 1 ? 'Yes' : 'No',
+                            'number' : data.number,
+                            'cost' : '€ ' + data.cost,
+                            'additional payment' : data.additional_payment ?  '€ '+ data.additional_payment : '-',
+                            'home visit' : data.home_visit == 1? 'Yes' : 'No',
+                            'number2' : data.number2,
+                            'cost3' : '€ '+ data.cost3,
+                            'additional payment 4' : data.additional_payment_4 ? '€ '+ data.additional_payment_4 : '-',
+                            'total payment' : '€ '+ data.total_payment,
+                            'received by' : data.received_by,
+                            'received date' : data.received_date,
+                            'remark' : data.remark,
+                            'created by' : data.created_by,
+                            'last updated by' : data.updated_by ? data.updated_by : '-'
+                        }
+                    ) )
+                
+                setLoading(false);
+                setDataToExport(toExpot);
                 }else{
                     console.log(error);
                     setLoading(false);
@@ -158,6 +229,7 @@ const Payments = () => {
         window.scrollTo(0, 0);
     };
 
+
  
     return (
         <>
@@ -189,14 +261,15 @@ const Payments = () => {
                         <FontAwesomeIcon icon={faPlus} className="mr-2" />
                         <span>Add New Payment Record</span>
                     </PrimaryButton>
-                    <button className="inline-flex items-center gap-2 justify-center px-4 py-2 bg-blue-300 border border-transparent rounded-md
-                    font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-400
-                    focus:outline-none focus:ring-0 focus:ring-blue-400 focus:ring-offset-2 transition ease-in-out
-                    duration-150"
-                    >
-                        <FontAwesomeIcon icon={faFileExcel} />
-                        <span>Export</span>
-                    </button>
+                    
+                    {
+                        paymentRecord && (
+                            <ExportToExcel 
+                                apiData={dataToExport}
+                                fileName={'payment_record'}
+                            />
+                        )
+                    }
                 </div>
             </div>
             <table className="w-[32rem] sm:w-full rounded-lg">
@@ -258,9 +331,10 @@ const Payments = () => {
                                         </Link>
                                     </td>
                                     <td className="border border-separate pl-2">
-                                        <a href="#" className="flex justify-start items-center gap-1 w-fit px-2 py-[2px] rounded-md bg-blue-300 text-xs">
+                                        <a href={`/app/payments/export/${pr.id}`} target="_blank" 
+                                        className="flex justify-start items-center gap-1 w-fit px-2 py-[2px] rounded-md bg-blue-300 text-xs">
                                             <FontAwesomeIcon icon={faPrint} />
-                                            <p>PDF</p>
+                                            <p>Pdf</p>
                                         </a>
                                     </td>
                                     <td className="border border-separate pl-2">

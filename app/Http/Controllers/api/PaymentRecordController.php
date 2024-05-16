@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentRecordController extends Controller
 {
@@ -90,12 +89,6 @@ class PaymentRecordController extends Controller
     }
 
 
-    public function export(Request $request){
-
-        $export = Excel::download(new PaymentRecordExport($request->dateRange[0], $request->dateRange[1]), 'payment-record.csv', \Maatwebsite\Excel\Excel::XLSX);
-        ob_end_clean();
-        return $export;
-    }
 
     public function create_new(Request $request){
 
