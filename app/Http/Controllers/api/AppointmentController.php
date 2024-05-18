@@ -16,11 +16,7 @@ class AppointmentController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->appointment_access == 1) {
-            $appointments = Appointment::with('patient', 'user', 'service')->where('status', 0)->get();
-        } else {
-            $appointments = Appointment::with('patient', 'user', 'service')->where('user_id', Auth::user()->id)->where('status', 0)->get();
-        }
+        $appointments = Appointment::with('patient', 'user', 'service')->where('status', 0)->get();
         $reserved = ReserveAppointment::all();
 
         $events = [];

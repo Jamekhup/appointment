@@ -291,35 +291,35 @@ const EventModal = ({
                         </div>
                     )}
 
-                    {user.appointmentAccess == 1 &&
-                        (eventData.title == "Reserved"
-                            ? user.role == 1 && (
+                    {eventData.title == "Reserved"
+                        ? user.role == 1 && (
+                              <PrimaryButton
+                                  type="button"
+                                  className="!bg-red-500 border px-4 mt-4 hover:!bg-red-400"
+                                  onClick={() => handleDelete()}
+                              >
+                                  Delete
+                              </PrimaryButton>
+                          )
+                        : (user.id == eventData.data.user_id ||
+                              user.role == 1) && (
+                              <div className="flex items-center gap-x-2">
                                   <PrimaryButton
                                       type="button"
-                                      className="!bg-red-500 border px-4 mt-4 hover:!bg-red-400"
-                                      onClick={() => handleDelete()}
+                                      className="px-4 mt-4"
+                                      onClick={() => handleFinished()}
                                   >
-                                      Delete
+                                      Finished
                                   </PrimaryButton>
-                              )
-                            : user.id == eventData.data.user_id && (
-                                  <div className="flex items-center gap-x-2">
-                                      <PrimaryButton
-                                          type="button"
-                                          className="px-4 mt-4"
-                                          onClick={() => handleFinished()}
-                                      >
-                                          Finished
-                                      </PrimaryButton>
-                                      <PrimaryButton
-                                          type="button"
-                                          className="bg-transparent border !border-slate-800 px-4 mt-4 !text-gray-800 hover:bg-transparent hover:text-gray-800"
-                                          onClick={() => handleCancel()}
-                                      >
-                                          Cancelled
-                                      </PrimaryButton>
-                                  </div>
-                              ))}
+                                  <PrimaryButton
+                                      type="button"
+                                      className="bg-transparent border !border-slate-800 px-4 mt-4 !text-gray-800 hover:bg-transparent hover:text-gray-800"
+                                      onClick={() => handleCancel()}
+                                  >
+                                      Cancelled
+                                  </PrimaryButton>
+                              </div>
+                          )}
                 </form>
             </div>
         </Modal>

@@ -74,7 +74,7 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                         &times;
                     </div>
                 </div>
-                <form onSubmit={handleSubmit} className="mt-5">
+                <form onSubmit={handleSubmit} className="mt-5 h-[21rem]">
                     <div
                         className="grid grid-cols-1 sm:grid-cols-2
                 gap-x-2.5 sm:gap-y-4 gap-y-2.5 items-start"

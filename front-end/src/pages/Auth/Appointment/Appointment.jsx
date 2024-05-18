@@ -174,7 +174,7 @@ const Appointment = () => {
             <CreateReservation
                 show={openReserveModal}
                 close={() => setOpenReserveModal(false)}
-                maxWidth="w-full sm:w-5/6 md:w-2/3 mt-0 sm:-mt-62 md:-mt-72"
+                maxWidth="w-full sm:w-5/6 md:w-2/3 mt-0 sm:-mt-62 md:-mt-28"
                 handleCreate={handleReservationCreate}
             />
         </>

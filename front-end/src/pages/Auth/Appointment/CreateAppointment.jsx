@@ -50,7 +50,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const [title, setTitle] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [dob, setDob] = useState("");
+    const [dob, setDob] = useState("01/01/2000");
     const [street, setStreet] = useState("");
     const [houseNumber, setHouseNumber] = useState("");
     const [city, setCity] = useState("");
@@ -87,13 +87,17 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
         if (serviceId == "select") {
             setError({ serviceId: ["Please select a service"] });
             setLoading(false);
-        } else if (patientId == "") {
-            setError({ patientId: ["Please select a patient"] });
-            setLoading(false);
         } else if (therapistId == "select") {
             setError({ therapistId: ["Please select a therapist"] });
             setLoading(false);
         } else {
+            if (toggleForm == false) {
+                if (patientId == "") {
+                    setError({ patientId: ["Please select a patient"] });
+                    setLoading(false);
+                    return;
+                }
+            }
             axios
                 .post(
                     "/appointment/create",
@@ -102,7 +106,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                         title,
                         firstName,
                         lastName,
-                        dob,
+                        dob: dob.toISOString().split("T")[0],
                         street,
                         houseNumber,
                         city,
@@ -150,6 +154,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     setLoading(false);
                 })
                 .catch((error) => {
+                    console.log(error);
                     setError(error.response.data.message);
                     setLoading(false);
                 });
@@ -235,7 +240,10 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                                     <div className="flex flex-col text-sm">
                                         <label htmlFor="first_name">
-                                            First Name
+                                            First Name{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
                                         </label>
                                         <TextInput
                                             id="first_name"
@@ -256,7 +264,10 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                                     <div className="flex flex-col text-sm">
                                         <label htmlFor="last_name">
-                                            Last Name
+                                            Last Name{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
                                         </label>
                                         <TextInput
                                             id="last_name"
@@ -277,16 +288,18 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                                     <div className="flex flex-col text-sm">
                                         <label htmlFor="dob">
-                                            Date of Birth
+                                            Date of Birth{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
                                         </label>
-                                        <TextInput
+                                        <ReactDatePicker
                                             id="dob"
-                                            type="date"
-                                            value={dob}
-                                            onChange={(e) =>
-                                                setDob(e.target.value)
-                                            }
+                                            dateFormat="dd/MM/yyyy"
+                                            className="w-full h-10 cursor-pointer border px-1.5 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
                                             required
+                                            selected={dob}
+                                            onChange={(date) => setDob(date)}
                                         />
                                         {/* {errors && errors.dob && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
@@ -297,7 +310,10 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                                     <div className="flex flex-col text-sm">
                                         <label htmlFor="street">
-                                            Street Name
+                                            Street Name{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
                                         </label>
                                         <TextInput
                                             id="street"
@@ -318,7 +334,10 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                                     <div className="flex flex-col text-sm">
                                         <label htmlFor="house">
-                                            House Number
+                                            House Number{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
                                         </label>
                                         <TextInput
                                             id="house"
@@ -338,7 +357,12 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                     </div>
 
                                     <div className="flex flex-col text-sm">
-                                        <label htmlFor="city">City</label>
+                                        <label htmlFor="city">
+                                            City{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
+                                        </label>
                                         <TextInput
                                             id="city"
                                             type="text"
@@ -358,7 +382,10 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                                     <div className="flex flex-col text-sm">
                                         <label htmlFor="postal">
-                                            Postal Code
+                                            Postal Code{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
                                         </label>
                                         <TextInput
                                             id="postal"
@@ -718,7 +745,9 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                             )}
                         </div>
                         <div className="flex flex-col text-sm">
-                            <label htmlFor="doctor">Doctor Name</label>
+                            <label htmlFor="doctor">
+                                Doctor Name (optional)
+                            </label>
                             <TextInput
                                 id="doctor"
                                 type="text"
