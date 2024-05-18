@@ -58,7 +58,7 @@ const CreateService = ({ show, close, maxWidth, handleCreate }) => {
             <form onSubmit={handleSubmit} className="p-3 text-sm">
                 <div className="grid md:grid-cols-2 gid-cols-1 gap-2.5 items-start">
                     <div className="flex flex-col">
-                        <label htmlFor="name">Service Name</label>
+                        <label htmlFor="name">Service Name <span className="text-red-600">*</span></label>
                         <TextInput
                             id="name"
                             type="text"

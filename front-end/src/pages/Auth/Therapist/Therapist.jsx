@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 import axios from "../../../axios";
 import Swal from "sweetalert2";
 import useAuthContext from "../../../context/AuthContext";
-import CreateEmployee from "./CreateEmployee";
-import EditEmployee from "./EditEmployee";
+import CreateTherapist from "./CreateTherapist";
+import EditTherapist from "./EditTherapist";
 import Loading from "../../../components/Loading";
 import TextInput from "../../../components/TextInput";
 
-const Employee = () => {
+const Therapist = () => {
     const { user } = useAuthContext();
     const [employee, setEmployee] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ const Employee = () => {
     const getData = () => {
         setLoading(true);
         axios
-            .get("/employee", {
+            .get("/therapist", {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -68,7 +68,7 @@ const Employee = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 axios
-                    .delete("/employee/delete/" + id, {
+                    .delete("/therapist/delete/" + id, {
                         headers: {
                             Authorization: `Bearer ${user.token}`,
                         },
@@ -89,7 +89,7 @@ const Employee = () => {
 
     return (
         <>
-            <Header title="Employee" />
+            <Header title="Therapist" />
             <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center mb-2">
                 <TextInput
                     type="text"
@@ -269,7 +269,7 @@ const Employee = () => {
                 </table>
             </div>
 
-            <CreateEmployee
+            <CreateTherapist
                 show={openCreateModal}
                 close={() => setOpenCreateModal(false)}
                 maxWidth="w-full sm:w-5/6 md:w-2/3 mt-10 mt-0 md:-mt-20 lg:-mt-28 xl:-mt-52"
@@ -277,7 +277,7 @@ const Employee = () => {
             />
 
             {openEditModalData && (
-                <EditEmployee
+                <EditTherapist
                     show={openEditModal}
                     close={() => {
                         setOpenEditModal(false);
@@ -290,6 +290,6 @@ const Employee = () => {
             )}
         </>
     );
-};
+}
 
-export default Employee;
+export default Therapist

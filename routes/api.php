@@ -3,7 +3,7 @@
 use App\Http\Controllers\api\AppointmentController;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\DashbaordController;
-use App\Http\Controllers\api\EmployeeController;
+use App\Http\Controllers\api\TherapistController;
 use App\Http\Controllers\api\PatientController;
 use App\Http\Controllers\api\PaymentRecordController;
 use App\Http\Controllers\api\ReservationController;
@@ -42,10 +42,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/reserve-appointment/create', [ReservationController::class, 'create']);
     Route::delete('/reserve-appointment/delete/{id}', [ReservationController::class, 'delete']);
 
-    Route::get('/employee', [EmployeeController::class, 'index']);
-    Route::post('/employee/create', [EmployeeController::class, 'create']);
-    Route::put('/employee/update/{id}', [EmployeeController::class, 'update']);
-    Route::delete('/employee/delete/{id}', [EmployeeController::class, 'delete']);
+    Route::get('/therapist', [TherapistController::class, 'index']);
+    Route::post('/therapist/create', [TherapistController::class, 'create']);
+    Route::put('/therapist/update/{id}', [TherapistController::class, 'update']);
+    Route::delete('/therapist/delete/{id}', [TherapistController::class, 'delete']);
 
     Route::get('/service', [ServiceController::class, 'index']);
     Route::post('/service/create', [ServiceController::class, 'create']);

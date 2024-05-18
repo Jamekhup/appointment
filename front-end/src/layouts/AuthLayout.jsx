@@ -148,7 +148,7 @@ const AuthLayout = () => {
                             )}
                             {user.employeeAccess == 1 && (
                                 <NavLink
-                                    to={"/app/employee"}
+                                    to={"/app/therapist"}
                                     className={({ isActive }) =>
                                         isActive
                                             ? "flex justify-start items-center gap-2 px-2 py-2.5 bg-blue-200"
@@ -161,7 +161,7 @@ const AuthLayout = () => {
                                         className="w-4"
                                     />
                                     <span className="text-slate-600">
-                                        Employees
+                                        Therapist
                                     </span>
                                 </NavLink>
                             )}

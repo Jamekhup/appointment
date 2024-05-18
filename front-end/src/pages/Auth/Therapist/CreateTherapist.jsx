@@ -7,35 +7,20 @@ import useAuthContext from "../../../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 
-const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
-    const [name, setName] = useState(editData?.name);
-    const [email, setEmail] = useState(editData?.email);
-    const [dashboardAccess, setDashboardAccess] = useState(
-        editData?.dashboard_access
-    );
-    const [appointmentAccess, setAppointmentAccess] = useState(
-        editData?.appointment_access
-    );
-    const [appointmentListAccess, setAppointmentListAccess] = useState(
-        editData?.appointment_list_access
-    );
-    const [patientAccess, setPatientAccess] = useState(
-        editData?.patient_access
-    );
-    const [paymentAccess, setPaymentAccess] = useState(
-        editData?.payment_record_access
-    );
-    const [serviceAccess, setServiceAccess] = useState(
-        editData?.service_access
-    );
-    const [employeeAccess, setEmployeeAccess] = useState(
-        editData?.employee_access
-    );
+const CreateTherapist = ({show ,close, maxWidth,handleCreate}) => {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [dashboardAccess, setDashboardAccess] = useState(1);
+    const [appointmentAccess, setAppointmentAccess] = useState(1);
+    const [appointmentListAccess, setAppointmentListAccess] = useState(0);
+    const [patientAccess, setPatientAccess] = useState(0);
+    const [paymentAccess, setPaymentAccess] = useState(0);
+    const [serviceAccess, setServiceAccess] = useState(0);
+    const [employeeAccess, setEmployeeAccess] = useState(0);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState(null);
     const { user } = useAuthContext();
-
-    const [password, setPassword] = useState("");
 
     const [showHidePassword, setShowHidePassword] = useState(false);
 
@@ -43,8 +28,8 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
         e.preventDefault();
         setLoading(true);
         axios
-            .put(
-                "/employee/update/" + editData.id,
+            .post(
+                "/therapist/create",
                 {
                     name,
                     email,
@@ -64,10 +49,11 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 }
             )
             .then((response) => {
-                handleUpdate(response.data);
+                handleCreate(response.data);
                 setLoading(false);
                 setName("");
                 setEmail("");
+                setPassword("");
                 setDashboardAccess(1);
                 setAppointmentAccess(1);
                 setAppointmentListAccess(0);
@@ -99,7 +85,7 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
     return (
         <Modal show={show} onClose={close} maxWidth={maxWidth}>
             <div className="flex justify-between items-center bg-gray-300 p-2 px-4 rounded-t-md">
-                <div>Update Employee</div>
+                <div>Create New Employee</div>
                 <div
                     className="px-2 bg-rose-500 rounded-md text-white font-medium cursor-pointer"
                     onClick={close}
@@ -112,7 +98,7 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 className="p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-3 text-sm"
             >
                 <div className="flex flex-col">
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">Name <span className="text-red-600">*</span></label>
                     <TextInput
                         id="name"
                         type="text"
@@ -128,14 +114,14 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                     )}
                 </div>
                 <div className="flex flex-col">
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">Email <span className="text-red-600">*</span></label>
                     <TextInput
                         id="email"
                         type="email"
                         value={email}
+                        required
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter Employee Email"
-                        required
                     />
                     {errors && errors.email && (
                         <div className="text-xs mt-1 font-medium text-red-600">
@@ -143,15 +129,15 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                         </div>
                     )}
                 </div>
-
                 <div className="flex flex-col relative">
-                    <label htmlFor="password">Password (Optional)</label>
+                    <label htmlFor="password">Password <span className="text-red-600">*</span></label>
                     <TextInput
                         id="password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="New Employee Password"
+                        placeholder="Enter Employee Password"
+                        required
                     />
                     <FontAwesomeIcon
                         icon={showHidePassword ? faEye : faEyeSlash}
@@ -163,8 +149,8 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                             {errors.password[0]}
                         </div>
                     )}
-                </div>
 
+                </div>
                 <div className="font-medium -mb-1 mt-2 col-span-1 md:col-span-2 xl:col-span-3">
                     Employee Access
                 </div>
@@ -289,11 +275,11 @@ const EditEmployee = ({ show, close, maxWidth, handleUpdate, editData }) => {
                     type={loading ? "button" : "submit"}
                     className="w-full md:w-1/2 xl:w-1/3 mt-2"
                 >
-                    {loading ? "Updating..." : "Update"}
+                    {loading ? "Creating..." : "Create"}
                 </PrimaryButton>
             </form>
         </Modal>
     );
-};
+}
 
-export default EditEmployee;
+export default CreateTherapist

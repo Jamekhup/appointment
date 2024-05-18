@@ -30,7 +30,7 @@ const Setting = () => {
     const fetchData = () =>{
         setLoading(true);
         axios
-           .get("/setting/",{
+           .get("/setting",{
             headers: {
                 Authorization: `Bearer ${user.token}`,
             },
@@ -169,7 +169,7 @@ const Setting = () => {
                             <form onSubmit={updatePassword} className="mt-2">
                                 <div className="flex flex-col gap-2.5 mb-2">
                                     <div className="flex flex-col text-sm relative">
-                                        <label>Current Password</label>
+                                        <label>Current Password <span className="text-red-600">*</span></label>
                                         <TextInput
                                             id="password"
                                             type="password"
@@ -192,7 +192,7 @@ const Setting = () => {
                                     
 
                                     <div className="flex flex-col text-sm">
-                                        <label>New Password</label>
+                                        <label>New Password <span className="text-red-600">*</span></label>
                                         <TextInput
                                             id="password"
                                             type="password"
@@ -209,7 +209,7 @@ const Setting = () => {
                                     </div>
 
                                     <div className="flex flex-col text-sm">
-                                        <label>Confirm New Password</label>
+                                        <label>Confirm New Password <span className="text-red-600">*</span></label>
                                         <TextInput
                                             id="password"
                                             type="password"

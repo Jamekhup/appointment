@@ -218,6 +218,12 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
             });
     };
 
+    const changeDateFormat = (value) => {
+        let change = value.split('/');
+        let newDate = change[2] + '/' + change[1] + '/' + change[0];
+        setDob(newDate);
+    }
+
 
     return (
         <Modal show={show} onClose={close} maxWidth={maxWidth}>
@@ -256,7 +262,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                         <form onSubmit={submitExisted} className="p-3 text-sm">
 
                             <div className="flex flex-col mb-3 relative">
-                                <label>Search Patient by name and select</label>
+                                <label>Search Patient by name and select <span className="text-red-600">*</span></label>
                                 <TextInput
                                     type="text"
                                     value={searchPatient}
@@ -333,7 +339,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
 
                                     <div className="grid md:grid-cols-2 gid-cols-1 gap-2.5 items-start">
                                         <div className="flex flex-col">
-                                            <label>Treatment</label>
+                                            <label>Treatment <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 type="text"
                                                 value={treatment}
@@ -344,17 +350,16 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col">
-                                            <label>Doctor Name</label>
+                                            <label>Doctor Name (Optional)</label>
                                             <TextInput
                                                 type="text"
                                                 value={doctorName}
                                                 onChange={(e) => setDoctorName(e.target.value)}
                                                 placeholder="Dr. William ..."
-                                                required
                                             />
                                         </div>
                                         <div className="flex flex-col">
-                                            <label>Full Covered By Insurance Company</label>
+                                            <label>Full Covered By Insurance Company <span className="text-red-600">*</span></label>
                                             <select 
                                                 className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={coveredByInsuranceCompany}
@@ -367,7 +372,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                             </select>
                                         </div>
                                         <div className="flex flex-col">
-                                            <label>Number</label>
+                                            <label>Number <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 type="number"
                                                 value={number}
@@ -377,7 +382,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                             />
                                         </div>
                                         <div className="flex flex-col">
-                                            <label>Cost</label>
+                                            <label>Cost <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 type="number"
                                                 step="any"
@@ -398,7 +403,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                             />
                                         </div>
                                         <div className="flex flex-col">
-                                            <label>Home Visit</label>
+                                            <label>Home Visit <span className="text-red-600">*</span></label>
                                             <select 
                                                 className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={homeVisit}
@@ -443,7 +448,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col">
-                                            <label>Total Payment</label>
+                                            <label>Total Payment <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 type="number"
                                                 step="any"
@@ -488,7 +493,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                     gap-x-2.5 sm:gap-y-4 gap-y-2.5 items-start"
                                     >
                                         <div className="flex flex-col text-sm">
-                                            <label htmlFor="title">Title</label>
+                                            <label htmlFor="title">Title <span className="text-red-600">*</span></label>
                                             <select
                                                 className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
@@ -508,7 +513,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col text-sm">
-                                            <label htmlFor="first_name">First Name</label>
+                                            <label htmlFor="first_name">First Name <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 id="first_name"
                                                 type="text"
@@ -525,7 +530,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col text-sm">
-                                            <label htmlFor="last_name">Last Name</label>
+                                            <label htmlFor="last_name">Last Name <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 id="last_name"
                                                 type="text"
@@ -542,12 +547,15 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col text-sm">
-                                            <label htmlFor="dob">Date of Birth</label>
+                                            <label htmlFor="dob">Date of Birth <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 id="dob"
                                                 type="date"
                                                 value={dob}
-                                                onChange={(e) => setDob(e.target.value)}
+                                                onChange={(e) => changeDateFormat(e.target.value)}
+                                                placeholder="dd-mm-yyyy" 
+                                                min="1920-01-01" 
+                                                max="2040-12-31"
                                                 required
                                             />
                                             {errors && errors.dob && (
@@ -558,7 +566,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col text-sm">
-                                            <label htmlFor="street">Street Name</label>
+                                            <label htmlFor="street">Street Name <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 id="street"
                                                 type="text"
@@ -575,7 +583,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col text-sm">
-                                            <label htmlFor="house">House Number</label>
+                                            <label htmlFor="house">House Number <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 id="house"
                                                 type="text"
@@ -592,7 +600,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col text-sm">
-                                            <label htmlFor="city">City</label>
+                                            <label htmlFor="city">City <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 id="city"
                                                 type="text"
@@ -609,7 +617,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col text-sm">
-                                            <label htmlFor="postal">Postal Code</label>
+                                            <label htmlFor="postal">Postal Code <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 id="postal"
                                                 type="number"
@@ -666,12 +674,13 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col text-sm">
-                                            <label htmlFor="title">Payment Free (Yes or No)</label>
+                                            <label htmlFor="title">Payment Free (Yes or No) <span className="text-red-600">*</span></label>
                                             <select
                                                 className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={paymentFree}
                                                 onChange={(e) => setPaymentFree(e.target.value)}
+                                                required
                                             >
                                                 <option value="">Select One</option>
                                                 <option value="1">Yes</option>
@@ -686,7 +695,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
 
                                         <div className="flex flex-col text-sm">
                                             <label htmlFor="title">
-                                                Treatment in Six Month (Yes or No)
+                                                Treatment in Six Month (Yes or No) <span className="text-red-600">*</span>
                                             </label>
                                             <select
                                                 className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
@@ -695,6 +704,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                                 onChange={(e) =>
                                                     setTreatmentInSixMonth(e.target.value)
                                                 }
+                                                required
                                             >
                                                 <option value="">Select One</option>
                                                 <option value="1">Yes</option>
@@ -709,13 +719,14 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
 
                                         <div className="flex flex-col text-sm">
                                             <label htmlFor="title">
-                                                Private Patient (Yes or No)
+                                                Private Patient (Yes or No) <span className="text-red-600">*</span>
                                             </label>
                                             <select
                                                 className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={privatePatient}
                                                 onChange={(e) => setPrivatePatient(e.target.value)}
+                                                required
                                             >
                                                 <option value="">Select One</option>
                                                 <option value="1">Yes</option>
@@ -746,7 +757,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
 
                                     <div className="grid md:grid-cols-2 gid-cols-1 gap-2.5 items-start">
                                         <div className="flex flex-col">
-                                            <label>Treatment</label>
+                                            <label>Treatment <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 type="text"
                                                 value={newTreatment}
@@ -757,17 +768,16 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col">
-                                            <label>Doctor Name</label>
+                                            <label>Doctor Name (Optional)</label>
                                             <TextInput
                                                 type="text"
                                                 value={newDoctorName}
                                                 onChange={(e) => setNewDoctorName(e.target.value)}
                                                 placeholder="Dr. William ..."
-                                                required
                                             />
                                         </div>
                                         <div className="flex flex-col">
-                                            <label>Full Covered By Insurance Company</label>
+                                            <label>Full Covered By Insurance Company <span className="text-red-600">*</span></label>
                                             <select 
                                                 className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={newCoveredByInsuranceCompany}
@@ -780,7 +790,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                             </select>
                                         </div>
                                         <div className="flex flex-col">
-                                            <label>Number</label>
+                                            <label>Number <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 type="number"
                                                 value={newNumber}
@@ -790,7 +800,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                             />
                                         </div>
                                         <div className="flex flex-col">
-                                            <label>Cost</label>
+                                            <label>Cost <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 type="number"
                                                 step="any"
@@ -811,7 +821,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                             />
                                         </div>
                                         <div className="flex flex-col">
-                                            <label>Home Visit</label>
+                                            <label>Home Visit <span className="text-red-600">*</span></label>
                                             <select 
                                                 className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                                 value={newHomeVisit}
@@ -856,7 +866,7 @@ const CreatePayment = ({ show, close, maxWidth, handleCreate, patient }) => {
                                         </div>
 
                                         <div className="flex flex-col">
-                                            <label>Total Payment</label>
+                                            <label>Total Payment <span className="text-red-600">*</span></label>
                                             <TextInput
                                                 type="number"
                                                 step="any"

@@ -21,7 +21,6 @@ import EditPatient from "./pages/Auth/Patient/EditPatient";
 
 import Service from "./pages/Auth/Service/Service";
 
-import Employee from "./pages/Auth/Employee/Employee";
 
 import Setting from "./pages/Auth/Setting";
 
@@ -32,6 +31,7 @@ import AppointmentDetail from "./pages/Auth/Appointment/AppointmentDetail";
 import EditPayment from "./pages/Auth/PaymentRecord/EditPayment";
 import PaymentExportPdf from "./pages/Auth/PaymentRecord/PaymentExportPdf";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Therapist from "./pages/Auth/Therapist/Therapist";
 
 function App() {
     return (
@@ -78,8 +78,9 @@ function App() {
 
                     <Route path="service" element={<Service />} />
 
-                    <Route path="employee" element={<Employee />} />
                 </Route>
+
+                <Route path="therapist" element={<Therapist/>} />
 
                 <Route path="setting" element={<Setting />} />
             </Route>
