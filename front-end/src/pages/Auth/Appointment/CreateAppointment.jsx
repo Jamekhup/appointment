@@ -106,7 +106,10 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                         title,
                         firstName,
                         lastName,
-                        dob: dob.toISOString().split("T")[0],
+                        dob:
+                            typeof dob === "string"
+                                ? dob
+                                : dob.toISOString().split("T")[0],
                         street,
                         houseNumber,
                         city,
@@ -454,7 +457,10 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                                     <div className="flex flex-col text-sm">
                                         <label htmlFor="title">
-                                            Payment Free (Yes or No)
+                                            Payment Free (Yes or No){" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
                                         </label>
                                         <select
                                             className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
@@ -477,7 +483,10 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                                     <div className="flex flex-col text-sm">
                                         <label htmlFor="title">
-                                            Treatment in Six Month (Yes or No)
+                                            Treatment in Six Month (Yes or No){" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
                                         </label>
                                         <select
                                             className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
@@ -502,7 +511,10 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                                     <div className="flex flex-col text-sm">
                                         <label htmlFor="title">
-                                            Private Patient (Yes or No)
+                                            Private Patient (Yes or No){" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
                                         </label>
                                         <select
                                             className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
@@ -541,52 +553,64 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                     ></textarea>
                                 </div>
                             </div>
-                            <p className="mb-3 font-semibold border-b border-blue-300">
-                                Select Therapist
-                            </p>
-                            <div className="flex flex-col text-sm w-full mb-4">
-                                <label htmlFor="therapist">
-                                    Select Therapist{" "}
-                                    <span className="text-red-600">*</span>
-                                </label>
-                                <select
-                                    className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
-                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                    value={therapistId}
-                                    required
-                                    onChange={(e) =>
-                                        setTherapistId(e.target.value)
-                                    }
-                                    id="therapist"
-                                >
-                                    <option
-                                        value="select"
-                                        disabled
-                                        className="bg-white"
-                                    >
+                            {therapists && (
+                                <>
+                                    <p className="mb-3 font-semibold border-b border-blue-300">
                                         Select Therapist
-                                    </option>
-                                    {therapists &&
-                                        therapists.map((therapist, i) => (
+                                    </p>
+                                    <div className="flex flex-col text-sm w-full mb-4">
+                                        <label htmlFor="therapist">
+                                            Select Therapist{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
+                                        </label>
+                                        <select
+                                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                            value={therapistId}
+                                            required
+                                            onChange={(e) =>
+                                                setTherapistId(e.target.value)
+                                            }
+                                            id="therapist"
+                                        >
                                             <option
-                                                key={i}
-                                                value={therapist.id}
+                                                value="select"
+                                                disabled
                                                 className="bg-white"
                                             >
-                                                {therapist.name}
+                                                Select Therapist
                                             </option>
-                                        ))}
-                                </select>
-                                {error && error.therapistId && (
-                                    <div className="text-xs mt-1 font-medium text-red-600">
-                                        {error.therapistId[0]}
+                                            {therapists &&
+                                                therapists.map(
+                                                    (therapist, i) => (
+                                                        <option
+                                                            key={i}
+                                                            value={therapist.id}
+                                                            className="bg-white"
+                                                        >
+                                                            {therapist.name}
+                                                        </option>
+                                                    )
+                                                )}
+                                        </select>
+                                        {error && error.therapistId && (
+                                            <div className="text-xs mt-1 font-medium text-red-600">
+                                                {error.therapistId[0]}
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
+                                </>
+                            )}
                         </>
                     ) : (
-                        <div className="flex justify-between items-center gap-x-3 my-3">
-                            <div className="flex flex-col relative w-full">
+                        <div className="flex justify-between items-start gap-x-3 my-3">
+                            <div
+                                className={`flex flex-col relative ${
+                                    therapists ? "w-full" : "w-1/2"
+                                }`}
+                            >
                                 <label>
                                     Search Patient by name and select{" "}
                                     <span className="text-red-600">*</span>
@@ -608,7 +632,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                     </div>
                                 )}
                                 {searchPatient != "" && (
-                                    <div className="absolute top-16 max-h-[260px] overflow-y-scroll bg-slate-200 md:w-[49.7%] w-full rounded-md p-2">
+                                    <div className="absolute top-16 max-h-[260px] overflow-y-scroll bg-slate-200 w-full rounded-md p-2">
                                         <div className="flex flex-col gap-2.5">
                                             {patients &&
                                             controlPatientSearch ? (
@@ -660,45 +684,47 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                     </div>
                                 )}
                             </div>
-                            <div className="flex flex-col text-sm w-full">
-                                <label htmlFor="therapist">
-                                    Select Therapist{" "}
-                                    <span className="text-red-600">*</span>
-                                </label>
-                                <select
-                                    className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                            {therapists && (
+                                <div className="flex flex-col text-sm w-full">
+                                    <label htmlFor="therapist">
+                                        Select Therapist{" "}
+                                        <span className="text-red-600">*</span>
+                                    </label>
+                                    <select
+                                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                    value={therapistId}
-                                    required
-                                    onChange={(e) =>
-                                        setTherapistId(e.target.value)
-                                    }
-                                    id="therapist"
-                                >
-                                    <option
-                                        value="select"
-                                        disabled
-                                        className="bg-white"
+                                        value={therapistId}
+                                        required
+                                        onChange={(e) =>
+                                            setTherapistId(e.target.value)
+                                        }
+                                        id="therapist"
                                     >
-                                        Select Therapist
-                                    </option>
-                                    {therapists &&
-                                        therapists.map((therapist, i) => (
-                                            <option
-                                                key={i}
-                                                value={therapist.id}
-                                                className="bg-white"
-                                            >
-                                                {therapist.name}
-                                            </option>
-                                        ))}
-                                </select>
-                                {error && error.therapistId && (
-                                    <div className="text-xs mt-1 font-medium text-red-600">
-                                        {error.therapistId[0]}
-                                    </div>
-                                )}
-                            </div>
+                                        <option
+                                            value="select"
+                                            disabled
+                                            className="bg-white"
+                                        >
+                                            Select Therapist
+                                        </option>
+                                        {therapists &&
+                                            therapists.map((therapist, i) => (
+                                                <option
+                                                    key={i}
+                                                    value={therapist.id}
+                                                    className="bg-white"
+                                                >
+                                                    {therapist.name}
+                                                </option>
+                                            ))}
+                                    </select>
+                                    {error && error.therapistId && (
+                                        <div className="text-xs mt-1 font-medium text-red-600">
+                                            {error.therapistId[0]}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     )}
                     <p className="mb-3 font-semibold border-b border-blue-300">

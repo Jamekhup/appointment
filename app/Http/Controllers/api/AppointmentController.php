@@ -127,7 +127,11 @@ class AppointmentController extends Controller
                     }
 
                     $appointment->service_id = $request->serviceId;
-                    $appointment->user_id = $request->therapistId;
+                    if (Auth::user()->role == 0 || Auth::user()->role == 1) {
+                        $appointment->user_id = $request->therapistId;
+                    } else {
+                        $appointment->user_id = Auth::user()->id;
+                    }
                     $appointment->doctor_name = $request->doctor;
                     $appointment->date = $request->date;
                     $appointment->time = $request->time;

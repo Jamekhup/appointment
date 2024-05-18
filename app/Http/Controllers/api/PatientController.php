@@ -23,7 +23,11 @@ class PatientController extends Controller
     {
         $patients = Patient::all();
         $services = Service::all();
-        $therapists = User::where('role', 2)->get();
+        if (Auth::user()->role == 0 || Auth::user()->role == 1) {
+            $therapists = User::where('role', 2)->get();
+        } else {
+            $therapists = null;
+        }
 
         return response()->json([
             'status' => 'success',
