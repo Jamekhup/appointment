@@ -275,9 +275,11 @@ const Dashboard = () => {
                                                 {data.created_by}
                                             </td>
                                             <td className="border border-separate pl-2">
-                                                {convertDate2data.created_at.replace(
-                                                    /T|.000000Z/gi,
-                                                    " "
+                                                {convertDate2(
+                                                    data.created_at.replace(
+                                                        /T|.000000Z/gi,
+                                                        " "
+                                                    )
                                                 )}
                                             </td>
                                         </tr>
