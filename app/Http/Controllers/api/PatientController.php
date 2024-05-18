@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -17,10 +18,18 @@ class PatientController extends Controller
         return response()->json(['status' => 'success', 'patients' => $patients]);
     }
 
-    public function get_all(){
+    public function get_all()
+    {
         $patients = Patient::all();
         $services = Service::all();
-        return response()->json(['status' => 'success', 'patients' => $patients, 'services' => $services]);
+        $therapists = User::where('role', 2)->get();
+
+        return response()->json([
+            'status' => 'success',
+            'patients' => $patients,
+            'services' => $services,
+            'therapists' => $therapists
+        ]);
     }
 
     public function detail($id)

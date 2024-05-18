@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BigCalendar from "../../../components/BigCalendar";
 import Header from "../../../components/MetaTitle";
-import { faPlus, prefix } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import PrimaryButton from "../../../components/PrimaryButton";
 import CreateAppointment from "./CreateAppointment";
 import { useCallback, useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import useAuthContext from "../../../context/AuthContext";
 import moment from "moment";
 import EventModal from "./EventModal";
 import CreateReservation from "./CreateReservation";
+import Swal from "sweetalert2";
 
 const Appointment = () => {
     const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -87,13 +88,34 @@ const Appointment = () => {
 
     const handleCancel = (data) => {
         setEvent((prev) => prev.filter((p) => p.id !== data.id));
+        Swal.fire({
+            title: "Success!",
+            text: "Cancel appointment success",
+            icon: "success",
+            position: "top",
+            timer: 4500,
+        });
     };
 
     const handleFinish = (data) => {
         setEvent((prev) => prev.filter((p) => p.id !== data.id));
+        Swal.fire({
+            title: "Success!",
+            text: "Finished",
+            icon: "success",
+            position: "top",
+            timer: 4500,
+        });
     };
     const handleDelete = (id) => {
         setEvent((prev) => prev.filter((p) => p.id !== id));
+        Swal.fire({
+            title: "Success!",
+            text: "Delete appointment success",
+            icon: "success",
+            position: "top",
+            timer: 4500,
+        });
     };
 
     useEffect(() => {
@@ -104,20 +126,18 @@ const Appointment = () => {
         <>
             <Header title="Appointment" />
             <div className="flex flex-col md:flex-row justify-between items-center gap-y-2 gap-x-2 mb-4">
-                {/* {user && user.appointmentAccess == 1 && (
-                    <> */}
-                <PrimaryButton
-                    onClick={() => setOpenReserveModal(true)}
-                    className="bg-rose-500 hover:bg-rose-400 focus:bg-rose-500"
-                >
-                    <span>Reserve Booking</span>
-                </PrimaryButton>
+                {user && user.role == 1 && (
+                    <PrimaryButton
+                        onClick={() => setOpenReserveModal(true)}
+                        className="bg-rose-500 hover:bg-rose-400 focus:bg-rose-500"
+                    >
+                        <span>Reserve Booking</span>
+                    </PrimaryButton>
+                )}
                 <PrimaryButton onClick={() => setOpenCreateModal(true)}>
                     <FontAwesomeIcon icon={faPlus} className="mr-2" />
                     <span>Add New Appointment</span>
                 </PrimaryButton>
-                {/* </>
-                )} */}
             </div>
             <div>
                 {event && (

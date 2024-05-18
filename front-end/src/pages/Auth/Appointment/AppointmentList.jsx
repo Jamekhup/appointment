@@ -53,6 +53,7 @@ const AppointmentList = () => {
                         " " +
                         data.patient.last_name,
                     doctor: data.doctor_name,
+                    therapist: data.user?.name,
                     "appointment date": data.date,
                     "appointment time": data.time,
                     status:
@@ -64,10 +65,7 @@ const AppointmentList = () => {
                             ? "Cancelled"
                             : "-",
                     comment: data.comment,
-                    "start date time": data.start_date_time,
                     "finish date time": data.finish_date_time,
-                    "created by": data.created_by,
-                    "updated by": data.updated_by ? data.updated_by : "-",
                 }));
                 setDataToExport(toExpot);
                 setFetching(false);
@@ -141,7 +139,7 @@ const AppointmentList = () => {
                         onChange={(update) => {
                             setDateRange(update);
                         }}
-                        dateFormat="yyyy/MM/dd"
+                        dateFormat="dd/MM/yyyy"
                         isClearable={true}
                         showIcon
                         calendarIconClassname="react-date-range-picker"
@@ -152,7 +150,7 @@ const AppointmentList = () => {
                 <div className="flex justify-between items-center">
                     <div className="bg-blue-200 rounded-md flex justify-between items-center mr-3">
                         <div
-                            className={`px-5 py-1 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans rounded-l-md ${
+                            className={`px-5 py-2 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans rounded-l-md ${
                                 filterByStatus == null
                                     ? "shadow-blue-400 bg-blue-300"
                                     : "bg-blue-200 hover:bg-blue-300"
@@ -162,7 +160,7 @@ const AppointmentList = () => {
                             All
                         </div>
                         <div
-                            className={`px-3 py-1 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans ${
+                            className={`px-3 py-2 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans ${
                                 filterByStatus == 0
                                     ? "shadow-blue-400 bg-blue-300"
                                     : "bg-blue-200 hover:bg-blue-300"
@@ -172,7 +170,7 @@ const AppointmentList = () => {
                             Active
                         </div>
                         <div
-                            className={`px-3 py-1 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans ${
+                            className={`px-3 py-2 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans ${
                                 filterByStatus == 1
                                     ? "shadow-blue-400 bg-blue-300"
                                     : "bg-blue-200 hover:bg-blue-300"
@@ -182,7 +180,7 @@ const AppointmentList = () => {
                             Finished
                         </div>
                         <div
-                            className={`px-3 py-1 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans rounded-r-md ${
+                            className={`px-3 py-2 text-sm border-r-blue-300 border-r-2 outline-none cursor-pointer font-sans rounded-r-md ${
                                 filterByStatus == 2
                                     ? "shadow-blue-400 bg-blue-300"
                                     : "bg-blue-200 hover:bg-blue-300"
@@ -210,6 +208,9 @@ const AppointmentList = () => {
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Doctor Name
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Therapist
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Date
@@ -248,13 +249,20 @@ const AppointmentList = () => {
                                         key={i}
                                     >
                                         <td className="border border-separate py-1 pl-2">
-                                            {appointment.patient.title} {appointment.patient.first_name} {appointment.patient.last_name}
+                                            {appointment.patient.title}{" "}
+                                            {appointment.patient.first_name}{" "}
+                                            {appointment.patient.last_name}
                                         </td>
                                         <td className="border border-separate py-1 pl-2">
                                             {appointment.doctor_name}
                                         </td>
                                         <td className="border border-separate py-1 pl-2">
-                                            {appointment.date}
+                                            {appointment.user.name}
+                                        </td>
+                                        <td className="border border-separate py-1 pl-2">
+                                            {appointment.date.split("-")[2]}-
+                                            {appointment.date.split("-")[1]}-
+                                            {appointment.date.split("-")[0]}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             {appointment.time}
@@ -339,7 +347,7 @@ const AppointmentList = () => {
                                 ))}
                         {fetching && (
                             <tr>
-                                <td colSpan={7}>
+                                <td colSpan={10}>
                                     <Loading />
                                 </td>
                             </tr>

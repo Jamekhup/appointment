@@ -129,6 +129,22 @@ const AppointmentDetail = () => {
                             <tbody>
                                 <tr>
                                     <td className="border-b border-gray-200 px-3 py-1.5">
+                                        Therapist
+                                    </td>
+                                    <td className="border-b border-gray-200 px-3 py-1.5">
+                                        <span>{appointment.user.name}</span> ({" "}
+                                        <div
+                                            className="rounded-sm px-3 py-2 inline-block -mb-0.5"
+                                            style={{
+                                                backgroundColor:
+                                                    appointment.user.color,
+                                            }}
+                                        ></div>{" "}
+                                        )
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="border-b border-gray-200 px-3 py-1.5">
                                         Service
                                     </td>
                                     <td className="border-b border-gray-200 px-3 py-1.5">

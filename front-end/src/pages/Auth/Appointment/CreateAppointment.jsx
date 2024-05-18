@@ -5,14 +5,19 @@ import TextInput from "../../../components/TextInput";
 import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
 import Swal from "sweetalert2";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format, setHours, setMinutes } from "date-fns";
 
 const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const [patients, setPatients] = useState(null);
     const [services, setServices] = useState(null);
+    const [therapists, setTherapists] = useState(null);
     const [patientId, setPatientId] = useState("");
+    const [therapistId, setTherapistId] = useState("select");
     const [serviceId, setServiceId] = useState("select");
-    const [date, setDate] = useState("");
-    const [time, setTime] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [time, setTime] = useState(setHours(setMinutes(new Date(), 0), 8));
     const [comment, setComment] = useState("");
     const [doctor, setDoctor] = useState("");
     const [loading, setLoading] = useState(false);
@@ -70,7 +75,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                 if (res.data.status == "success") {
                     setPatients(res.data.patients);
                     setServices(res.data.services);
-                    setPatientId(res.data.patients[0].id);
+                    setTherapists(res.data.therapists);
                     setFetching(false);
                 }
             });
@@ -79,62 +84,76 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        axios
-            .post(
-                "/appointment/create",
-                {
-                    patientId,
-                    title,
-                    firstName,
-                    lastName,
-                    dob,
-                    street,
-                    houseNumber,
-                    city,
-                    postalCode,
-                    houseDoctor,
-                    recommendedDoctor,
-                    insuranceCompany,
-                    paymentFree,
-                    treatmentInSixMonth,
-                    privatePatient,
-                    specialNeed,
-                    serviceId,
-                    date,
-                    time,
-                    comment,
-                    doctor,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
+        if (serviceId == "select") {
+            setError({ serviceId: ["Please select a service"] });
+            setLoading(false);
+        } else if (patientId == "") {
+            setError({ patientId: ["Please select a patient"] });
+            setLoading(false);
+        } else if (therapistId == "select") {
+            setError({ therapistId: ["Please select a therapist"] });
+            setLoading(false);
+        } else {
+            axios
+                .post(
+                    "/appointment/create",
+                    {
+                        patientId,
+                        title,
+                        firstName,
+                        lastName,
+                        dob,
+                        street,
+                        houseNumber,
+                        city,
+                        postalCode,
+                        houseDoctor,
+                        recommendedDoctor,
+                        insuranceCompany,
+                        paymentFree,
+                        treatmentInSixMonth,
+                        privatePatient,
+                        specialNeed,
+                        serviceId,
+                        therapistId,
+                        date: date.toISOString().split("T")[0],
+                        time: format(time, "HH:mm"),
+                        comment,
+                        doctor,
                     },
-                }
-            )
-            .then((response) => {
-                if (response.data.status == "reserved") {
-                    Swal.fire({
-                        icon: "error",
-                        title: response.data.message,
-                        showConfirmButton: false,
-                        timer: 4500,
-                    });
-                } else {
-                    handleCreate(response.data.data);
-                    close();
-                }
-                setComment("");
-                setPatientId(patients[0].id);
-                setServiceId(services[0].id);
-                setDate("");
-                setTime("");
-                setDoctor("");
-                setLoading(false);
-            })
-            .catch((error) => {
-                setError(error.response.data.message);
-                setLoading(false);
-            });
+                    {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    }
+                )
+                .then((response) => {
+                    if (response.data.status == "reserved") {
+                        Swal.fire({
+                            icon: "error",
+                            title: response.data.message,
+                            showConfirmButton: false,
+                            timer: 4500,
+                        });
+                    } else {
+                        handleCreate(response.data.data);
+                        close();
+                    }
+                    setComment("");
+                    setPatientId("");
+                    setServiceId("select");
+                    setTherapistId("select");
+                    setSelectedPatient("");
+                    setDate(new Date());
+                    setTime(setHours(setMinutes(new Date(), 0), 8));
+                    setDoctor("");
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    setError(error.response.data.message);
+                    setLoading(false);
+                });
+        }
     };
 
     useEffect(() => {
@@ -181,366 +200,478 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     </div>
 
                     {toggleForm ? (
-                        <div>
-                            <p className="mb-3 font-semibold border-b border-blue-300">
-                                Patient Information
-                            </p>
-                            <div
-                                className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1
+                        <>
+                            <div>
+                                <p className="mb-3 font-semibold border-b border-blue-300">
+                                    Patient Information
+                                </p>
+                                <div
+                                    className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1
                                     gap-x-2.5 sm:gap-y-4 gap-y-2.5 items-start"
-                            >
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="title">Title</label>
-                                    <select
-                                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
+                                >
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="title">Title</label>
+                                        <select
+                                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                        value={title}
-                                        onChange={(e) =>
-                                            setTitle(e.target.value)
-                                        }
-                                    >
-                                        <option value="">Select Title</option>
-                                        <option value="Mr">Mr</option>
-                                        <option value="Ms">Ms</option>
-                                        <option value="Mrs">Mrs</option>
-                                    </select>
-                                    {/* {errors && errors.title && (
+                                            value={title}
+                                            onChange={(e) =>
+                                                setTitle(e.target.value)
+                                            }
+                                        >
+                                            <option value="">
+                                                Select Title
+                                            </option>
+                                            <option value="Mr">Mr</option>
+                                            <option value="Ms">Ms</option>
+                                            <option value="Mrs">Mrs</option>
+                                        </select>
+                                        {/* {errors && errors.title && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.title[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="first_name">
-                                        First Name
-                                    </label>
-                                    <TextInput
-                                        id="first_name"
-                                        type="text"
-                                        value={firstName}
-                                        onChange={(e) =>
-                                            setFirstName(e.target.value)
-                                        }
-                                        placeholder="John"
-                                        required
-                                    />
-                                    {/* {errors && errors.firstName && (
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="first_name">
+                                            First Name
+                                        </label>
+                                        <TextInput
+                                            id="first_name"
+                                            type="text"
+                                            value={firstName}
+                                            onChange={(e) =>
+                                                setFirstName(e.target.value)
+                                            }
+                                            placeholder="John"
+                                            required
+                                        />
+                                        {/* {errors && errors.firstName && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.firstName[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="last_name">Last Name</label>
-                                    <TextInput
-                                        id="last_name"
-                                        type="text"
-                                        value={lastName}
-                                        onChange={(e) =>
-                                            setLastName(e.target.value)
-                                        }
-                                        placeholder="Smith"
-                                        required
-                                    />
-                                    {/* {errors && errors.lastName && (
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="last_name">
+                                            Last Name
+                                        </label>
+                                        <TextInput
+                                            id="last_name"
+                                            type="text"
+                                            value={lastName}
+                                            onChange={(e) =>
+                                                setLastName(e.target.value)
+                                            }
+                                            placeholder="Smith"
+                                            required
+                                        />
+                                        {/* {errors && errors.lastName && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.lastName[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="dob">Date of Birth</label>
-                                    <TextInput
-                                        id="dob"
-                                        type="date"
-                                        value={dob}
-                                        onChange={(e) => setDob(e.target.value)}
-                                        required
-                                    />
-                                    {/* {errors && errors.dob && (
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="dob">
+                                            Date of Birth
+                                        </label>
+                                        <TextInput
+                                            id="dob"
+                                            type="date"
+                                            value={dob}
+                                            onChange={(e) =>
+                                                setDob(e.target.value)
+                                            }
+                                            required
+                                        />
+                                        {/* {errors && errors.dob && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.dob[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="street">Street Name</label>
-                                    <TextInput
-                                        id="street"
-                                        type="text"
-                                        value={street}
-                                        onChange={(e) =>
-                                            setStreet(e.target.value)
-                                        }
-                                        placeholder="Street Name"
-                                        required
-                                    />
-                                    {/* {errors && errors.street && (
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="street">
+                                            Street Name
+                                        </label>
+                                        <TextInput
+                                            id="street"
+                                            type="text"
+                                            value={street}
+                                            onChange={(e) =>
+                                                setStreet(e.target.value)
+                                            }
+                                            placeholder="Street Name"
+                                            required
+                                        />
+                                        {/* {errors && errors.street && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.street[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="house">House Number</label>
-                                    <TextInput
-                                        id="house"
-                                        type="text"
-                                        value={houseNumber}
-                                        onChange={(e) =>
-                                            setHouseNumber(e.target.value)
-                                        }
-                                        placeholder="House Number"
-                                        required
-                                    />
-                                    {/* {errors && errors.houseNumber && (
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="house">
+                                            House Number
+                                        </label>
+                                        <TextInput
+                                            id="house"
+                                            type="text"
+                                            value={houseNumber}
+                                            onChange={(e) =>
+                                                setHouseNumber(e.target.value)
+                                            }
+                                            placeholder="House Number"
+                                            required
+                                        />
+                                        {/* {errors && errors.houseNumber && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.houseNumber[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="city">City</label>
-                                    <TextInput
-                                        id="city"
-                                        type="text"
-                                        value={city}
-                                        onChange={(e) =>
-                                            setCity(e.target.value)
-                                        }
-                                        placeholder="City Name"
-                                        required
-                                    />
-                                    {/* {errors && errors.city && (
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="city">City</label>
+                                        <TextInput
+                                            id="city"
+                                            type="text"
+                                            value={city}
+                                            onChange={(e) =>
+                                                setCity(e.target.value)
+                                            }
+                                            placeholder="City Name"
+                                            required
+                                        />
+                                        {/* {errors && errors.city && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.city[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="postal">Postal Code</label>
-                                    <TextInput
-                                        id="postal"
-                                        type="number"
-                                        value={postalCode}
-                                        onChange={(e) =>
-                                            setPostalCode(e.target.value)
-                                        }
-                                        placeholder="989098"
-                                        required
-                                    />
-                                    {/* {errors && errors.postalCode && (
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="postal">
+                                            Postal Code
+                                        </label>
+                                        <TextInput
+                                            id="postal"
+                                            type="number"
+                                            value={postalCode}
+                                            onChange={(e) =>
+                                                setPostalCode(e.target.value)
+                                            }
+                                            placeholder="989098"
+                                            required
+                                        />
+                                        {/* {errors && errors.postalCode && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.postalCode[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="house_doctor">
-                                        House Doctor (optional)
-                                    </label>
-                                    <TextInput
-                                        id="house_doctor"
-                                        type="text"
-                                        value={houseDoctor}
-                                        onChange={(e) =>
-                                            setHouseDoctor(e.target.value)
-                                        }
-                                        placeholder="House Doctor"
-                                    />
-                                </div>
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="house_doctor">
+                                            House Doctor (optional)
+                                        </label>
+                                        <TextInput
+                                            id="house_doctor"
+                                            type="text"
+                                            value={houseDoctor}
+                                            onChange={(e) =>
+                                                setHouseDoctor(e.target.value)
+                                            }
+                                            placeholder="House Doctor"
+                                        />
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="recommended_doctor">
-                                        Recommended Doctor (optional)
-                                    </label>
-                                    <TextInput
-                                        id="recommended_doctor"
-                                        type="text"
-                                        value={recommendedDoctor}
-                                        onChange={(e) =>
-                                            setRecommendedDoctor(e.target.value)
-                                        }
-                                        placeholder="Recommended Doctor"
-                                    />
-                                </div>
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="recommended_doctor">
+                                            Recommended Doctor (optional)
+                                        </label>
+                                        <TextInput
+                                            id="recommended_doctor"
+                                            type="text"
+                                            value={recommendedDoctor}
+                                            onChange={(e) =>
+                                                setRecommendedDoctor(
+                                                    e.target.value
+                                                )
+                                            }
+                                            placeholder="Recommended Doctor"
+                                        />
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label>
-                                        Health Insurance Company (optional)
-                                    </label>
-                                    <TextInput
-                                        type="text"
-                                        value={insuranceCompany}
-                                        onChange={(e) =>
-                                            setInsuranceCompany(e.target.value)
-                                        }
-                                        placeholder="Health Insurance Company Name"
-                                    />
-                                </div>
+                                    <div className="flex flex-col text-sm">
+                                        <label>
+                                            Health Insurance Company (optional)
+                                        </label>
+                                        <TextInput
+                                            type="text"
+                                            value={insuranceCompany}
+                                            onChange={(e) =>
+                                                setInsuranceCompany(
+                                                    e.target.value
+                                                )
+                                            }
+                                            placeholder="Health Insurance Company Name"
+                                        />
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="title">
-                                        Payment Free (Yes or No)
-                                    </label>
-                                    <select
-                                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="title">
+                                            Payment Free (Yes or No)
+                                        </label>
+                                        <select
+                                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                        value={paymentFree}
-                                        onChange={(e) =>
-                                            setPaymentFree(e.target.value)
-                                        }
-                                    >
-                                        <option value="">Select One</option>
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
-                                    </select>
-                                    {/* {errors && errors.paymentFree && (
+                                            value={paymentFree}
+                                            onChange={(e) =>
+                                                setPaymentFree(e.target.value)
+                                            }
+                                        >
+                                            <option value="">Select One</option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                        {/* {errors && errors.paymentFree && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.paymentFree[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="title">
-                                        Treatment in Six Month (Yes or No)
-                                    </label>
-                                    <select
-                                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="title">
+                                            Treatment in Six Month (Yes or No)
+                                        </label>
+                                        <select
+                                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                        value={treatmentInSixMonth}
-                                        onChange={(e) =>
-                                            setTreatmentInSixMonth(
-                                                e.target.value
-                                            )
-                                        }
-                                    >
-                                        <option value="">Select One</option>
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
-                                    </select>
-                                    {/* {errors && errors.treatmentInSixMonth && (
+                                            value={treatmentInSixMonth}
+                                            onChange={(e) =>
+                                                setTreatmentInSixMonth(
+                                                    e.target.value
+                                                )
+                                            }
+                                        >
+                                            <option value="">Select One</option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                        {/* {errors && errors.treatmentInSixMonth && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.treatmentInSixMonth[0]}
                                         </div>
                                     )} */}
-                                </div>
+                                    </div>
 
-                                <div className="flex flex-col text-sm">
-                                    <label htmlFor="title">
-                                        Private Patient (Yes or No)
-                                    </label>
-                                    <select
-                                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="title">
+                                            Private Patient (Yes or No)
+                                        </label>
+                                        <select
+                                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                        value={privatePatient}
-                                        onChange={(e) =>
-                                            setPrivatePatient(e.target.value)
-                                        }
-                                    >
-                                        <option value="">Select One</option>
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
-                                    </select>
-                                    {/* {errors && errors.privatePatient && (
+                                            value={privatePatient}
+                                            onChange={(e) =>
+                                                setPrivatePatient(
+                                                    e.target.value
+                                                )
+                                            }
+                                        >
+                                            <option value="">Select One</option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                        {/* {errors && errors.privatePatient && (
                                         <div className="text-xs mt-1 font-medium text-red-600">
                                             {errors.privatePatient[0]}
                                         </div>
                                     )} */}
-                                </div>
-                            </div>
-
-                            <div className="w-full flex flex-col mt-4 mb-4">
-                                <label className="text-sm">
-                                    Special Need (Optional)
-                                </label>
-                                <textarea
-                                    className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600
-                                        focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                    rows={7}
-                                    value={specialNeed}
-                                    onChange={(e) =>
-                                        setSpecialNeed(e.target.value)
-                                    }
-                                ></textarea>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="flex flex-col mb-3 relative mt-3">
-                            <label>Search Patient by name and select</label>
-                            <TextInput
-                                type="text"
-                                value={
-                                    selectedPatient
-                                        ? selectedPatient
-                                        : searchPatient
-                                }
-                                onChange={(e) => handlePatientSearch(e)}
-                                placeholder="Search ..."
-                                className="md:w-[49.7%] w-full"
-                            />
-                            {/* {errors && errors.name && (
-                                <div className="text-xs mt-1 font-medium text-red-600">
-                                    {errors.name[0]}
-                                </div>
-                            )} */}
-
-                            {searchPatient != "" && (
-                                <div className="absolute top-16 max-h-[260px] overflow-y-scroll bg-slate-200 md:w-[49.7%] w-full rounded-md p-2">
-                                    <div className="flex flex-col gap-2.5">
-                                        {patients && controlPatientSearch ? (
-                                            patients
-                                                .filter(
-                                                    (pt) =>
-                                                        pt.first_name
-                                                            .toLowerCase()
-                                                            .includes(
-                                                                searchPatient.toLocaleLowerCase()
-                                                            ) ||
-                                                        pt.last_name
-                                                            .toLowerCase()
-                                                            .includes(
-                                                                searchPatient.toLocaleLowerCase()
-                                                            )
-                                                )
-                                                .map((result, i) => (
-                                                    <div
-                                                        className="flex justify-between items-center border-b border-amber-100 text-sm"
-                                                        key={i}
-                                                    >
-                                                        <p>
-                                                            {result.first_name}{" "}
-                                                            {result.last_name}
-                                                        </p>
-                                                        <button
-                                                            className="cursor-pointer bg-gray-600 px-2.5 rounded-md text-xs text-slate-200 py-[1px]"
-                                                            onClick={() =>
-                                                                selectPatient(
-                                                                    result
-                                                                )
-                                                            }
-                                                        >
-                                                            Select
-                                                        </button>
-                                                    </div>
-                                                ))
-                                        ) : (
-                                            <div className="flex justify-between items-center border-b border-amber-100 text-sm">
-                                                <p>No Result</p>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
-                            )}
+
+                                <div className="w-full flex flex-col mt-4 mb-4">
+                                    <label className="text-sm">
+                                        Special Need (Optional)
+                                    </label>
+                                    <textarea
+                                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600
+                                        focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                        rows={7}
+                                        value={specialNeed}
+                                        onChange={(e) =>
+                                            setSpecialNeed(e.target.value)
+                                        }
+                                    ></textarea>
+                                </div>
+                            </div>
+                            <p className="mb-3 font-semibold border-b border-blue-300">
+                                Select Therapist
+                            </p>
+                            <div className="flex flex-col text-sm w-full mb-4">
+                                <label htmlFor="therapist">
+                                    Select Therapist{" "}
+                                    <span className="text-red-600">*</span>
+                                </label>
+                                <select
+                                    className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                    value={therapistId}
+                                    required
+                                    onChange={(e) =>
+                                        setTherapistId(e.target.value)
+                                    }
+                                    id="therapist"
+                                >
+                                    <option
+                                        value="select"
+                                        disabled
+                                        className="bg-white"
+                                    >
+                                        Select Therapist
+                                    </option>
+                                    {therapists &&
+                                        therapists.map((therapist, i) => (
+                                            <option
+                                                key={i}
+                                                value={therapist.id}
+                                                className="bg-white"
+                                            >
+                                                {therapist.name}
+                                            </option>
+                                        ))}
+                                </select>
+                                {error && error.therapistId && (
+                                    <div className="text-xs mt-1 font-medium text-red-600">
+                                        {error.therapistId[0]}
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex justify-between items-center gap-x-3 my-3">
+                            <div className="flex flex-col relative w-full">
+                                <label>
+                                    Search Patient by name and select{" "}
+                                    <span className="text-red-600">*</span>
+                                </label>
+                                <TextInput
+                                    type="text"
+                                    value={
+                                        selectedPatient
+                                            ? selectedPatient
+                                            : searchPatient
+                                    }
+                                    onChange={(e) => handlePatientSearch(e)}
+                                    placeholder="Search ..."
+                                    className="w-full"
+                                />
+                                {error && error.patientId && (
+                                    <div className="text-xs mt-1 font-medium text-red-600">
+                                        {error.patientId[0]}
+                                    </div>
+                                )}
+                                {searchPatient != "" && (
+                                    <div className="absolute top-16 max-h-[260px] overflow-y-scroll bg-slate-200 md:w-[49.7%] w-full rounded-md p-2">
+                                        <div className="flex flex-col gap-2.5">
+                                            {patients &&
+                                            controlPatientSearch ? (
+                                                patients
+                                                    .filter(
+                                                        (pt) =>
+                                                            pt.first_name
+                                                                .toLowerCase()
+                                                                .includes(
+                                                                    searchPatient.toLocaleLowerCase()
+                                                                ) ||
+                                                            pt.last_name
+                                                                .toLowerCase()
+                                                                .includes(
+                                                                    searchPatient.toLocaleLowerCase()
+                                                                )
+                                                    )
+                                                    .map((result, i) => (
+                                                        <div
+                                                            className="flex justify-between items-center border-b border-amber-100 text-sm"
+                                                            key={i}
+                                                        >
+                                                            <p>
+                                                                {
+                                                                    result.first_name
+                                                                }{" "}
+                                                                {
+                                                                    result.last_name
+                                                                }
+                                                            </p>
+                                                            <button
+                                                                className="cursor-pointer bg-gray-600 px-2.5 rounded-md text-xs text-slate-200 py-[1px]"
+                                                                onClick={() =>
+                                                                    selectPatient(
+                                                                        result
+                                                                    )
+                                                                }
+                                                            >
+                                                                Select
+                                                            </button>
+                                                        </div>
+                                                    ))
+                                            ) : (
+                                                <div className="flex justify-between items-center border-b border-amber-100 text-sm">
+                                                    <p>No Result</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex flex-col text-sm w-full">
+                                <label htmlFor="therapist">
+                                    Select Therapist{" "}
+                                    <span className="text-red-600">*</span>
+                                </label>
+                                <select
+                                    className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                    value={therapistId}
+                                    required
+                                    onChange={(e) =>
+                                        setTherapistId(e.target.value)
+                                    }
+                                    id="therapist"
+                                >
+                                    <option
+                                        value="select"
+                                        disabled
+                                        className="bg-white"
+                                    >
+                                        Select Therapist
+                                    </option>
+                                    {therapists &&
+                                        therapists.map((therapist, i) => (
+                                            <option
+                                                key={i}
+                                                value={therapist.id}
+                                                className="bg-white"
+                                            >
+                                                {therapist.name}
+                                            </option>
+                                        ))}
+                                </select>
+                                {error && error.therapistId && (
+                                    <div className="text-xs mt-1 font-medium text-red-600">
+                                        {error.therapistId[0]}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                     <p className="mb-3 font-semibold border-b border-blue-300">
@@ -551,9 +682,12 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                 gap-x-2.5 sm:gap-y-4 gap-y-2.5 items-start"
                     >
                         <div className="flex flex-col text-sm">
-                            <label htmlFor="services">Select Service</label>
+                            <label htmlFor="services">
+                                Select Service{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
                             <select
-                                className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
+                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                 value={serviceId}
                                 required
@@ -600,13 +734,18 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                             )}
                         </div>
                         <div className="flex flex-col text-sm">
-                            <label htmlFor="start_date">Appointment Date</label>
-                            <TextInput
+                            <label htmlFor="start_date">
+                                Appointment Date{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
+
+                            <ReactDatePicker
                                 id="start_date"
-                                type="date"
+                                dateFormat="dd/MM/yyyy"
+                                className="w-full h-10 cursor-pointer border px-1.5 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
                                 required
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
+                                selected={date}
+                                onChange={(date) => setDate(date)}
                             />
 
                             {error && error.date && (
@@ -617,13 +756,22 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                         </div>
 
                         <div className="flex flex-col text-sm">
-                            <label htmlFor="time">Appointment Time</label>
-                            <TextInput
+                            <label htmlFor="time">
+                                Appointment Time{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
+                            <ReactDatePicker
+                                selected={time}
+                                onChange={(time) => setTime(time)}
+                                showTimeSelect
+                                className="w-full h-10 cursor-pointer border px-1.5 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
+                                showTimeSelectOnly
+                                timeIntervals={60}
+                                timeCaption="Time"
+                                timeFormat="HH:mm"
+                                dateFormat="HH:mm"
                                 id="time"
-                                type="time"
                                 required
-                                value={time}
-                                onChange={(e) => setTime(e.target.value)}
                             />
                             {error && error.time && (
                                 <div className="text-xs mt-1 font-medium text-red-600">
