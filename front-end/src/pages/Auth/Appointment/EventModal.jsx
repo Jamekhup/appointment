@@ -292,7 +292,8 @@ const EventModal = ({
                     )}
 
                     {eventData.title == "Reserved"
-                        ? user.role == 1 && (
+                        ? user.role == 1 ||
+                          (user.role == 0 && (
                               <PrimaryButton
                                   type="button"
                                   className="!bg-red-500 border px-4 mt-4 hover:!bg-red-400"
@@ -300,9 +301,10 @@ const EventModal = ({
                               >
                                   Delete
                               </PrimaryButton>
-                          )
+                          ))
                         : (user.id == eventData.data.user_id ||
-                              user.role == 1) && (
+                              user.role == 1 ||
+                              user.role == 0) && (
                               <div className="flex items-center gap-x-2">
                                   <PrimaryButton
                                       type="button"
