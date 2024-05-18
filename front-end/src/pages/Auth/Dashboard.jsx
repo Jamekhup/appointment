@@ -100,7 +100,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchData(url);
-    }, [dateRange]);
+    }, [endDate]);
 
     const convertDate = (date) => {
         let newDate = date.split("-");
