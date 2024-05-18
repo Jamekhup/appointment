@@ -49,6 +49,11 @@ const AppointmentDetail = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    const convertDate = (date) => {
+        let newDate = date.split("-");
+        return newDate[2] + "-" + newDate[1] + "-" + newDate[0];
+    };
     return (
         <>
             <Header title="Appointment Detail" />
@@ -83,7 +88,7 @@ const AppointmentDetail = () => {
                                         Date Of Birth
                                     </td>
                                     <td className="border-b border-gray-200 px-3 py-1.5">
-                                        {appointment.patient.dob}
+                                        {convertDate(appointment.patient.dob)}
                                     </td>
                                 </tr>
                                 <tr>
