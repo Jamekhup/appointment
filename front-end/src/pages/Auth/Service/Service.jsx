@@ -157,9 +157,7 @@ const Service = () => {
                                             {ser.name}
                                         </td>
                                         <td className="border border-separate pl-2 font-mono">
-                                            {ser.price
-                                                ? "€ " + ser.price
-                                                : "-"}
+                                            {ser.price ? "€ " + ser.price : "-"}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             {ser.description

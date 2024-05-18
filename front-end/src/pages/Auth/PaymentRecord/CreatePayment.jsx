@@ -14,6 +14,7 @@ const CreatePayment = ({
     therapist,
 }) => {
     const [treatment, setTreatment] = useState("");
+    const [therapistId, setTherapistId] = useState("");
     const [doctorName, setDoctorName] = useState("");
     const [coveredByInsuranceCompany, setCoveredByInsuranceCompany] =
         useState("");
@@ -92,6 +93,7 @@ const CreatePayment = ({
                     {
                         patient_id: selectedPatient.id,
                         treatment,
+                        therapistId,
                         doctorName,
                         coveredByInsuranceCompany,
                         number,
@@ -117,6 +119,7 @@ const CreatePayment = ({
                         handleCreate(response.data.payment);
                         setSelectedPatient("");
                         setTreatment("");
+                        setTherapistId("");
                         setDoctorName("");
                         setCoveredByInsuranceCompany("");
                         setNumber("");
@@ -148,6 +151,7 @@ const CreatePayment = ({
                 "/payment-record/create/new",
                 {
                     newTreatment,
+                    therapistId,
                     newDoctorName,
                     newCoveredByInsuranceCompany,
                     newNumber,
@@ -186,6 +190,7 @@ const CreatePayment = ({
                     handleCreate(response.data.payment);
                     setLoading(false);
                     setTreatment("");
+                    setTherapistId("");
                     setDoctorName("");
                     setCoveredByInsuranceCompany("");
                     setNumber("");
@@ -397,6 +402,44 @@ const CreatePayment = ({
                                             placeholder="Treatment ..."
                                             required
                                         />
+                                    </div>
+
+                                    <div className="flex flex-col">
+                                        <label>
+                                            Select Therapist{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
+                                        </label>
+                                        <select
+                                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                            focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                            value={therapistId}
+                                            onChange={(e) =>
+                                                setTherapistId(e.target.value)
+                                            }
+                                            required
+                                        >
+                                            <option value="">
+                                                Select Therapist
+                                            </option>
+                                            {therapist &&
+                                                therapist.map(
+                                                    (therapist, i) => (
+                                                        <option
+                                                            key={i}
+                                                            value={therapist.id}
+                                                        >
+                                                            {therapist.name}
+                                                        </option>
+                                                    )
+                                                )}
+                                        </select>
+                                        {errors && errors.therapistId && (
+                                            <div className="text-xs mt-1 font-medium text-red-600">
+                                                {errors.therapistId[0]}
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="flex flex-col">
@@ -936,6 +979,40 @@ const CreatePayment = ({
                                         placeholder="Treatment ..."
                                         required
                                     />
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <label>
+                                        Select Therapist{" "}
+                                        <span className="text-red-600">*</span>
+                                    </label>
+                                    <select
+                                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                            focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                        value={therapistId}
+                                        onChange={(e) =>
+                                            setTherapistId(e.target.value)
+                                        }
+                                        required
+                                    >
+                                        <option value="">
+                                            Select Therapist
+                                        </option>
+                                        {therapist &&
+                                            therapist.map((therapist, i) => (
+                                                <option
+                                                    key={i}
+                                                    value={therapist.id}
+                                                >
+                                                    {therapist.name}
+                                                </option>
+                                            ))}
+                                    </select>
+                                    {errors && errors.therapistId && (
+                                        <div className="text-xs mt-1 font-medium text-red-600">
+                                            {errors.therapistId[0]}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex flex-col">

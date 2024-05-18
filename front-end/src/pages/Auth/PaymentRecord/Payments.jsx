@@ -71,15 +71,16 @@ const Payments = () => {
                 setTherapist(res.data.therapist);
 
                 const toExpot = res.data.payment.data.map((data, i) => ({
-                    no: i + 1,
-                    "patient name":
+                    No: i + 1,
+                    "Patient Name":
                         data.patient.title +
                         " " +
                         data.patient.first_name +
                         " " +
                         data.patient.last_name,
-                    "date of birth": data.patient.dob,
-                    address:
+
+                    "Date of Birth": data.patient.dob,
+                    Address:
                         data.patient.house_number +
                         " " +
                         data.patient.street +
@@ -87,33 +88,34 @@ const Payments = () => {
                         data.patient.city +
                         " " +
                         data.patient.postal_code,
-                    "insurance company": data.patient.health_insurance_company,
-                    "house doctor": data.patient.house_doctor,
-                    "recommended doctor": data.patient.recommended_doctor,
-                    "treatment in six months":
+                    "Insurance Company": data.patient.health_insurance_company,
+                    "House Doctor": data.patient.house_doctor,
+                    "Recommended Doctor": data.patient.recommended_doctor,
+                    "Treatment in six Months":
                         data.patient.treatment_in_6_month == 1 ? "Yes" : "No",
-                    "issue date": data.issue_date,
-                    treatment: data.treatment,
-                    "doctor name": data.doctor_name,
-                    "covered by insurance company":
+                    "Issue Date": data.issue_date,
+                    Treatment: data.treatment,
+                    Therapist: data.patient.user.name,
+                    "Doctor Name": data.doctor_name,
+                    "Covered by Insurance Company":
                         data.full_covered_by_insurance_company == 1
                             ? "Yes"
                             : "No",
-                    number: data.number,
-                    cost: "€ " + data.cost,
-                    "additional payment": data.additional_payment
+                    Number: data.number,
+                    Cost: "€ " + data.cost,
+                    "Additional Payment": data.additional_payment
                         ? "€ " + data.additional_payment
                         : "-",
-                    "home visit": data.home_visit == 1 ? "Yes" : "No",
-                    number2: data.number2,
-                    cost3: "€ " + data.cost3,
-                    "additional payment 4": data.additional_payment_4
+                    "Home Visit": data.home_visit == 1 ? "Yes" : "No",
+                    Number2: data.number2,
+                    Cost3: "€ " + data.cost3,
+                    "Additional Payment 4": data.additional_payment_4
                         ? "€ " + data.additional_payment_4
                         : "-",
-                    "total payment": "€ " + data.total_payment,
-                    "received by": data.received_by,
-                    "received date": data.received_date,
-                    remark: data.remark,
+                    "Total Payment": "€ " + data.total_payment,
+                    "Received By": data.received_by,
+                    "Received Date": data.received_date,
+                    Remark: data.remark,
                 }));
 
                 setLoading(false);
@@ -135,15 +137,16 @@ const Payments = () => {
                 setPatients(res.data.patient);
                 setTherapist(res.data.therapist);
                 const toExpot = res.data.payment.data.map((data, i) => ({
-                    no: i + 1,
-                    "patient name":
+                    No: i + 1,
+                    "Patient Name":
                         data.patient.title +
                         " " +
                         data.patient.first_name +
                         " " +
                         data.patient.last_name,
-                    "date of birth": data.patient.dob,
-                    address:
+
+                    "Date of Birth": data.patient.dob,
+                    Address:
                         data.patient.house_number +
                         " " +
                         data.patient.street +
@@ -151,33 +154,34 @@ const Payments = () => {
                         data.patient.city +
                         " " +
                         data.patient.postal_code,
-                    "insurance company": data.patient.health_insurance_company,
-                    "house doctor": data.patient.house_doctor,
-                    "recommended doctor": data.patient.recommended_doctor,
-                    "treatment in six months":
+                    "Insurance Company": data.patient.health_insurance_company,
+                    "House Doctor": data.patient.house_doctor,
+                    "Recommended Doctor": data.patient.recommended_doctor,
+                    "Treatment in six Months":
                         data.patient.treatment_in_6_month == 1 ? "Yes" : "No",
-                    "issue date": data.issue_date,
-                    treatment: data.treatment,
-                    "doctor name": data.doctor_name,
-                    "covered by insurance company":
+                    "Issue Date": data.issue_date,
+                    Treatment: data.treatment,
+                    Therapist: data.patient.user.name,
+                    "Doctor Name": data.doctor_name,
+                    "Covered by Insurance Company":
                         data.full_covered_by_insurance_company == 1
                             ? "Yes"
                             : "No",
-                    number: data.number,
-                    cost: "€ " + data.cost,
-                    "additional payment": data.additional_payment
+                    Number: data.number,
+                    Cost: "€ " + data.cost,
+                    "Additional Payment": data.additional_payment
                         ? "€ " + data.additional_payment
                         : "-",
-                    "home visit": data.home_visit == 1 ? "Yes" : "No",
-                    number2: data.number2,
-                    cost3: "€ " + data.cost3,
-                    "additional payment 4": data.additional_payment_4
+                    "Home Visit": data.home_visit == 1 ? "Yes" : "No",
+                    Number2: data.number2,
+                    Cost3: "€ " + data.cost3,
+                    "Additional Payment 4": data.additional_payment_4
                         ? "€ " + data.additional_payment_4
                         : "-",
-                    "total payment": "€ " + data.total_payment,
-                    "received by": data.received_by,
-                    "received date": data.received_date,
-                    remark: data.remark,
+                    "Total Payment": "€ " + data.total_payment,
+                    "Received By": data.received_by,
+                    "Received Date": data.received_date,
+                    Remark: data.remark,
                 }));
 
                 setLoading(false);
@@ -194,23 +198,6 @@ const Payments = () => {
         Swal.fire({
             title: "Success!",
             text: "New Payment Record created successfully",
-            icon: "success",
-        });
-    };
-
-    const handleUpdate = (data) => {
-        setService((prev) =>
-            prev.map((p) => {
-                if (p.id === data.id) {
-                    return { ...p, ...data };
-                } else {
-                    return p;
-                }
-            })
-        );
-        Swal.fire({
-            title: "Success!",
-            text: "Service Updated successfully",
             icon: "success",
         });
     };
@@ -256,6 +243,11 @@ const Payments = () => {
         window.scrollTo(0, 0);
     };
 
+    const convertDate = (date) => {
+        let newDate = date.split("-");
+        return newDate[2] + "-" + newDate[1] + "-" + newDate[0];
+    };
+
     return (
         <>
             <Header title="Payment Records" />
@@ -269,7 +261,7 @@ const Payments = () => {
                         onChange={(update) => {
                             setDateRange(update);
                         }}
-                        dateFormat="yyyy/MM/dd"
+                        dateFormat="dd/MM/yyyy"
                         isClearable={true}
                         showIcon
                         calendarIconClassname="react-date-range-picker"
@@ -305,6 +297,9 @@ const Payments = () => {
                     <tr className="h-7">
                         <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                             Patient Name
+                        </th>
+                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                            Therapist
                         </th>
                         <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                             DOB
@@ -349,7 +344,10 @@ const Payments = () => {
                                         {pr.patient.last_name}
                                     </td>
                                     <td className="border border-separate pl-2">
-                                        {pr.patient.dob}
+                                        {pr.user.name}
+                                    </td>
+                                    <td className="border border-separate pl-2">
+                                        {convertDate(pr.patient.dob)}
                                     </td>
                                     <td className="border border-separate pl-2">
                                         {pr.patient.street}
@@ -361,7 +359,7 @@ const Payments = () => {
                                         {pr.patient.postal_code}
                                     </td>
                                     <td className="border border-separate pl-2">
-                                        {pr.issue_date}
+                                        {convertDate(pr.issue_date)}
                                     </td>
                                     <td className="border border-separate pl-2">
                                         {pr.received_by}

@@ -20,7 +20,7 @@ class PaymentRecordController extends Controller
 
         $patient = Patient::all();
         $therapist = User::where('role', 2)->get();
-        $payment = PaymentRecord::with('patient')->when($request->dateRange, function ($query, $date) {
+        $payment = PaymentRecord::with(['patient', 'user'])->when($request->dateRange, function ($query, $date) {
             $query->whereDate('issue_date', '>=', Carbon::parse($date[0])->addDay()->format('Y-m-d'))
                 ->whereDate('issue_date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
         })->orderBy('created_at', 'DESC')->paginate(30);
@@ -33,7 +33,7 @@ class PaymentRecordController extends Controller
     public function detail($id)
     {
 
-        $payment = PaymentRecord::with('patient')->find($id);
+        $payment = PaymentRecord::with(['patient', 'user'])->find($id);
         if ($payment) {
             return response()->json(['status' => 'success', 'payment' => $payment]);
         } else {
@@ -65,6 +65,7 @@ class PaymentRecordController extends Controller
             $payment->patient_id = $request->patient_id;
             $payment->issue_date = date('Y-m-d');
             $payment->treatment = $request->treatment;
+            $payment->user_id = $request->therapistId;
             $payment->doctor_name = $request->doctorName;
             $payment->full_covered_by_insurance_company = $request->coveredByInsuranceCompany;
             $payment->number = $request->number;
@@ -120,6 +121,7 @@ class PaymentRecordController extends Controller
                 $payment->patient_id = $patient->id;
                 $payment->issue_date = date('Y-m-d');
                 $payment->treatment = $request->newTreatment;
+                $payment->user_id = $request->therapistId;
                 $payment->doctor_name = $request->newDoctorName;
                 $payment->full_covered_by_insurance_company = $request->newCoveredByInsuranceCompany;
                 $payment->number = $request->newNumber;
@@ -149,10 +151,11 @@ class PaymentRecordController extends Controller
 
     public function edit($id)
     {
-        $payment = PaymentRecord::with('patient')->find($id);
+        $payment = PaymentRecord::with(['patient', 'user'])->find($id);
         $patients = Patient::all();
+        $therapist = User::where('role', 2)->get();
         if ($payment) {
-            return response()->json(['status' => 'success', 'payment' => $payment, 'patient' => $patients]);
+            return response()->json(['status' => 'success', 'payment' => $payment, 'patient' => $patients, 'therapist' => $therapist]);
         } else {
             return response()->json(['status' => 'fail', 'message' => 'Something went wrong'], 422);
         }
@@ -186,6 +189,7 @@ class PaymentRecordController extends Controller
                 }
                 $payment->issue_date = date('Y-m-d');
                 $payment->treatment = $request->treatment;
+                $payment->user_id = $request->therapistId;
                 $payment->doctor_name = $request->doctorName;
                 $payment->full_covered_by_insurance_company = $request->coveredByInsuranceCompany;
                 $payment->number = $request->number;

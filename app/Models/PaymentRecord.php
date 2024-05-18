@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentRecord extends Model
 {
-    use HasFactory,HasUuids;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'patient_id',
@@ -31,41 +31,13 @@ class PaymentRecord extends Model
         'updated_by',
     ];
 
-    public function patient(){
-        return $this->belongsTo(Patient::class,'patient_id','id');
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patient_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

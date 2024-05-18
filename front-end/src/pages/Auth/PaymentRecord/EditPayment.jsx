@@ -16,6 +16,8 @@ const EditPayment = () => {
 
     const [payment, setPayment] = useState(null);
     const [patient, setPatient] = useState(null);
+    const [therapist, setTherapist] = useState(null);
+
     const [loading, setLoading] = useState(false);
     const [formLoading, setFormLoading] = useState(false);
     const navigate = useNavigate();
@@ -23,6 +25,7 @@ const EditPayment = () => {
     const [errors, setErrors] = useState(false);
 
     const [treatment, setTreatment] = useState("");
+    const [therapistId, setTherapistId] = useState("");
     const [doctorName, setDoctorName] = useState("");
     const [coveredByInsuranceCompany, setCoveredByInsuranceCompany] =
         useState("");
@@ -68,8 +71,10 @@ const EditPayment = () => {
                         setLoading(false);
                         setPayment(res.data.payment);
                         setPatient(res.data.patient);
+                        setTherapist(res.data.therapist);
 
                         setTreatment(res.data.payment.treatment);
+                        setTherapistId(res.data.payment.user_id);
                         setDoctorName(res.data.payment.doctor_name);
                         setCoveredByInsuranceCompany(
                             res.data.payment.full_covered_by_insurance_company
@@ -129,6 +134,7 @@ const EditPayment = () => {
                     {
                         patient_id: selectedPatient.id,
                         treatment,
+                        therapistId,
                         doctorName,
                         coveredByInsuranceCompany,
                         number,
@@ -213,6 +219,40 @@ const EditPayment = () => {
                                         placeholder="Treatment ..."
                                         required
                                     />
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <label>
+                                        Select Therapist{" "}
+                                        <span className="text-red-600">*</span>
+                                    </label>
+                                    <select
+                                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                            focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                        value={therapistId}
+                                        onChange={(e) =>
+                                            setTherapistId(e.target.value)
+                                        }
+                                        required
+                                    >
+                                        <option value="">
+                                            Select Therapist
+                                        </option>
+                                        {therapist &&
+                                            therapist.map((therapist, i) => (
+                                                <option
+                                                    key={i}
+                                                    value={therapist.id}
+                                                >
+                                                    {therapist.name}
+                                                </option>
+                                            ))}
+                                    </select>
+                                    {errors && errors.therapistId && (
+                                        <div className="text-xs mt-1 font-medium text-red-600">
+                                            {errors.therapistId[0]}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex flex-col">

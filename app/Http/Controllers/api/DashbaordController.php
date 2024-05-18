@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 
 class DashbaordController extends Controller
 {
-    public function dashboard(){
+    public function dashboard()
+    {
 
         $totalPatient = Patient::count();
         $totalAppointment = Appointment::count();
@@ -20,9 +21,9 @@ class DashbaordController extends Controller
 
         $totalIncome = PaymentRecord::sum('total_payment');
 
-        $activeAppointment = Appointment::with('patient')->where('status','0')->orderBy('created_at', 'DESC')->get();
+        $activeAppointment = Appointment::with(['patient', 'user'])->where('status', '0')->orderBy('created_at', 'DESC')->get();
         $reserved = ReserveAppointment::whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-        ->orderBy('created_at','DESC')->get();
+            ->orderBy('created_at', 'DESC')->get();
 
         return response()->json([
             'status' => 'success',
