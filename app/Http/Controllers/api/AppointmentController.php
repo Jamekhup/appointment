@@ -91,6 +91,7 @@ class AppointmentController extends Controller
                 $already_reserved = Appointment::with('user')->where('user_id', $request->therapistId)
                     ->whereDate('date', $request->date)
                     ->whereTime('time', '<=', $request->time)
+                    ->where('status', 1)
                     ->whereTime(DB::raw('ADDTIME(time, "01:00:00")'), '>', $request->time)->first();
 
                 if ($already_reserved) {
