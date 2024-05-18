@@ -1,8 +1,6 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-// import event from "./event";
-// import resources from "./resources";
 
 const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
     const localizer = momentLocalizer(moment);
@@ -13,7 +11,7 @@ const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
             events={event}
             startAccessor="start"
             endAccessor="end"
-            style={{ height: 720 }}
+            style={{ height: 540, width: 1150 }}
             defaultView="week"
             getNow={() => new Date()}
             views={["day", "week", "month"]}

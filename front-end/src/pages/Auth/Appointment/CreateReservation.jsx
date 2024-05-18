@@ -5,11 +5,18 @@ import TextInput from "../../../components/TextInput";
 import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
 import Swal from "sweetalert2";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format, setHours, setMinutes } from "date-fns";
 
 const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
-    const [date, setDate] = useState("");
-    const [fromTime, setFromTime] = useState("");
-    const [toTime, setToTime] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [fromTime, setFromTime] = useState(
+        setHours(setMinutes(new Date(), 0), 8)
+    );
+    const [toTime, setToTime] = useState(
+        setHours(setMinutes(new Date(), 0), 21)
+    );
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -22,9 +29,9 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
             .post(
                 "/reserve-appointment/create",
                 {
-                    date,
-                    fromTime,
-                    toTime,
+                    date: date.toISOString().split("T")[0],
+                    fromTime: format(fromTime, "HH:mm"),
+                    toTime: format(toTime, "HH:mm"),
                 },
                 {
                     headers: {
@@ -45,9 +52,9 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                     close();
                 }
                 setLoading(false);
-                setDate("");
-                setFromTime("");
-                setToTime("");
+                setDate(new Date());
+                setFromTime(setHours(setMinutes(new Date(), 0), 8));
+                setToTime(setHours(setMinutes(new Date(), 0), 21));
             })
             .catch((error) => {
                 setError(error.response.data.message);
@@ -67,19 +74,23 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                         &times;
                     </div>
                 </div>
-                <form onSubmit={handleSubmit} className="mt-5">
+                <form onSubmit={handleSubmit} className="mt-5 h-[21rem]">
                     <div
                         className="grid grid-cols-1 sm:grid-cols-2
                 gap-x-2.5 sm:gap-y-4 gap-y-2.5 items-start"
                     >
                         <div className="flex flex-col text-sm">
-                            <label htmlFor="start_date">Reserve Date</label>
-                            <TextInput
+                            <label htmlFor="start_date">
+                                Reserve Date{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
+                            <ReactDatePicker
                                 id="start_date"
-                                type="date"
+                                dateFormat="dd/MM/yyyy"
+                                className="w-full h-10 cursor-pointer border px-1.5 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
                                 required
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
+                                selected={date}
+                                onChange={(date) => setDate(date)}
                             />
 
                             {error && error.date && (
@@ -90,14 +101,24 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                         </div>
 
                         <div className="flex flex-col text-sm">
-                            <label htmlFor="from_time">From Time</label>
-                            <TextInput
+                            <label htmlFor="from_time">
+                                From Time{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
+                            <ReactDatePicker
+                                selected={fromTime}
+                                onChange={(time) => setFromTime(time)}
+                                showTimeSelect
+                                className="w-full h-10 cursor-pointer border px-1.5 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
+                                showTimeSelectOnly
+                                timeIntervals={60}
+                                timeCaption="Time"
+                                timeFormat="HH:mm"
+                                dateFormat="HH:mm"
                                 id="from_time"
-                                type="time"
                                 required
-                                value={fromTime}
-                                onChange={(e) => setFromTime(e.target.value)}
                             />
+
                             {error && error.fromTime && (
                                 <div className="text-xs mt-1 font-medium text-red-600">
                                     {error.fromTime[0]}
@@ -105,13 +126,21 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                             )}
                         </div>
                         <div className="flex flex-col text-sm">
-                            <label htmlFor="to_time">To Time</label>
-                            <TextInput
+                            <label htmlFor="to_time">
+                                To Time <span className="text-red-600">*</span>
+                            </label>
+                            <ReactDatePicker
+                                selected={toTime}
+                                onChange={(time) => setToTime(time)}
+                                showTimeSelect
+                                className="w-full h-10 cursor-pointer border px-1.5 text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
+                                showTimeSelectOnly
+                                timeIntervals={60}
+                                timeCaption="Time"
+                                timeFormat="HH:mm"
+                                dateFormat="HH:mm"
                                 id="to_time"
-                                type="time"
                                 required
-                                value={toTime}
-                                onChange={(e) => setToTime(e.target.value)}
                             />
                             {error && error.toTime && (
                                 <div className="text-xs mt-1 font-medium text-red-600">

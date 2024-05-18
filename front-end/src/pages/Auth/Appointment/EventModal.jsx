@@ -3,6 +3,7 @@ import PrimaryButton from "../../../components/PrimaryButton";
 import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 const EventModal = ({
     show,
@@ -16,69 +17,117 @@ const EventModal = ({
     const { user } = useAuthContext();
     const [loading, setLoading] = useState(false);
 
+    const options = {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    };
+
     const handleCancel = () => {
         setLoading(true);
-        axios
-            .put(
-                "/appointment/cancelled/" + eventData.id,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                }
-            )
-            .then((response) => {
-                cancelled(response.data.data);
-                setLoading(false);
-                close();
-            })
-            .catch((error) => {
-                setError(error.response.data.message);
-                setLoading(false);
-            });
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure, you want to cancel this Appointment?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#4B4A4A",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+            position: "top",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .put(
+                        "/appointment/cancelled/" + eventData.id,
+                        {},
+                        {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        }
+                    )
+                    .then((response) => {
+                        cancelled(response.data.data);
+                        setLoading(false);
+                        close();
+                    })
+                    .catch((error) => {
+                        setError(error.response.data.message);
+                        setLoading(false);
+                    });
+            }
+        });
     };
 
     const handleFinished = () => {
         setLoading(true);
-        axios
-            .put(
-                "/appointment/finished/" + eventData.id,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`,
-                    },
-                }
-            )
-            .then((response) => {
-                finished(response.data.data);
-                setLoading(false);
-                close();
-            })
-            .catch((error) => {
-                console.log(error);
-                setLoading(false);
-            });
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure, you want to finish?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#4B4A4A",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+            position: "top",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .put(
+                        "/appointment/finished/" + eventData.id,
+                        {},
+                        {
+                            headers: {
+                                Authorization: `Bearer ${user.token}`,
+                            },
+                        }
+                    )
+                    .then((response) => {
+                        finished(response.data.data);
+                        setLoading(false);
+                        close();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        setLoading(false);
+                    });
+            }
+        });
     };
 
     const handleDelete = () => {
         setLoading(true);
-        axios
-            .delete("/reserve-appointment/delete/" + eventData.id, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
-            })
-            .then((response) => {
-                deleteReserve(response.data);
-                setLoading(false);
-                close();
-            })
-            .catch((error) => {
-                setError(error.response.data.message);
-                setLoading(false);
-            });
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#4B4A4A",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete",
+            position: "top",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .delete("/reserve-appointment/delete/" + eventData.id, {
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    })
+                    .then((response) => {
+                        deleteReserve(response.data);
+                        setLoading(false);
+                        close();
+                    })
+                    .catch((error) => {
+                        setError(error.response.data.message);
+                        setLoading(false);
+                    });
+            }
+        });
     };
 
     return (
@@ -106,7 +155,7 @@ const EventModal = ({
                                         <td>
                                             {new Date(
                                                 eventData.start
-                                            ).toLocaleString()}
+                                            ).toLocaleString("en-GB", options)}
                                         </td>
                                     </tr>
                                     <tr className="border-b border-red-400">
@@ -114,7 +163,7 @@ const EventModal = ({
                                         <td>
                                             {new Date(
                                                 eventData.end
-                                            ).toLocaleString()}
+                                            ).toLocaleString("en-GB", options)}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -131,7 +180,7 @@ const EventModal = ({
                                         Start Time:{" "}
                                         {new Date(
                                             eventData.start
-                                        ).toLocaleString()}
+                                        ).toLocaleString("en-GB", options)}
                                     </div>
                                 </div>
                                 <div className="flex justify-between items-center">
@@ -142,7 +191,25 @@ const EventModal = ({
                                             {eventData.data.patient.last_name}
                                         </span>
                                         <span className="ml-1">
-                                            (DOB: {eventData.data.patient.dob})
+                                            (DOB:{" "}
+                                            {
+                                                eventData.data?.patient?.dob?.split(
+                                                    "-"
+                                                )[2]
+                                            }
+                                            -
+                                            {
+                                                eventData.data?.patient?.dob?.split(
+                                                    "-"
+                                                )[1]
+                                            }
+                                            -
+                                            {
+                                                eventData.data?.patient?.dob?.split(
+                                                    "-"
+                                                )[0]
+                                            }
+                                            )
                                         </span>
                                     </div>
                                 </div>
@@ -224,33 +291,35 @@ const EventModal = ({
                         </div>
                     )}
 
-                    {user.appointmentAccess == 1 &&
-                        (eventData.title == "Reserved" ? (
-                            <PrimaryButton
-                                type="button"
-                                className="!bg-red-500 border px-4 mt-4 hover:!bg-red-400"
-                                onClick={() => handleDelete()}
-                            >
-                                Delete
-                            </PrimaryButton>
-                        ) : (
-                            <div className="flex items-center gap-x-2">
-                                <PrimaryButton
-                                    type="button"
-                                    className="px-4 mt-4"
-                                    onClick={() => handleFinished()}
-                                >
-                                    Finished
-                                </PrimaryButton>
-                                <PrimaryButton
-                                    type="button"
-                                    className="bg-transparent border !border-slate-800 px-4 mt-4 !text-gray-800 hover:bg-transparent hover:text-gray-800"
-                                    onClick={() => handleCancel()}
-                                >
-                                    Cancelled
-                                </PrimaryButton>
-                            </div>
-                        ))}
+                    {eventData.title == "Reserved"
+                        ? user.role == 1 && (
+                              <PrimaryButton
+                                  type="button"
+                                  className="!bg-red-500 border px-4 mt-4 hover:!bg-red-400"
+                                  onClick={() => handleDelete()}
+                              >
+                                  Delete
+                              </PrimaryButton>
+                          )
+                        : (user.id == eventData.data.user_id ||
+                              user.role == 1) && (
+                              <div className="flex items-center gap-x-2">
+                                  <PrimaryButton
+                                      type="button"
+                                      className="px-4 mt-4"
+                                      onClick={() => handleFinished()}
+                                  >
+                                      Finished
+                                  </PrimaryButton>
+                                  <PrimaryButton
+                                      type="button"
+                                      className="bg-transparent border !border-slate-800 px-4 mt-4 !text-gray-800 hover:bg-transparent hover:text-gray-800"
+                                      onClick={() => handleCancel()}
+                                  >
+                                      Cancelled
+                                  </PrimaryButton>
+                              </div>
+                          )}
                 </form>
             </div>
         </Modal>
