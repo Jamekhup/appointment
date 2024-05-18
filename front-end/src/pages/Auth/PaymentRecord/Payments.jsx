@@ -14,7 +14,6 @@ import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import CreatePayment from "./CreatePayment";
-import EditPayment from "./EditPayment";
 import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
 import StatusLoading from "../../../components/Loading";
@@ -26,6 +25,7 @@ const Payments = () => {
     const { user } = useAuthContext();
     const [paymentRecord, setPaymentRecord] = useState(null);
     const [patients, setPatients] = useState(null);
+    const [therapist, setTherapist] = useState(null);
 
     const [dataToExport, setDataToExport] = useState([]);
 
@@ -68,6 +68,7 @@ const Payments = () => {
                 setPaymentRecord(res.data.payment.data);
                 setPagination(res.data.payment);
                 setPatients(res.data.patient);
+                setTherapist(res.data.therapist);
 
                 const toExpot = res.data.payment.data.map((data, i) => ({
                     no: i + 1,
@@ -132,6 +133,7 @@ const Payments = () => {
                 setPaymentRecord(res.data.payment.data);
                 setPagination(res.data.payment);
                 setPatients(res.data.patient);
+                setTherapist(res.data.therapist);
                 const toExpot = res.data.payment.data.map((data, i) => ({
                     no: i + 1,
                     "patient name":
@@ -430,21 +432,8 @@ const Payments = () => {
                 maxWidth="w-full sm:w-5/6 md:w-2/3 mt-10 mt-0 md:-mt-20 lg:-mt-28 xl:-mt-52"
                 handleCreate={handleCreate}
                 patient={patients}
+                therapist={therapist}
             />
-
-            {openEditModal && (
-                <EditPayment
-                    show={openEditModal}
-                    close={() => {
-                        setOpenEditModal(false);
-                        setEditModalData(null);
-                    }}
-                    maxWidth="w-full sm:w-5/6 md:w-2/3 mt-10 mt-0 md:-mt-20 lg:-mt-28 xl:-mt-52"
-                    editData={editModalData}
-                    handleUpdate={handleUpdate}
-                    patient={patients}
-                />
-            )}
         </>
     );
 };

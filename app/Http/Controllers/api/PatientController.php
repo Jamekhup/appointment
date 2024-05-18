@@ -8,6 +8,7 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class PatientController extends Controller
 {
@@ -17,7 +18,8 @@ class PatientController extends Controller
         return response()->json(['status' => 'success', 'patients' => $patients]);
     }
 
-    public function get_all(){
+    public function get_all()
+    {
         $patients = Patient::all();
         $services = Service::all();
         return response()->json(['status' => 'success', 'patients' => $patients, 'services' => $services]);
@@ -56,7 +58,7 @@ class PatientController extends Controller
         $patient->title = $request->title;
         $patient->first_name = $request->firstName;
         $patient->last_name = $request->lastName;
-        $patient->dob = $request->dob;
+        $patient->dob = Carbon::parse($request->dob)->addDay()->format('Y-m-d');
         $patient->street = $request->street;
         $patient->house_number = $request->houseNumber;
         $patient->city = $request->city;
@@ -102,7 +104,7 @@ class PatientController extends Controller
             $patient->title = $request->title;
             $patient->first_name = $request->firstName;
             $patient->last_name = $request->lastName;
-            $patient->dob = $request->dob;
+            $patient->dob = Carbon::parse($request->dob)->addDay()->format('Y-m-d');
             $patient->street = $request->street;
             $patient->house_number = $request->houseNumber;
             $patient->city = $request->city;

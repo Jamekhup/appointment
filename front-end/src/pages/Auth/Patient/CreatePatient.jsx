@@ -65,6 +65,7 @@ const CreatePatient = () => {
                 }
             )
             .then((res) => {
+                console.log(res);
                 if (res.data.status == "success") {
                     setLoading(false);
                     setTitle("");
@@ -102,6 +103,7 @@ const CreatePatient = () => {
                 }
             })
             .catch((error) => {
+                console.log(error);
                 if (error.response.status === 422) {
                     setErrors(error.response.data.message);
                     setLoading(false);
@@ -186,9 +188,9 @@ const CreatePatient = () => {
 
                     <div className="flex flex-col text-sm">
                         <label htmlFor="dob">Date of Birth</label>
-                        <DatePicker 
-                            selected={dob} 
-                            onChange={(date) => setDob(date)} 
+                        <DatePicker
+                            selected={dob}
+                            onChange={(date) => setDob(date)}
                             dateFormat="dd/MM/yyyy"
                             isClearable={true}
                             placeholderText="Select Date of Birth"

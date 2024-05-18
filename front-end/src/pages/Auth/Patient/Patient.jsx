@@ -85,6 +85,11 @@ const Patient = () => {
         });
     };
 
+    const convertDate = (date) => {
+        let newDate = date.split("-");
+        return newDate[2] + "-" + newDate[1] + "-" + newDate[0];
+    };
+
     return (
         <>
             <Header title="Patients" />
@@ -151,7 +156,7 @@ const Patient = () => {
                                         {pa.first_name} {pa.last_name}
                                     </td>
                                     <td className="border border-separate pl-2">
-                                        {pa.dob}
+                                        {convertDate(pa.dob)}
                                     </td>
                                     <td className="border border-separate pl-2">
                                         {pa.street + ", "}

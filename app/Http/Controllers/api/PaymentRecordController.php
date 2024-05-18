@@ -6,6 +6,7 @@ use App\Exports\PaymentRecordExport;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\PaymentRecord;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,34 +15,34 @@ use Carbon\Carbon;
 
 class PaymentRecordController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
         $patient = Patient::all();
-        $payment = PaymentRecord::with('patient')->
-        when($request->dateRange, function ($query, $date) {
+        $therapist = User::where('role', 2)->get();
+        $payment = PaymentRecord::with('patient')->when($request->dateRange, function ($query, $date) {
             $query->whereDate('issue_date', '>=', Carbon::parse($date[0])->addDay()->format('Y-m-d'))
                 ->whereDate('issue_date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
         })->orderBy('created_at', 'DESC')->paginate(30);
 
-        if($payment){
-            return response()->json(['status' =>'success', 'patient' => $patient, 'payment' => $payment]);
+        if ($payment) {
+            return response()->json(['status' => 'success', 'patient' => $patient, 'payment' => $payment, 'therapist' => $therapist]);
         }
-
-
     }
 
-    public function detail($id){
+    public function detail($id)
+    {
 
         $payment = PaymentRecord::with('patient')->find($id);
-        if($payment){
-            return response()->json(['status' =>'success', 'payment' => $payment]);
-        }else{
-            return response()->json(['status' => 'fail','message' => 'Something went wrong'], 422);
+        if ($payment) {
+            return response()->json(['status' => 'success', 'payment' => $payment]);
+        } else {
+            return response()->json(['status' => 'fail', 'message' => 'Something went wrong'], 422);
         }
-
     }
 
-    public function create_existed(Request $request){
+    public function create_existed(Request $request)
+    {
 
         // $input = Validator::make($request->all(), [
         //     'patient_id' =>'required',
@@ -79,18 +80,18 @@ class PaymentRecordController extends Controller
             $payment->remark = $request->remark;
             $payment->created_by = Auth::user()->name;
 
-            if($payment->save()){
-                return response()->json(['status' =>'success', 'payment' => $payment]);
+            if ($payment->save()) {
+                return response()->json(['status' => 'success', 'payment' => $payment]);
             }
         } catch (\Throwable $th) {
             return response()->json($th);
         }
-
     }
 
 
 
-    public function create_new(Request $request){
+    public function create_new(Request $request)
+    {
 
         try {
             DB::beginTransaction();
@@ -113,7 +114,7 @@ class PaymentRecordController extends Controller
             $patient->special_need = $request->specialNeed;
             $patient->created_by = Auth::user()->name;
 
-            if($patient->save()){
+            if ($patient->save()) {
 
                 $payment = new PaymentRecord();
                 $payment->patient_id = $patient->id;
@@ -134,33 +135,31 @@ class PaymentRecordController extends Controller
                 $payment->remark = $request->newRemark;
                 $payment->created_by = Auth::user()->name;
 
-                if($payment->save()){
+                if ($payment->save()) {
                     DB::commit();
-                    return response()->json(['status' =>'success',  'payment' => $payment]);
+                    return response()->json(['status' => 'success',  'payment' => $payment]);
                 }
             }
-
-
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json($th);
-            
         }
-
     }
 
 
-    public function edit($id){
+    public function edit($id)
+    {
         $payment = PaymentRecord::with('patient')->find($id);
         $patients = Patient::all();
-        if($payment){
-            return response()->json(['status' =>'success', 'payment' => $payment, 'patient' => $patients]);
-        }else{
-            return response()->json(['status' => 'fail','message' => 'Something went wrong'], 422);
+        if ($payment) {
+            return response()->json(['status' => 'success', 'payment' => $payment, 'patient' => $patients]);
+        } else {
+            return response()->json(['status' => 'fail', 'message' => 'Something went wrong'], 422);
         }
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
 
         // $input = Validator::make($request->all(), [
         //     'patient_id' =>'required',
@@ -180,9 +179,9 @@ class PaymentRecordController extends Controller
 
         try {
             $payment = PaymentRecord::find($id);
-            if($payment){
+            if ($payment) {
 
-                if($request->patient_id){
+                if ($request->patient_id) {
                     $payment->patient_id = $request->patient_id;
                 }
                 $payment->issue_date = date('Y-m-d');
@@ -203,22 +202,21 @@ class PaymentRecordController extends Controller
                 $payment->updated_by = Auth::user()->name;
                 $payment->updated_at = date('Y-m-d H:i:s');
 
-                if($payment->save()){
-                    return response()->json(['status' =>'success', 'payment' => $payment]);
+                if ($payment->save()) {
+                    return response()->json(['status' => 'success', 'payment' => $payment]);
                 }
             }
         } catch (\Throwable $th) {
             return response()->json($th);
         }
-
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $payment = PaymentRecord::find($id);
-        if($payment){
+        if ($payment) {
             $payment->delete();
-            return response()->json(['status' =>'success']);
+            return response()->json(['status' => 'success']);
         }
     }
 }
-
