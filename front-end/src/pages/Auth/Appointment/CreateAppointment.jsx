@@ -87,13 +87,17 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
         if (serviceId == "select") {
             setError({ serviceId: ["Please select a service"] });
             setLoading(false);
-        } else if (therapistId == "select") {
-            setError({ therapistId: ["Please select a therapist"] });
-            setLoading(false);
         } else {
             if (toggleForm == false) {
                 if (patientId == "") {
                     setError({ patientId: ["Please select a patient"] });
+                    setLoading(false);
+                    return;
+                }
+            }
+            if (user?.role == 0 || user?.role == 1) {
+                if (therapistId == "select") {
+                    setError({ therapistId: ["Please select a therapist"] });
                     setLoading(false);
                     return;
                 }
@@ -154,6 +158,21 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     setDate(new Date());
                     setTime(setHours(setMinutes(new Date(), 0), 8));
                     setDoctor("");
+                    setTitle("");
+                    setFirstName("");
+                    setLastName("");
+                    setDob("01/01/2000");
+                    setStreet("");
+                    setCity("");
+                    setHouseNumber("");
+                    setPostalCode("");
+                    setHouseDoctor("");
+                    setRecommendedDoctor("");
+                    setInsuranceCompany("");
+                    setPaymentFree("");
+                    setTreatmentInSixMonth("");
+                    setPrivatePatient("");
+                    setSpecialNeed("");
                     setLoading(false);
                 })
                 .catch((error) => {
