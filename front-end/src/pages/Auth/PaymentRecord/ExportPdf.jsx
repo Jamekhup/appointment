@@ -154,16 +154,8 @@ const ExportPdf = ({data}) => {
                 <Text style={styles.qtySecond}>{data.patient.health_insurance_company}</Text>
             </View>
             <View style={styles.rowSecond}>
-                <Text style={styles.descriptionSecond}>Payment Free</Text>
-                <Text style={styles.qtySecond}>{data.patient.payment_free == 1 ? 'Yes' : 'No'}</Text>
-            </View>
-            <View style={styles.rowSecond}>
                 <Text style={styles.descriptionSecond}>Treatment in Six Months</Text>
                 <Text style={styles.qtySecond}>{data.patient.treatment_in_6_month == 1 ? 'Yes' : 'No'}</Text>
-            </View>
-            <View style={styles.rowSecond}>
-                <Text style={styles.descriptionSecond}>Private Patient</Text>
-                <Text style={styles.qtySecond}>{data.patient.private_patient == 1 ? 'Yes' : 'No'}</Text>
             </View>
 
             {/* record info */}
@@ -179,7 +171,7 @@ const ExportPdf = ({data}) => {
             </View>
             <View style={styles.rowSecond}>
                 <Text style={styles.descriptionSecond}>Doctor Name</Text>
-                <Text style={styles.qtySecond}>{data.patient.doctor_name}</Text>
+                <Text style={styles.qtySecond}>{data.doctor_name}</Text>
             </View>
             <View style={styles.rowSecond}>
                 <Text style={styles.descriptionSecond}>Full Covered By Insurance Company</Text>

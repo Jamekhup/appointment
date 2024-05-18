@@ -8,6 +8,8 @@ import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CreatePatient = () => {
     const { user } = useAuthContext();
@@ -184,12 +186,15 @@ const CreatePatient = () => {
 
                     <div className="flex flex-col text-sm">
                         <label htmlFor="dob">Date of Birth</label>
-                        <TextInput
-                            id="dob"
-                            type="date"
-                            value={dob}
-                            onChange={(e) => setDob(e.target.value)}
-                            required
+                        <DatePicker 
+                            selected={dob} 
+                            onChange={(date) => setDob(date)} 
+                            dateFormat="dd/MM/yyyy"
+                            isClearable={true}
+                            placeholderText="Select Date of Birth"
+                            calendarIconClassname="react-date-picker"
+                            className="border px-1.5 h-[38px] py-2 text-sm border-gray-300 
+                            text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm w-full"
                         />
                         {errors && errors.dob && (
                             <div className="text-xs mt-1 font-medium text-red-600">

@@ -129,35 +129,43 @@ const Setting = () => {
                             <table className="w-full mt-4">
                                 <tbody>
                                     <tr>
-                                        <td className="border border-gray-100 px-3 py-2">
+                                        <td className="border border-gray-100 px-3 py-2.5">
                                             User Name
                                         </td>
-                                        <td className="border border-gray-100 px-3 py-2">
+                                        <td className="border border-gray-100 px-3 py-2.5">
                                             {getUser.name}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td className="border border-gray-100 px-3 py-2">
+                                        <td className="border border-gray-100 px-3 py-2.5">
                                             Email
                                         </td>
-                                        <td className="border border-gray-100 px-3 py-2">
+                                        <td className="border border-gray-100 px-3 py-2.5">
                                             {getUser.email}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td className="border border-gray-100 px-3 py-2">
+                                        <td className="border border-gray-100 px-3 py-2.5">
+                                            Role
+                                        </td>
+                                        <td className="border border-gray-100 px-3 py-2.5">
+                                            {getUser.role == 1 ? 'Admin' : 'Therapist'}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="border border-gray-100 px-3 py-2.5">
                                             Account Created By
                                         </td>
-                                        <td className="border border-gray-100 px-3 py-2">
+                                        <td className="border border-gray-100 px-3 py-2.5">
                                             {getUser.created_by ? getUser.created_by : '-'}
                                         </td>
                                     </tr>
 
                                     <tr>
-                                        <td className="border border-gray-100 px-3 py-2">
+                                        <td className="border border-gray-100 px-3 py-2.5">
                                             Account Created At
                                         </td>
-                                        <td className="border border-gray-100 px-3 py-2">
+                                        <td className="border border-gray-100 px-3 py-2.5">
                                             {getUser.created_at.replace(/T|.000000Z/gi,' ')}
                                         </td>
                                     </tr>

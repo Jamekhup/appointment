@@ -18,6 +18,11 @@ return new class extends Migration
                 ->references('id')
                 ->on('patients')
                 ->onDelete('cascade');
+            $table->foreignUuid('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
             $table->date('issue_date');
             $table->string('treatment')->nullable();
             $table->string('doctor_name')->nullable();

@@ -89,12 +89,8 @@ const Payments = () => {
                     "insurance company": data.patient.health_insurance_company,
                     "house doctor": data.patient.house_doctor,
                     "recommended doctor": data.patient.recommended_doctor,
-                    "payment free":
-                        data.patient.payment_free == 1 ? "Yes" : "No",
                     "treatment in six months":
                         data.patient.treatment_in_6_month == 1 ? "Yes" : "No",
-                    "private patient":
-                        data.patient.private_patient == 1 ? "Yes" : "No",
                     "issue date": data.issue_date,
                     treatment: data.treatment,
                     "doctor name": data.doctor_name,
@@ -117,8 +113,6 @@ const Payments = () => {
                     "received by": data.received_by,
                     "received date": data.received_date,
                     remark: data.remark,
-                    "created by": data.created_by,
-                    "last updated by": data.updated_by ? data.updated_by : "-",
                 }));
 
                 setLoading(false);
@@ -158,12 +152,8 @@ const Payments = () => {
                     "insurance company": data.patient.health_insurance_company,
                     "house doctor": data.patient.house_doctor,
                     "recommended doctor": data.patient.recommended_doctor,
-                    "payment free":
-                        data.patient.payment_free == 1 ? "Yes" : "No",
                     "treatment in six months":
                         data.patient.treatment_in_6_month == 1 ? "Yes" : "No",
-                    "private patient":
-                        data.patient.private_patient == 1 ? "Yes" : "No",
                     "issue date": data.issue_date,
                     treatment: data.treatment,
                     "doctor name": data.doctor_name,
@@ -186,8 +176,6 @@ const Payments = () => {
                     "received by": data.received_by,
                     "received date": data.received_date,
                     remark: data.remark,
-                    "created by": data.created_by,
-                    "last updated by": data.updated_by ? data.updated_by : "-",
                 }));
 
                 setLoading(false);

@@ -95,13 +95,13 @@ const Therapist = () => {
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search Employee by Name"
+                    placeholder="Search Therapist by Name"
                     className="!py-1 md:w-[30%] w-full"
                 />
                 <div className="flex justify-end items-center gap-x-2">
                     <PrimaryButton onClick={() => setOpenCreateModal(true)}>
                         <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                        <span>Add New Employee</span>
+                        <span>Add New Therapist</span>
                     </PrimaryButton>
                 </div>
             </div>
@@ -117,6 +117,9 @@ const Therapist = () => {
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Email
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Role
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Access
@@ -151,6 +154,9 @@ const Therapist = () => {
                                         </td>
                                         <td className="border border-separate pl-2">
                                             {emp.email}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {emp.role == 1 ? 'Admin' : 'Therapist'}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             <div className="flex justify-start flex-wrap gap-1 items-center text-xs my-1">

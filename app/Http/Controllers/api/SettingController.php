@@ -13,7 +13,7 @@ use App\Http\Controllers\Controller;
 class SettingController extends Controller
 {
     public function index(){
-        $user = User::select('name','email','created_at','created_by')->where('id','=', Auth::user()->id)->first();
+        $user = User::select('name','email','role','created_at','created_by')->where('id','=', Auth::user()->id)->first();
         if($user){
             return response()->json(['status' => 'success','user' => $user]);
         }

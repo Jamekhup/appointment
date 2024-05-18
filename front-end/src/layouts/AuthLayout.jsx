@@ -223,8 +223,8 @@ const AuthLayout = () => {
                                     onClick={() => setToggleLogout(false)}
                                 >
                                     <div
-                                        className="absolute -right-1 top-11  bg-white w-[150px] h-10 px-1.5 py-2
-                                    rounded-md drop-shadow-md border border-gray-200 hover:bg-blue-300"
+                                        className="absolute right-1 top-10  bg-white w-[150px] h-10 px-1.5 py-2
+                                    rounded-md drop-shadow-lg border border-gray-200 hover:bg-rose-300"
                                         onClick={handleLogOut}
                                     >
                                         <div className="flex justify-center items-center gap-1.5 cursor-pointer">

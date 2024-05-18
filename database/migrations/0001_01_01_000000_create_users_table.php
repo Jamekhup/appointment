@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('color');
-            $table->tinyInteger('role')->comment('1=admin,2=employee');
+            $table->tinyInteger('role')->comment('0=superadmin,1=admin,2=employee');
             $table->tinyInteger('dashboard_access')->comment('0=no,1=yes');
             $table->tinyInteger('appointment_access')->comment('0=no,1=yes');
             $table->tinyInteger('appointment_list_access')->comment('0=no,1=yes');
@@ -40,7 +40,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignUuid('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
