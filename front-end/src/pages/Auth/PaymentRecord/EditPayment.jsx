@@ -17,6 +17,7 @@ const EditPayment = () => {
     const [payment, setPayment] = useState(null);
     const [patient, setPatient] = useState(null);
     const [therapist, setTherapist] = useState(null);
+    const [services, setServices] = useState(null);
 
     const [loading, setLoading] = useState(false);
     const [formLoading, setFormLoading] = useState(false);
@@ -72,6 +73,7 @@ const EditPayment = () => {
                         setPayment(res.data.payment);
                         setPatient(res.data.patient);
                         setTherapist(res.data.therapist);
+                        setServices(res.data.services);
 
                         setTreatment(res.data.payment.treatment);
                         setTherapistId(res.data.payment.user_id);
@@ -209,16 +211,41 @@ const EditPayment = () => {
                         <form onSubmit={handleSubmit}>
                             <div className="grid md:grid-cols-2 gid-cols-1 gap-2.5 items-start">
                                 <div className="flex flex-col">
-                                    <label>Treatment</label>
-                                    <TextInput
-                                        type="text"
+                                    <label>
+                                        Treatment{" "}
+                                        <span className="text-red-600">
+                                            *
+                                        </span>
+                                    </label>
+                                    <select
+                                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                         value={treatment}
                                         onChange={(e) =>
                                             setTreatment(e.target.value)
                                         }
-                                        placeholder="Treatment ..."
                                         required
-                                    />
+                                    >
+                                        <option value="">
+                                            Select Treatment
+                                        </option>
+                                        {services &&
+                                            services.map(
+                                                (service, i) => (
+                                                    <option
+                                                        key={i}
+                                                        value={service.name}
+                                                    >
+                                                        {service.name}
+                                                    </option>
+                                                )
+                                            )}
+                                    </select>
+                                    {errors && errors.treatment && (
+                                        <div className="text-xs mt-1 font-medium text-red-600">
+                                            {errors.treatment[0]}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex flex-col">
@@ -227,7 +254,7 @@ const EditPayment = () => {
                                         <span className="text-red-600">*</span>
                                     </label>
                                     <select
-                                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                        className="border px-1.5 py-[8.5px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                         value={therapistId}
                                         onChange={(e) =>
@@ -272,7 +299,7 @@ const EditPayment = () => {
                                         Full Covered By Insurance Company
                                     </label>
                                     <select
-                                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                        className="border px-1.5 py-[8.5px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                         value={coveredByInsuranceCompany}
                                         onChange={(e) =>
                                             setCoveredByInsuranceCompany(
@@ -326,7 +353,7 @@ const EditPayment = () => {
                                 <div className="flex flex-col">
                                     <label>Home Visit</label>
                                     <select
-                                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                        className="border px-1.5 py-[8.5px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                         value={homeVisit}
                                         onChange={(e) =>
                                             setHomeVisit(e.target.value)

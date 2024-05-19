@@ -8,14 +8,15 @@ import Swal from "sweetalert2";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format, setHours, setMinutes } from "date-fns";
+import Times from "../../../assets/Times.json";
 
 const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
     const [date, setDate] = useState(new Date());
     const [fromTime, setFromTime] = useState(
-        setHours(setMinutes(new Date(), 0), 8)
+        ''
     );
     const [toTime, setToTime] = useState(
-        setHours(setMinutes(new Date(), 0), 21)
+        ''
     );
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -30,8 +31,8 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                 "/reserve-appointment/create",
                 {
                     date: date.toISOString().split("T")[0],
-                    fromTime: format(fromTime, "HH:mm"),
-                    toTime: format(toTime, "HH:mm"),
+                    fromTime: fromTime,
+                    toTime: toTime,
                 },
                 {
                     headers: {
@@ -100,7 +101,7 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                             )}
                         </div>
 
-                        <div className="flex flex-col text-sm">
+                        {/* <div className="flex flex-col text-sm">
                             <label htmlFor="from_time">
                                 From Time{" "}
                                 <span className="text-red-600">*</span>
@@ -142,6 +143,81 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                                 id="to_time"
                                 required
                             />
+                            {error && error.toTime && (
+                                <div className="text-xs mt-1 font-medium text-red-600">
+                                    {error.toTime[0]}
+                                </div>
+                            )}
+                        </div> */}
+
+
+<div className="flex flex-col text-sm">
+                            <label htmlFor="time">
+                                From Time{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
+
+                            <select
+                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                                focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                value={fromTime}
+                                required
+                                onChange={(e) => setFromTime(e.target.value)}
+                            >
+                                <option
+                                    value=""
+                                >
+                                    Select From Time
+                                </option>
+                                {Times &&
+                                    Times.map((t, i) => (
+                                        <option
+                                            key={i}
+                                            value={t.time}
+                                            className="bg-white"
+                                        >
+                                            {t.time}
+                                        </option>
+                                    ))}
+                            </select>
+                            
+                            {error && error.formTime && (
+                                <div className="text-xs mt-1 font-medium text-red-600">
+                                    {error.formTime[0]}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col text-sm">
+                            <label htmlFor="time">
+                                To Time{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
+
+                            <select
+                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                                focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                value={toTime}
+                                required
+                                onChange={(e) => setToTime(e.target.value)}
+                            >
+                                <option
+                                    value=""
+                                >
+                                    Select To Time
+                                </option>
+                                {Times &&
+                                    Times.map((t, i) => (
+                                        <option
+                                            key={i}
+                                            value={t.time}
+                                            className="bg-white"
+                                        >
+                                            {t.time}
+                                        </option>
+                                    ))}
+                            </select>
+                            
                             {error && error.toTime && (
                                 <div className="text-xs mt-1 font-medium text-red-600">
                                     {error.toTime[0]}

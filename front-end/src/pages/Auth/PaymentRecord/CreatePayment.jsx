@@ -12,6 +12,7 @@ const CreatePayment = ({
     handleCreate,
     patient,
     therapist,
+    services
 }) => {
     const [treatment, setTreatment] = useState("");
     const [therapistId, setTherapistId] = useState("");
@@ -381,6 +382,14 @@ const CreatePayment = ({
                                                     }
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td className="border border-gray-100 px-3 py-2">
+                                                    Insurance Comany
+                                                </td>
+                                                <td className="border border-gray-100 px-3 py-2">
+                                                    { selectedPatient.health_insurance_company ? selectedPatient.health_insurance_company : '-'}
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -393,15 +402,35 @@ const CreatePayment = ({
                                                 *
                                             </span>
                                         </label>
-                                        <TextInput
-                                            type="text"
+                                        <select
+                                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
+                                            focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                             value={treatment}
                                             onChange={(e) =>
                                                 setTreatment(e.target.value)
                                             }
-                                            placeholder="Treatment ..."
                                             required
-                                        />
+                                        >
+                                            <option value="">
+                                                Select Treatment
+                                            </option>
+                                            {services &&
+                                                services.map(
+                                                    (service, i) => (
+                                                        <option
+                                                            key={i}
+                                                            value={service.name}
+                                                        >
+                                                            {service.name}
+                                                        </option>
+                                                    )
+                                                )}
+                                        </select>
+                                        {errors && errors.treatment && (
+                                            <div className="text-xs mt-1 font-medium text-red-600">
+                                                {errors.treatment[0]}
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="flex flex-col">
@@ -490,6 +519,7 @@ const CreatePayment = ({
                                             }
                                             placeholder="Number"
                                             required
+                                            min="1"
                                         />
                                     </div>
                                     <div className="flex flex-col">
@@ -508,6 +538,7 @@ const CreatePayment = ({
                                             }
                                             placeholder="Cost"
                                             required
+                                            min="1"
                                         />
                                     </div>
                                     <div className="flex flex-col">
@@ -524,6 +555,7 @@ const CreatePayment = ({
                                                 )
                                             }
                                             placeholder="Additonal Payment"
+                                            min="1"
                                         />
                                     </div>
                                     <div className="flex flex-col">
@@ -556,6 +588,7 @@ const CreatePayment = ({
                                                 setNumber2(e.target.value)
                                             }
                                             placeholder="Number 2"
+                                            min="1"
                                         />
                                     </div>
                                     <div className="flex flex-col">
@@ -568,6 +601,7 @@ const CreatePayment = ({
                                                 setCost3(e.target.value)
                                             }
                                             placeholder="Cost 3"
+                                            min="1"
                                         />
                                     </div>
 
@@ -585,6 +619,7 @@ const CreatePayment = ({
                                                 )
                                             }
                                             placeholder="Additonal Payment 4"
+                                            min="1"
                                         />
                                     </div>
 
@@ -604,6 +639,7 @@ const CreatePayment = ({
                                             }
                                             placeholder="Total Payment"
                                             required
+                                            min="1"
                                         />
                                     </div>
                                 </div>

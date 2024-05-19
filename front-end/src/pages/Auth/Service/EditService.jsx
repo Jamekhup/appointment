@@ -81,6 +81,7 @@ const EditService = ({ show, close, maxWidth, handleUpdate, editData }) => {
                             onChange={(e) => setPrice(e.target.value)}
                             placeholder="Price"
                             step="any"
+                            min="1"
                         />
                         {errors && errors.price && (
                             <div className="text-xs mt-1 font-medium text-red-600">

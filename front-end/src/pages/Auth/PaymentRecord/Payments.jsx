@@ -26,6 +26,7 @@ const Payments = () => {
     const [paymentRecord, setPaymentRecord] = useState(null);
     const [patients, setPatients] = useState(null);
     const [therapist, setTherapist] = useState(null);
+    const [services, setServices] = useState(null);
 
     const [dataToExport, setDataToExport] = useState([]);
 
@@ -49,6 +50,11 @@ const Payments = () => {
         },
     ]);
 
+    const convertDate = (date) => {
+        let newDate = date.split("-");
+        return newDate[2] + "-" + newDate[1] + "-" + newDate[0];
+    };
+
     const url = "/payment-record";
 
     const getData = async (url) => {
@@ -69,9 +75,10 @@ const Payments = () => {
                 setPagination(res.data.payment);
                 setPatients(res.data.patient);
                 setTherapist(res.data.therapist);
+                setServices(res.data.services);
 
                 const toExpot = res.data.payment.data.map((data, i) => ({
-                    No: i + 1,
+                    "No": i + 1,
                     "Patient Name":
                         data.patient.title +
                         " " +
@@ -79,8 +86,8 @@ const Payments = () => {
                         " " +
                         data.patient.last_name,
 
-                    "Date of Birth": data.patient.dob,
-                    Address:
+                    "Date of Birth": convertDate(data.patient.dob),
+                    "Address":
                         data.patient.house_number +
                         " " +
                         data.patient.street +
@@ -93,29 +100,29 @@ const Payments = () => {
                     "Recommended Doctor": data.patient.recommended_doctor,
                     "Treatment in six Months":
                         data.patient.treatment_in_6_month == 1 ? "Yes" : "No",
-                    "Issue Date": data.issue_date,
-                    Treatment: data.treatment,
-                    Therapist: data.patient.user.name,
+                    "Issue Date": convertDate(data.issue_date),
+                    "Treatment": data.treatment,
+                    "Therapist": data.user.name,
                     "Doctor Name": data.doctor_name,
                     "Covered by Insurance Company":
                         data.full_covered_by_insurance_company == 1
                             ? "Yes"
                             : "No",
-                    Number: data.number,
-                    Cost: "€ " + data.cost,
+                    "Number": data.number,
+                    "Cost": "€ " + data.cost,
                     "Additional Payment": data.additional_payment
                         ? "€ " + data.additional_payment
                         : "-",
                     "Home Visit": data.home_visit == 1 ? "Yes" : "No",
-                    Number2: data.number2,
-                    Cost3: "€ " + data.cost3,
+                    "Number 2": data.number2,
+                    "Cost 3": "€ " + data.cost3,
                     "Additional Payment 4": data.additional_payment_4
                         ? "€ " + data.additional_payment_4
                         : "-",
                     "Total Payment": "€ " + data.total_payment,
                     "Received By": data.received_by,
-                    "Received Date": data.received_date,
-                    Remark: data.remark,
+                    "Received Date": convertDate(data.received_date),
+                    "Remark": data.remark,
                 }));
 
                 setLoading(false);
@@ -136,8 +143,9 @@ const Payments = () => {
                 setPagination(res.data.payment);
                 setPatients(res.data.patient);
                 setTherapist(res.data.therapist);
+                setServices(res.data.services);
                 const toExpot = res.data.payment.data.map((data, i) => ({
-                    No: i + 1,
+                    "no": i + 1,
                     "Patient Name":
                         data.patient.title +
                         " " +
@@ -145,8 +153,8 @@ const Payments = () => {
                         " " +
                         data.patient.last_name,
 
-                    "Date of Birth": data.patient.dob,
-                    Address:
+                    "Date of Birth": convertDate(data.patient.dob),
+                    "Address":
                         data.patient.house_number +
                         " " +
                         data.patient.street +
@@ -159,29 +167,29 @@ const Payments = () => {
                     "Recommended Doctor": data.patient.recommended_doctor,
                     "Treatment in six Months":
                         data.patient.treatment_in_6_month == 1 ? "Yes" : "No",
-                    "Issue Date": data.issue_date,
-                    Treatment: data.treatment,
-                    Therapist: data.patient.user.name,
+                    "Issue Date": convertDate(data.issue_date),
+                    "Treatment": data.treatment,
+                    "Therapist": data.user.name,
                     "Doctor Name": data.doctor_name,
                     "Covered by Insurance Company":
                         data.full_covered_by_insurance_company == 1
                             ? "Yes"
                             : "No",
-                    Number: data.number,
-                    Cost: "€ " + data.cost,
+                    "Number": data.number,
+                    "Cost": "€ " + data.cost,
                     "Additional Payment": data.additional_payment
                         ? "€ " + data.additional_payment
                         : "-",
                     "Home Visit": data.home_visit == 1 ? "Yes" : "No",
-                    Number2: data.number2,
-                    Cost3: "€ " + data.cost3,
+                    "Number 2": data.number2,
+                    "Cost 3": "€ " + data.cost3,
                     "Additional Payment 4": data.additional_payment_4
                         ? "€ " + data.additional_payment_4
                         : "-",
                     "Total Payment": "€ " + data.total_payment,
                     "Received By": data.received_by,
-                    "Received Date": data.received_date,
-                    Remark: data.remark,
+                    "Received Date": convertDate(data.received_date),
+                    "Remark": data.remark,
                 }));
 
                 setLoading(false);
@@ -243,10 +251,7 @@ const Payments = () => {
         window.scrollTo(0, 0);
     };
 
-    const convertDate = (date) => {
-        let newDate = date.split("-");
-        return newDate[2] + "-" + newDate[1] + "-" + newDate[0];
-    };
+    
 
     return (
         <>
@@ -431,6 +436,7 @@ const Payments = () => {
                 handleCreate={handleCreate}
                 patient={patients}
                 therapist={therapist}
+                services={services}
             />
         </>
     );

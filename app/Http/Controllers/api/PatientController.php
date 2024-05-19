@@ -58,7 +58,7 @@ class PatientController extends Controller
             'street' => 'required',
             'houseNumber' => 'required',
             'city' => 'required',
-            'postalCode' => 'required|digits:6',
+            'postalCode' => 'required',
             'paymentFree' => 'required',
         ]);
 
@@ -103,7 +103,7 @@ class PatientController extends Controller
             'street' => 'required',
             'houseNumber' => 'required',
             'city' => 'required',
-            'postalCode' => 'required|digits:6',
+            'postalCode' => 'required',
             'paymentFree' => 'required',
         ]);
 

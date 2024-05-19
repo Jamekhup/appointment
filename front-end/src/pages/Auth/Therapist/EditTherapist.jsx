@@ -137,7 +137,7 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            placeholder="Enter Employee Name"
+                            placeholder="Enter Name"
                             required
                         />
                         {errors && errors.name && (
@@ -155,7 +155,7 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
                             value={email}
                             required
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter Employee Email"
+                            placeholder="Enter Email"
                         />
                         {errors && errors.email && (
                             <div className="text-xs mt-1 font-medium text-red-600">
@@ -166,7 +166,7 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
 
                     <div className="flex flex-col">
                         <label htmlFor="role">Select Role <span className="text-red-600">*</span></label>
-                        <select className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
+                        <select className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
                         onChange={(e) => handleRoleSelect(e.target.value)}
                         required
@@ -190,7 +190,7 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter Employee Password"
+                            placeholder="Enter Password"
                         />
                         <FontAwesomeIcon
                             icon={showHidePassword ? faEye : faEyeSlash}
@@ -211,7 +211,7 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
                         <div className="my-4">
 
                             <div className="font-medium  mb-3 mt-2 col-span-1 md:col-span-2 xl:col-span-3">
-                                Employee Access
+                                Therapist Access
                             </div>
                             <div className="flex flex-wrap gap-x-4 gap-y-2 col-span-1 md:col-span-2 xl:col-span-3">
                                 <div className="flex items-center gap-x-2">
@@ -328,7 +328,7 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
                                         htmlFor="employee_access"
                                         className="cursor-pointer"
                                     >
-                                        Employee Access
+                                        Therapist Access
                                     </label>
                                 </div>
                             </div>

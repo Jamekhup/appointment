@@ -95,6 +95,7 @@ class TherapistController extends Controller
             if ($employee) {
                 $employee->name = $request->name;
                 $employee->email = $request->email;
+                $employee->role = $request->role;
                 if ($request->password) {
                     $employee->password = $request->password;
                 }
@@ -118,6 +119,7 @@ class TherapistController extends Controller
             if ($employee) {
                 $employee->name = $request->name;
                 $employee->email = $request->email;
+                $employee->role = $request->role;
                 if ($request->password) {
                     $employee->password = $request->password;
                 }

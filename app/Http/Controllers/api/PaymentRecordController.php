@@ -6,6 +6,7 @@ use App\Exports\PaymentRecordExport;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\PaymentRecord;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,18 +16,26 @@ use Carbon\Carbon;
 
 class PaymentRecordController extends Controller
 {
+    
     public function index(Request $request)
     {
 
         $patient = Patient::all();
         $therapist = User::where('role', 2)->get();
+        $services = Service::all();
         $payment = PaymentRecord::with(['patient', 'user'])->when($request->dateRange, function ($query, $date) {
             $query->whereDate('issue_date', '>=', Carbon::parse($date[0])->addDay()->format('Y-m-d'))
                 ->whereDate('issue_date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
         })->orderBy('created_at', 'DESC')->paginate(30);
 
         if ($payment) {
-            return response()->json(['status' => 'success', 'patient' => $patient, 'payment' => $payment, 'therapist' => $therapist]);
+            return response()->json(
+                ['status' => 'success', 
+                'patient' => $patient, 
+                'payment' => $payment, 
+                'therapist' => $therapist,
+                'services' => $services
+            ]);
         }
     }
 
@@ -154,8 +163,15 @@ class PaymentRecordController extends Controller
         $payment = PaymentRecord::with(['patient', 'user'])->find($id);
         $patients = Patient::all();
         $therapist = User::where('role', 2)->get();
+        $services = Service::all();
         if ($payment) {
-            return response()->json(['status' => 'success', 'payment' => $payment, 'patient' => $patients, 'therapist' => $therapist]);
+            return response()->json(
+                ['status' => 'success', 
+                'payment' => $payment, 
+                'patient' => $patients, 
+                'therapist' => $therapist,
+                'services' => $services
+            ]);
         } else {
             return response()->json(['status' => 'fail', 'message' => 'Something went wrong'], 422);
         }

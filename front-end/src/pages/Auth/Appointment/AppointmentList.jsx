@@ -28,6 +28,8 @@ const AppointmentList = () => {
     const [startDate, endDate] = dateRange;
     const [dataToExport, setDataToExport] = useState([]);
 
+    const [therapists, setTherapists] = useState(null);
+
     const url = "/appointment-list";
     const [pagination, setPagination] = useState(null);
 
@@ -43,20 +45,22 @@ const AppointmentList = () => {
             .then((res) => {
                 setAppointments(res.data.appointments.data);
                 setPagination(res.data.appointments);
+                setTherapists(res.data.therapists);
                 const toExpot = res.data.appointments.data.map((data, i) => ({
-                    no: i + 1,
-                    service: data.service.name,
-                    patient:
+                    "No": i + 1,
+                    "Service": data.service.name,
+                    "Patient":
                         data.patient.title +
                         " " +
                         data.patient.first_name +
                         " " +
                         data.patient.last_name,
-                    doctor: data.doctor_name,
-                    therapist: data.user?.name,
-                    "appointment date": data.date,
-                    "appointment time": data.time,
-                    status:
+                    "Doctor": data.doctor_name,
+                    "Therapist": data.user?.name,
+                    "Appointment Date": data.date,
+                    "From": data.from_time,
+                    "To": data.to_time,
+                    "Status":
                         data.status == 0
                             ? "Active"
                             : data.status == 1
@@ -64,8 +68,7 @@ const AppointmentList = () => {
                             : data.status == 2
                             ? "Cancelled"
                             : "-",
-                    comment: data.comment,
-                    "finish date time": data.finish_date_time,
+                    
                 }));
                 setDataToExport(toExpot);
                 setFetching(false);
@@ -77,15 +80,7 @@ const AppointmentList = () => {
     };
 
     const handleUpdate = (data) => {
-        setAppointments((prev) =>
-            prev.map((p) => {
-                if (p.id === data.id) {
-                    return { ...p, ...data };
-                } else {
-                    return p;
-                }
-            })
-        );
+        getData(url);
     };
 
     const handleDelete = (id) => {
@@ -265,12 +260,10 @@ const AppointmentList = () => {
                                             {appointment.date.split("-")[0]}
                                         </td>
                                         <td className="border border-separate pl-2">
-                                            {appointment.time}
+                                            {appointment.from_time}
                                         </td>
                                         <td className="border border-separate pl-2">
-                                            {appointment.finish_date_time
-                                                ? appointment.finish_date_time
-                                                : "-"}
+                                            {appointment.to_time}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             <div className="flex items-center w-fit outline-none border border-slate-300 rounded-md px-2">
@@ -371,6 +364,7 @@ const AppointmentList = () => {
                     }}
                     maxWidth="w-full sm:w-5/6 md:w-2/3 mt-10 mt-0 md:-mt-20 lg:-mt-28 xl:-mt-40"
                     editData={editData}
+                    therapists={therapists}
                     handleUpdate={handleUpdate}
                 />
             )}

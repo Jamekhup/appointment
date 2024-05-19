@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('street');
             $table->string('house_number');
             $table->string('city');
-            $table->integer('postal_code');
+            $table->string('postal_code');
             $table->string('house_doctor')->nullable();
             $table->string('recommended_doctor')->nullable();
             $table->string('health_insurance_company')->nullable();

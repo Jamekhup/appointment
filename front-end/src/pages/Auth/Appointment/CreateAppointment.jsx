@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format, setHours, setMinutes } from "date-fns";
+import Times from "../../../assets/Times.json";
 
 const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const [patients, setPatients] = useState(null);
@@ -17,7 +18,9 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const [therapistId, setTherapistId] = useState("select");
     const [serviceId, setServiceId] = useState("select");
     const [date, setDate] = useState(new Date());
-    const [time, setTime] = useState(setHours(setMinutes(new Date(), 0), 8));
+    // const [time, setTime] = useState(setHours(setMinutes(new Date(), 0), 8));
+    const [fromTime, setFromTime] = useState('');
+    const [toTime, setToTime] = useState('');
     const [comment, setComment] = useState("");
     const [doctor, setDoctor] = useState("");
     const [loading, setLoading] = useState(false);
@@ -128,7 +131,9 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                         serviceId,
                         therapistId,
                         date: date.toISOString().split("T")[0],
-                        time: format(time, "HH:mm"),
+                        // time: format(time, "HH:mm"),
+                        fromTime: fromTime,
+                        toTime: toTime,
                         comment,
                         doctor,
                     },
@@ -139,6 +144,8 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     }
                 )
                 .then((response) => {
+                    console.log(response);
+                    
                     if (response.data.status == "reserved") {
                         Swal.fire({
                             icon: "error",
@@ -156,7 +163,9 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     setTherapistId("select");
                     setSelectedPatient("");
                     setDate(new Date());
-                    setTime(setHours(setMinutes(new Date(), 0), 8));
+                    // setTime(setHours(setMinutes(new Date(), 0), 8));
+                    setFromTime('');
+                    setToTime('');
                     setDoctor("");
                     setTitle("");
                     setFirstName("");
@@ -177,7 +186,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                 })
                 .catch((error) => {
                     console.log(error);
-                    setError(error.response.data.message);
+                    setError(error.response);
                     setLoading(false);
                 });
         }
@@ -630,7 +639,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                     therapists ? "w-full" : "w-1/2"
                                 }`}
                             >
-                                <label>
+                                <label className="text-sm">
                                     Search Patient by name and select{" "}
                                     <span className="text-red-600">*</span>
                                 </label>
@@ -829,7 +838,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                             )}
                         </div>
 
-                        <div className="flex flex-col text-sm">
+                        {/* <div className="flex flex-col text-sm">
                             <label htmlFor="time">
                                 Appointment Time{" "}
                                 <span className="text-red-600">*</span>
@@ -852,7 +861,83 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                     {error.time[0]}
                                 </div>
                             )}
+                        </div> */}
+
+                        <div className="flex flex-col text-sm">
+                            <label htmlFor="time">
+                                From Time{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
+
+                            <select
+                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                                focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                value={fromTime}
+                                required
+                                onChange={(e) => setFromTime(e.target.value)}
+                            >
+                                <option
+                                    value=""
+                                >
+                                    Select From Time
+                                </option>
+                                {Times &&
+                                    Times.map((t, i) => (
+                                        <option
+                                            key={i}
+                                            value={t.time}
+                                            className="bg-white"
+                                        >
+                                            {t.time}
+                                        </option>
+                                    ))}
+                            </select>
+                            
+                            {error && error.formTime && (
+                                <div className="text-xs mt-1 font-medium text-red-600">
+                                    {error.formTime[0]}
+                                </div>
+                            )}
                         </div>
+
+                        <div className="flex flex-col text-sm">
+                            <label htmlFor="time">
+                                To Time{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
+
+                            <select
+                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                                focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                value={toTime}
+                                required
+                                onChange={(e) => setToTime(e.target.value)}
+                            >
+                                <option
+                                    value=""
+                                >
+                                    Select To Time
+                                </option>
+                                {Times &&
+                                    Times.map((t, i) => (
+                                        <option
+                                            key={i}
+                                            value={t.time}
+                                            className="bg-white"
+                                        >
+                                            {t.time}
+                                        </option>
+                                    ))}
+                            </select>
+                            
+                            {error && error.toTime && (
+                                <div className="text-xs mt-1 font-medium text-red-600">
+                                    {error.toTime[0]}
+                                </div>
+                            )}
+                        </div>
+
+
                         <div className="flex flex-col text-sm col-span-1 sm:col-span-2">
                             <label htmlFor="comment">Comment</label>
                             <textarea

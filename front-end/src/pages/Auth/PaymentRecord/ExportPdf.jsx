@@ -191,7 +191,7 @@ const ExportPdf = ({ data }) => {
                             Insurance Company
                         </Text>
                         <Text style={styles.qtySecond}>
-                            {data.patient.health_insurance_company}
+                            {data.patient.health_insurance_company ? data.patient.health_insurance_company : '-'}
                         </Text>
                     </View>
                     <View style={styles.rowSecond}>
@@ -224,7 +224,7 @@ const ExportPdf = ({ data }) => {
                         <Text style={styles.descriptionSecond}>
                             Doctor Name
                         </Text>
-                        <Text style={styles.qtySecond}>{data.doctor_name}</Text>
+                        <Text style={styles.qtySecond}>{data.doctor_name ? data.doctor_name : '-'}</Text>
                     </View>
                     <View style={styles.rowSecond}>
                         <Text style={styles.descriptionSecond}>

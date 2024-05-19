@@ -32,7 +32,8 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('doctor_name')->nullable();
             $table->date('date');
-            $table->time('time');
+            $table->time('from_time');
+            $table->time('to_time');
             $table->tinyInteger('status')->default(0)->comment('0=active,1=finished,2=cancelled');
             $table->longText('comment')->nullable();
             $table->dateTime('start_date_time')->nullable();

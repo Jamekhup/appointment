@@ -4,14 +4,18 @@ import TextInput from "../../../components/TextInput";
 import PrimaryButton from "../../../components/PrimaryButton";
 import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
+import Times from "../../../assets/Times.json";
 
-const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
-    const [patientId, setPatientId] = useState("");
+const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therapists }) => {
+    const [patientId, setPatientId] = useState(editData.patient.id);
     const [serviceId, setServiceId] = useState("");
+    const [therapistId, setTherapistId] = useState("");
     const [patients, setPatients] = useState(null);
     const [services, setServices] = useState(null);
     const [date, setDate] = useState(editData.date);
-    const [time, setTime] = useState(editData.time);
+    // const [time, setTime] = useState(editData.time);
+    const [fromTime, setFromTime] = useState(editData.from_time);
+    const [toTime, setToTime] = useState(editData.to_time);
     const [comment, setComment] = useState(editData.comment);
     const [doctor, setDoctor] = useState(editData.doctor_name);
     const [status, setStatus] = useState(editData.status);
@@ -49,8 +53,10 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 {
                     patientId,
                     serviceId,
+                    therapistId,
                     date,
-                    time,
+                    fromTime,
+                    toTime,
                     comment,
                     doctor,
                     status,
@@ -92,7 +98,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 className="p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-3 text-sm"
             >
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="services">Select Patient</label>
+                    <label htmlFor="services">Select Patient <span className="text-red-600">*</span></label>
                     <select
                         className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
@@ -114,8 +120,32 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
                         </div>
                     )}
                 </div>
+
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="services">Select Service</label>
+                    <label htmlFor="services">Select Therapist <span className="text-red-600">*</span></label>
+                    <select
+                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
+                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                        value={therapistId}
+                        required
+                        onChange={(e) => setTherapistId(e.target.value)}
+                    >
+                        {therapists &&
+                            therapists.map((trp, i) => (
+                                <option key={i} value={trp.id}>
+                                    {trp.name}
+                                </option>
+                            ))}
+                    </select>
+                    {error && error.therapistId && (
+                        <div className="text-xs mt-1 font-medium text-red-600">
+                            {error.therapistId[0]}
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex flex-col text-sm">
+                    <label htmlFor="services">Select Service <span className="text-red-600">*</span></label>
                     <select
                         className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
@@ -138,7 +168,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 </div>
 
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="doctor">Doctor Name</label>
+                    <label htmlFor="doctor">Doctor Name (Optional)</label>
                     <TextInput
                         id="doctor"
                         type="text"
@@ -154,7 +184,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
                     )}
                 </div>
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="start_date">Appointment Date</label>
+                    <label htmlFor="start_date">Appointment Date <span className="text-red-600">*</span></label>
                     <TextInput
                         id="start_date"
                         type="date"
@@ -171,26 +201,76 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 </div>
 
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="time">Appointment Time</label>
-                    <TextInput
-                        id="time"
-                        type="time"
+                    <label htmlFor="time">
+                        From Time{" "}
+                        <span className="text-red-600">*</span>
+                    </label>
+
+                    <select
+                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                        value={fromTime}
                         required
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                    />
-                    {error && error.time && (
+                        onChange={(e) => setFromTime(e.target.value)}
+                    >
+                        
+                        {Times &&
+                            Times.map((t, i) => (
+                                <option
+                                    key={i}
+                                    value={t.time}
+                                    className="bg-white"
+                                >
+                                    {t.time}
+                                </option>
+                            ))}
+                    </select>
+                    
+                    {error && error.formTime && (
                         <div className="text-xs mt-1 font-medium text-red-600">
-                            {error.time[0]}
+                            {error.formTime[0]}
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex flex-col text-sm">
+                    <label htmlFor="time">
+                        To Time{" "}
+                        <span className="text-red-600">*</span>
+                    </label>
+
+                    <select
+                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                        value={toTime}
+                        required
+                        onChange={(e) => setToTime(e.target.value)}
+                    >
+                      
+                        {Times &&
+                            Times.map((t, i) => (
+                                <option
+                                    key={i}
+                                    value={t.time}
+                                    className="bg-white"
+                                >
+                                    {t.time}
+                                </option>
+                            ))}
+                    </select>
+                    
+                    {error && error.toTime && (
+                        <div className="text-xs mt-1 font-medium text-red-600">
+                            {error.toTime[0]}
                         </div>
                     )}
                 </div>
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="time">Status</label>
+                    <label htmlFor="time">Status (Optional)</label>
                     <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
-                        className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
+                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
                     >
                         <option value={0}>Active</option>
@@ -204,7 +284,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData }) => {
                     )}
                 </div>
                 <div className="flex flex-col text-sm col-span-1 sm:col-span-3">
-                    <label htmlFor="comment">Comment</label>
+                    <label htmlFor="comment">Comment (Optional)</label>
                     <textarea
                         id="comment"
                         placeholder="Enter comment"

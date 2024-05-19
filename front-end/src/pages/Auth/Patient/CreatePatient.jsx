@@ -133,9 +133,9 @@ const CreatePatient = () => {
                 gap-x-2.5 sm:gap-y-4 gap-y-2.5 items-start"
                 >
                     <div className="flex flex-col text-sm">
-                        <label htmlFor="title">Title</label>
+                        <label htmlFor="title">Title <span className="text-red-600">*</span></label>
                         <select
-                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                            className="border px-1.5 py-[8.6px] text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -153,7 +153,7 @@ const CreatePatient = () => {
                     </div>
 
                     <div className="flex flex-col text-sm">
-                        <label htmlFor="first_name">First Name</label>
+                        <label htmlFor="first_name">First Name <span className="text-red-600">*</span></label>
                         <TextInput
                             id="first_name"
                             type="text"
@@ -170,7 +170,7 @@ const CreatePatient = () => {
                     </div>
 
                     <div className="flex flex-col text-sm">
-                        <label htmlFor="last_name">Last Name</label>
+                        <label htmlFor="last_name">Last Name <span className="text-red-600">*</span></label>
                         <TextInput
                             id="last_name"
                             type="text"
@@ -187,7 +187,7 @@ const CreatePatient = () => {
                     </div>
 
                     <div className="flex flex-col text-sm">
-                        <label htmlFor="dob">Date of Birth</label>
+                        <label htmlFor="dob">Date of Birth <span className="text-red-600">*</span></label>
                         <DatePicker
                             selected={dob}
                             onChange={(date) => setDob(date)}
@@ -206,7 +206,7 @@ const CreatePatient = () => {
                     </div>
 
                     <div className="flex flex-col text-sm">
-                        <label htmlFor="street">Street Name</label>
+                        <label htmlFor="street">Street Name <span className="text-red-600">*</span></label>
                         <TextInput
                             id="street"
                             type="text"
@@ -223,7 +223,7 @@ const CreatePatient = () => {
                     </div>
 
                     <div className="flex flex-col text-sm">
-                        <label htmlFor="house">House Number</label>
+                        <label htmlFor="house">House Number <span className="text-red-600">*</span></label>
                         <TextInput
                             id="house"
                             type="text"
@@ -240,7 +240,7 @@ const CreatePatient = () => {
                     </div>
 
                     <div className="flex flex-col text-sm">
-                        <label htmlFor="city">City</label>
+                        <label htmlFor="city">City <span className="text-red-600">*</span></label>
                         <TextInput
                             id="city"
                             type="text"
@@ -257,7 +257,7 @@ const CreatePatient = () => {
                     </div>
 
                     <div className="flex flex-col text-sm">
-                        <label htmlFor="postal">Postal Code</label>
+                        <label htmlFor="postal">Postal Code <span className="text-red-600">*</span></label>
                         <TextInput
                             id="postal"
                             type="number"
@@ -314,9 +314,9 @@ const CreatePatient = () => {
                     </div>
 
                     <div className="flex flex-col text-sm">
-                        <label htmlFor="title">Payment Free (Yes or No)</label>
+                        <label htmlFor="title">Payment Free (Yes or No) <span className="text-red-600">*</span></label>
                         <select
-                            className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                            className="border px-1.5 py-[8.6px] text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                             value={paymentFree}
                             onChange={(e) => setPaymentFree(e.target.value)}
@@ -334,7 +334,7 @@ const CreatePatient = () => {
 
                     <div className="flex flex-col text-sm">
                         <label htmlFor="title">
-                            Treatment in Six Month (Yes or No)
+                            Treatment in Six Month (Yes or No) <span className="text-red-600">*</span>
                         </label>
                         <select
                             className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
@@ -357,7 +357,7 @@ const CreatePatient = () => {
 
                     <div className="flex flex-col text-sm">
                         <label htmlFor="title">
-                            Private Patient (Yes or No)
+                            Private Patient (Yes or No) <span className="text-red-600">*</span>
                         </label>
                         <select
                             className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0

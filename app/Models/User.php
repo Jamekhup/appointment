@@ -59,8 +59,8 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function paymentRecords()
-    {
-        return $this->hasOne(PaymentRecord::class);
+    public function paymentRecords(){
+        return $this->hasOne(PaymentRecord::class,'user_id','id');
     }
+
 }

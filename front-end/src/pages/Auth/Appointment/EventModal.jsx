@@ -166,53 +166,46 @@ const EventModal = ({
                                             ).toLocaleString("en-GB", options)}
                                         </td>
                                     </tr>
+                                    
                                 </tbody>
                             </table>
                         </div>
                     ) : (
                         <div className="bg-gray-50 rounded-md text-[15px] max-h-60 overflow-y-auto shadow-md border border-gray-300">
                             <div className="p-4">
-                                <div className="flex justify-between items-center">
-                                    <div className="font-medium text-base text-gray-700">
-                                        Patient
+                                <div className="flex justify-between items-ceter mb-2">
+                                    <div className="flex flex-col gap-1.5 text-sm text-gray-500">
+                                        <div>
+                                            Patient Name:{" "}
+                                            {
+                                            eventData.data.patient.title
+                                            + ' ' + eventData.data.patient.first_name 
+                                            + ' ' + eventData.data.patient.last_name
+                                            }
+                                            
+                                        </div>
+                                        <div>
+                                            Therapist Name : {" "}
+                                            {eventData.title}
+                                        </div>
                                     </div>
-                                    <div>
-                                        Start Time:{" "}
-                                        {new Date(
-                                            eventData.start
-                                        ).toLocaleString("en-GB", options)}
-                                    </div>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <span className="font-medium text-blue-500">
-                                            {eventData.data.patient.title}{" "}
-                                            {eventData.data.patient.first_name}{" "}
-                                            {eventData.data.patient.last_name}
-                                        </span>
-                                        <span className="ml-1">
-                                            (DOB:{" "}
-                                            {
-                                                eventData.data?.patient?.dob?.split(
-                                                    "-"
-                                                )[2]
-                                            }
-                                            -
-                                            {
-                                                eventData.data?.patient?.dob?.split(
-                                                    "-"
-                                                )[1]
-                                            }
-                                            -
-                                            {
-                                                eventData.data?.patient?.dob?.split(
-                                                    "-"
-                                                )[0]
-                                            }
-                                            )
-                                        </span>
+                                    <div className="flex flex-col gap-1.5 text-sm text-gray-500">
+                                        <div>
+                                            From:{" "}
+                                            {new Date(
+                                                eventData.start
+                                            ).toLocaleString("en-GB", options)}
+                                        </div>
+                                        <div>
+                                            to:{" "}
+                                            {new Date(
+                                                eventData.end
+                                            ).toLocaleString("en-GB", options)}
+                                        </div>
                                     </div>
                                 </div>
+                                
+
                                 <table className="w-5/6 mt-3">
                                     <tbody>
                                         <tr className="border-b border-gray-300">
@@ -222,7 +215,8 @@ const EventModal = ({
                                             <td>
                                                 {
                                                     eventData.data.patient
-                                                        .house_doctor
+                                                        .house_doctor ? eventData.data.patient
+                                                        .house_doctor : '-'
                                                 }
                                             </td>
                                         </tr>
@@ -233,7 +227,8 @@ const EventModal = ({
                                             <td>
                                                 {
                                                     eventData.data.patient
-                                                        .recommended_doctor
+                                                        .recommended_doctor ? eventData.data.patient
+                                                        .recommended_doctor : '-'
                                                 }
                                             </td>
                                         </tr>
@@ -244,7 +239,8 @@ const EventModal = ({
                                             <td>
                                                 {
                                                     eventData.data.patient
-                                                        .special_need
+                                                        .special_need ? eventData.data.patient
+                                                        .special_need : '-'
                                                 }
                                             </td>
                                         </tr>
@@ -261,13 +257,12 @@ const EventModal = ({
                                         </tr>
                                         <tr className="border-b border-gray-300">
                                             <td className="py-1">
-                                                Payment Free
+                                                Insurance Company
                                             </td>
                                             <td>
                                                 {eventData.data.patient
-                                                    .payment_free == 0
-                                                    ? "No"
-                                                    : "Yes"}
+                                                    .health_insurance_company ? eventData.data.patient
+                                                    .health_insurance_company : '-' }
                                             </td>
                                         </tr>
                                     </tbody>
@@ -284,8 +279,8 @@ const EventModal = ({
                                         € {eventData.data.service.price}
                                     </div>
                                 </div>
-                                <div>
-                                    ({eventData.data.service.description})
+                                <div className="text-xs text-slate-300">
+                                    {eventData.data.service.description ? eventData.data.service.description : 'No Description'}
                                 </div>
                             </div>
                         </div>
