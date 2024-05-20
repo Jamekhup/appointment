@@ -5,6 +5,10 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
     const localizer = momentLocalizer(moment);
 
+    let formats = {
+        timeGutterFormat: 'HH:mm',
+    }
+
     return (
         <Calendar
             localizer={localizer}
@@ -21,6 +25,8 @@ const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
             eventPropGetter={eventPropGetter}
             timeslots={5}
             step={4}
+            dateFormat="h t"
+            formats={formats}
         />
     );
 };

@@ -139,7 +139,7 @@ const Appointment = () => {
                     <span>Add New Appointment</span>
                 </PrimaryButton>
             </div>
-            <div>
+            <div className="h-[800px] overflow-y-scroll">
                 {event && (
                     <BigCalendar
                         event={event}
