@@ -19,6 +19,8 @@ const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
             min={moment("2024-01-03T08:00:00").toDate()}
             max={moment("2024-01-03T20:40:00").toDate()}
             eventPropGetter={eventPropGetter}
+            timeslots={5}
+            step={4}
         />
     );
 };
