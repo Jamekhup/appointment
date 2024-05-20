@@ -76,8 +76,8 @@ class AppointmentController extends Controller
         }
 
         $reserved = ReserveAppointment::where('date', '=', date('Y-m-d', strtotime($request->date)))
-            ->where('from_time', '>=', date("H:i:s", strtotime($request->fromTime)))
-            ->where('to_time', '<=', date("H:i:s", strtotime($request->toTime)))
+            ->where('from_time', '<=', date("H:i:s", strtotime($request->fromTime)))
+            ->where('to_time', '>=', date("H:i:s", strtotime($request->toTime)))
             ->first();
 
         if($reserved){
