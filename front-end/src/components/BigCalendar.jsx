@@ -25,7 +25,6 @@ const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
             eventPropGetter={eventPropGetter}
             timeslots={5}
             step={4}
-            dateFormat="h t"
             formats={formats}
         />
     );
