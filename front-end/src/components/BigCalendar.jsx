@@ -5,9 +5,16 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
     const localizer = momentLocalizer(moment);
 
-    let formats = {
-        timeGutterFormat: 'HH:mm',
-    }
+    const formats = {
+        timeGutterFormat: "HH:mm",
+        eventTimeRangeFormat: ({ start, end }) =>
+            `${moment(start).format("HH:mm")} - ${moment(end).format("HH:mm")}`,
+        // dayHeaderFormat: "dddd, D MMMM",
+        // dayRangeHeaderFormat: ({ start, end }) =>
+        //     `${moment(start).format("MMMM D")} - ${moment(end).format(
+        //         "MMMM D, YYYY"
+        //     )}`,
+    };
 
     return (
         <Calendar
