@@ -1,25 +1,57 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
+import { useCallback, useState } from "react";
 
-const BigCalendar = ({ event, handleSelectEvent, eventPropGetter }) => {
-    const localizer = momentLocalizer(moment);
+const DnDCalendar = withDragAndDrop(Calendar);
+const localizer = momentLocalizer(moment);
+
+const BigCalendar = ({
+    event,
+    handleSelectEvent,
+    eventPropGetter,
+    sendEventDataToBackend,
+}) => {
+    const [myEvents, setMyEvents] = useState(event);
 
     const formats = {
         timeGutterFormat: "HH:mm",
         eventTimeRangeFormat: ({ start, end }) =>
             `${moment(start).format("HH:mm")} - ${moment(end).format("HH:mm")}`,
-        // dayHeaderFormat: "dddd, D MMMM",
-        // dayRangeHeaderFormat: ({ start, end }) =>
-        //     `${moment(start).format("MMMM D")} - ${moment(end).format(
-        //         "MMMM D, YYYY"
-        //     )}`,
     };
 
+    const moveEvent = useCallback(
+        ({ event, start, end }) => {
+            setMyEvents((prev) => {
+                const existing = prev.find((ev) => ev.id === event.id) ?? {};
+                const filtered = prev.filter((ev) => ev.id !== event.id);
+                sendEventDataToBackend({ ...existing, start, end });
+                return [...filtered, { ...existing, start, end }];
+            });
+        },
+        [setMyEvents]
+    );
+
+    const resizeEvent = useCallback(
+        ({ event, start, end }) => {
+            setMyEvents((prev) => {
+                const existing = prev.find((ev) => ev.id === event.id) ?? {};
+                const filtered = prev.filter((ev) => ev.id !== event.id);
+                sendEventDataToBackend({ ...existing, start, end });
+                return [...filtered, { ...existing, start, end }];
+            });
+        },
+        [setMyEvents]
+    );
+
     return (
-        <Calendar
+        <DnDCalendar
             localizer={localizer}
-            events={event}
+            events={myEvents}
+            onEventDrop={moveEvent}
+            onEventResize={resizeEvent}
             startAccessor="start"
             endAccessor="end"
             style={{ height: 740, width: "100%" }}
