@@ -7,10 +7,10 @@ import CreateAppointment from "./CreateAppointment";
 import { useCallback, useEffect, useState } from "react";
 import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
-import moment from "moment";
 import EventModal from "./EventModal";
 import CreateReservation from "./CreateReservation";
 import Swal from "sweetalert2";
+import moment from "moment";
 
 const Appointment = () => {
     const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -118,6 +118,23 @@ const Appointment = () => {
         });
     };
 
+    const handleDragDrop = (data) => {
+        axios
+            .put(
+                "/appointment/dnd/" + data.id,
+                {
+                    start: data.start,
+                    end: data.end,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                }
+            )
+            .then((res) => console.log(res.data));
+    };
+
     useEffect(() => {
         getEvent();
     }, []);
@@ -142,6 +159,7 @@ const Appointment = () => {
             <div>
                 {event && (
                     <BigCalendar
+                        sendEventDataToBackend={(data) => handleDragDrop(data)}
                         event={event}
                         handleSelectEvent={handleSelectEvent}
                         eventPropGetter={eventPropGetter}

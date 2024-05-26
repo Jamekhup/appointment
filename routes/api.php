@@ -27,7 +27,7 @@ Route::post('/reset-password', [AuthController::class, 'reset_password'])
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
-    Route::get('/dashboard',[DashbaordController::class, 'dashboard']);
+    Route::get('/dashboard', [DashbaordController::class, 'dashboard']);
 
     Route::get('/appointment', [AppointmentController::class, 'index']);
     Route::get('/appointment-list', [AppointmentController::class, 'appointmentList']);
@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/appointment/detail/{id}', [AppointmentController::class, 'detail']);
     Route::put('/appointment/finished/{id}', [AppointmentController::class, 'finished']);
     Route::put('/appointment/cancelled/{id}', [AppointmentController::class, 'cancelled']);
+    Route::put('/appointment/dnd/{id}', [AppointmentController::class, 'dnd']);
     Route::delete('/appointment/delete/{id}', [AppointmentController::class, 'delete']);
 
     Route::get('/reserve-appointment', [ReservationController::class, 'index']);

@@ -80,17 +80,17 @@ class AppointmentController extends Controller
             ->where('to_time', '>=', date("H:i:s", strtotime($request->toTime)))
             ->first();
 
-        if($reserved){
+        if ($reserved) {
             return response()->json([
                 'status' => 'reserved',
                 'message' => $request->date . " from " . date('H:i', strtotime($request->fromTime)) . " to " . date('H:i', strtotime($request->toTime)) . ' Reserved'
             ]);
-        }else{
+        } else {
             $already_reserved = Appointment::with('user')->where('user_id', $request->therapistId)
-                ->where('date','=', date('Y-m-d', strtotime($request->date)))
+                ->where('date', '=', date('Y-m-d', strtotime($request->date)))
                 ->where('from_time', '>=', date('H:i:s', strtotime($request->fromTime)))
                 ->where('to_time', '<=', date('H:i:s', strtotime($request->toTime)))
-                ->where('status', '=',0)
+                ->where('status', '=', 0)
                 ->first();
 
             if ($already_reserved) {
@@ -98,12 +98,12 @@ class AppointmentController extends Controller
                     'status' => 'reserved',
                     'message' => $already_reserved->user->name .  ' is not available at ' . $request->date . " from " . date('H:i:s', strtotime($request->fromTime)) . " to " . date('H:i:s', strtotime($request->fromTime))
                 ]);
-            }else{
+            } else {
                 try {
                     DB::beginTransaction();
-    
+
                     $appointment = new Appointment();
-    
+
                     if ($request->patientId) {
                         $appointment->patient_id = $request->patientId;
                     } else {
@@ -128,7 +128,7 @@ class AppointmentController extends Controller
                             $appointment->patient_id = $patient->id;
                         }
                     }
-    
+
                     $appointment->service_id = $request->serviceId;
                     if (Auth::user()->role == 0 || Auth::user()->role == 1) {
                         $appointment->user_id = $request->therapistId;
@@ -144,26 +144,18 @@ class AppointmentController extends Controller
                     if ($appointment->save()) {
                         $get_appointment = Appointment::with('patient', 'user', 'service')->find($appointment->id);
                         $event = $this->event($get_appointment);
-    
+
                         DB::commit();
-    
+
                         return response()->json(['status' => 'success', 'data' => $event]);
                     }
-                    
                 } catch (\Throwable $th) {
                     DB::rollBack();
                     //throw $th;
                     return response()->json(['status' => 'fail', 'message' => $th->getMessage()], 422);
                 }
             }
-
-            
         }
-
-        
-            
-
-            
     }
 
     public function update(Request $request, $id)
@@ -258,6 +250,25 @@ class AppointmentController extends Controller
         abort(403);
     }
 
+    public function dnd(Request $request, $id)
+    {
+        if (Auth::user()->appointment_access == 1) {
+            $appointment = Appointment::where('id', $id)->first();
+            if ($appointment) {
+                $start = Carbon::parse($request->start);
+                $end = Carbon::parse($request->end);
+
+                $appointment->date = $start->toDateString();
+                $appointment->from_time = $start->toTimeString();
+                $appointment->to_time = $end->toTimeString();
+                $appointment->updated_by = Auth::user()->name;
+                $appointment->save();
+
+                return response()->json(201);
+            }
+        }
+        abort(403);
+    }
     public function delete($id)
     {
         if (Auth::user()->appointment_list_access == 1) {
