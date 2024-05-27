@@ -120,6 +120,12 @@ const Patient = () => {
                             Full Name
                         </th>
                         <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                            Email
+                        </th>
+                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                            Phone
+                        </th>
+                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                             DOB
                         </th>
                         <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
@@ -154,6 +160,12 @@ const Patient = () => {
                                     </td>
                                     <td className="border border-separate pl-2">
                                         {pa.first_name} {pa.last_name}
+                                    </td>
+                                    <td className="border border-separate pl-2">
+                                        {pa.email} 
+                                    </td>
+                                    <td className="border border-separate pl-2">
+                                        {pa.phone} 
                                     </td>
                                     <td className="border border-separate pl-2">
                                         {convertDate(pa.dob)}

@@ -69,6 +69,7 @@ class AppointmentController extends Controller
             'date' => 'required',
             'fromTime' => 'required',
             'toTime' => 'required',
+            'times' => 'required',
         ]);
 
         if ($input->fails()) {
@@ -99,60 +100,124 @@ class AppointmentController extends Controller
                     'message' => $already_reserved->user->name .  ' is not available at ' . $request->date . " from " . date('H:i:s', strtotime($request->fromTime)) . " to " . date('H:i:s', strtotime($request->fromTime))
                 ]);
             } else {
-                try {
-                    DB::beginTransaction();
-
-                    $appointment = new Appointment();
-
-                    if ($request->patientId) {
-                        $appointment->patient_id = $request->patientId;
-                    } else {
-                        $patient = new Patient();
-                        $patient->title = $request->title;
-                        $patient->first_name = $request->firstName;
-                        $patient->last_name = $request->lastName;
-                        $patient->dob = $request->dob;
-                        $patient->street = $request->street;
-                        $patient->house_number = $request->houseNumber;
-                        $patient->city = $request->city;
-                        $patient->postal_code = $request->postalCode;
-                        $patient->house_doctor = $request->houseDoctor;
-                        $patient->recommended_doctor = $request->recommendedDoctor;
-                        $patient->health_insurance_company = $request->insuranceCompany;
-                        $patient->payment_free = $request->paymentFree;
-                        $patient->treatment_in_6_month = $request->treatmentInSixMonth;
-                        $patient->private_patient = $request->privatePatient;
-                        $patient->special_need = $request->specialNeed;
-                        $patient->created_by = Auth::user()->name;
-                        if ($patient->save()) {
-                            $appointment->patient_id = $patient->id;
+                
+                //if times is just 1 time
+                if($request->times == 1){
+                    try {
+                        DB::beginTransaction();
+    
+                        $appointment = new Appointment();
+    
+                        if ($request->patientId) {
+                            $appointment->patient_id = $request->patientId;
+                        } else {
+                            $patient = new Patient();
+                            $patient->title = $request->title;
+                            $patient->first_name = $request->firstName;
+                            $patient->last_name = $request->lastName;
+                            $patient->dob = $request->dob;
+                            $patient->street = $request->street;
+                            $patient->house_number = $request->houseNumber;
+                            $patient->city = $request->city;
+                            $patient->postal_code = $request->postalCode;
+                            $patient->house_doctor = $request->houseDoctor;
+                            $patient->recommended_doctor = $request->recommendedDoctor;
+                            $patient->health_insurance_company = $request->insuranceCompany;
+                            $patient->payment_free = $request->paymentFree;
+                            $patient->treatment_in_6_month = $request->treatmentInSixMonth;
+                            $patient->private_patient = $request->privatePatient;
+                            $patient->special_need = $request->specialNeed;
+                            $patient->created_by = Auth::user()->name;
+                            if ($patient->save()) {
+                                $appointment->patient_id = $patient->id;
+                            }
                         }
+    
+                        $appointment->service_id = $request->serviceId;
+                        if (Auth::user()->role == 0 || Auth::user()->role == 1) {
+                            $appointment->user_id = $request->therapistId;
+                        } else {
+                            $appointment->user_id = Auth::user()->id;
+                        }
+                        $appointment->doctor_name = $request->doctor;
+                        $appointment->date = $request->date;
+                        $appointment->from_time = $request->fromTime;
+                        $appointment->to_time = $request->toTime;
+                        $appointment->comment = $request->comment;
+                        $appointment->created_by = Auth::user()->name;
+                        if ($appointment->save()) {
+                            $get_appointment = Appointment::with('patient', 'user', 'service')->find($appointment->id);
+                            $event = $this->event($get_appointment);
+    
+                            DB::commit();
+    
+                            return response()->json(['status' => 'success', 'data' => $event]);
+                        }
+                    } catch (\Throwable $th) {
+                        DB::rollBack();
+                        //throw $th;
+                        return response()->json(['status' => 'fail', 'message' => $th->getMessage()], 422);
                     }
+                }
 
-                    $appointment->service_id = $request->serviceId;
-                    if (Auth::user()->role == 0 || Auth::user()->role == 1) {
-                        $appointment->user_id = $request->therapistId;
-                    } else {
-                        $appointment->user_id = Auth::user()->id;
+                //if times is more than 1 time
+
+                if($request->times > 1){
+                    try {
+                        DB::beginTransaction();
+    
+                        $appointment = new Appointment();
+    
+                        if ($request->patientId) {
+                            $appointment->patient_id = $request->patientId;
+                        } else {
+                            $patient = new Patient();
+                            $patient->title = $request->title;
+                            $patient->first_name = $request->firstName;
+                            $patient->last_name = $request->lastName;
+                            $patient->dob = $request->dob;
+                            $patient->street = $request->street;
+                            $patient->house_number = $request->houseNumber;
+                            $patient->city = $request->city;
+                            $patient->postal_code = $request->postalCode;
+                            $patient->house_doctor = $request->houseDoctor;
+                            $patient->recommended_doctor = $request->recommendedDoctor;
+                            $patient->health_insurance_company = $request->insuranceCompany;
+                            $patient->payment_free = $request->paymentFree;
+                            $patient->treatment_in_6_month = $request->treatmentInSixMonth;
+                            $patient->private_patient = $request->privatePatient;
+                            $patient->special_need = $request->specialNeed;
+                            $patient->created_by = Auth::user()->name;
+                            if ($patient->save()) {
+                                $appointment->patient_id = $patient->id;
+                            }
+                        }
+    
+                        $appointment->service_id = $request->serviceId;
+                        if (Auth::user()->role == 0 || Auth::user()->role == 1) {
+                            $appointment->user_id = $request->therapistId;
+                        } else {
+                            $appointment->user_id = Auth::user()->id;
+                        }
+                        $appointment->doctor_name = $request->doctor;
+                        $appointment->date = $request->date;
+                        $appointment->from_time = $request->fromTime;
+                        $appointment->to_time = $request->toTime;
+                        $appointment->comment = $request->comment;
+                        $appointment->created_by = Auth::user()->name;
+                        if ($appointment->save()) {
+                            $get_appointment = Appointment::with('patient', 'user', 'service')->find($appointment->id);
+                            $event = $this->event($get_appointment);
+    
+                            DB::commit();
+    
+                            return response()->json(['status' => 'success', 'data' => $event]);
+                        }
+                    } catch (\Throwable $th) {
+                        DB::rollBack();
+                        //throw $th;
+                        return response()->json(['status' => 'fail', 'message' => $th->getMessage()], 422);
                     }
-                    $appointment->doctor_name = $request->doctor;
-                    $appointment->date = $request->date;
-                    $appointment->from_time = $request->fromTime;
-                    $appointment->to_time = $request->toTime;
-                    $appointment->comment = $request->comment;
-                    $appointment->created_by = Auth::user()->name;
-                    if ($appointment->save()) {
-                        $get_appointment = Appointment::with('patient', 'user', 'service')->find($appointment->id);
-                        $event = $this->event($get_appointment);
-
-                        DB::commit();
-
-                        return response()->json(['status' => 'success', 'data' => $event]);
-                    }
-                } catch (\Throwable $th) {
-                    DB::rollBack();
-                    //throw $th;
-                    return response()->json(['status' => 'fail', 'message' => $th->getMessage()], 422);
                 }
             }
         }

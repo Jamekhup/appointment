@@ -21,6 +21,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     // const [time, setTime] = useState(setHours(setMinutes(new Date(), 0), 8));
     const [fromTime, setFromTime] = useState('');
     const [toTime, setToTime] = useState('');
+    const [times, setTimes] = useState(1);
     const [comment, setComment] = useState("");
     const [doctor, setDoctor] = useState("");
     const [loading, setLoading] = useState(false);
@@ -53,6 +54,8 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const [title, setTitle] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
     const [dob, setDob] = useState("01/01/2000");
     const [street, setStreet] = useState("");
     const [houseNumber, setHouseNumber] = useState("");
@@ -65,6 +68,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const [treatmentInSixMonth, setTreatmentInSixMonth] = useState("");
     const [privatePatient, setPrivatePatient] = useState("");
     const [specialNeed, setSpecialNeed] = useState("");
+
 
     const getPatients = () => {
         setFetching(true);
@@ -113,6 +117,8 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                         title,
                         firstName,
                         lastName,
+                        email,
+                        phone,
                         dob:
                             typeof dob === "string"
                                 ? dob
@@ -135,6 +141,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                         fromTime: fromTime,
                         toTime: toTime,
                         comment,
+                        times,
                         doctor,
                     },
                     {
@@ -144,14 +151,13 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     }
                 )
                 .then((response) => {
-                    console.log(response);
                     
                     if (response.data.status == "reserved") {
                         Swal.fire({
                             icon: "error",
                             title: response.data.message,
                             showConfirmButton: false,
-                            timer: 4500,
+                            timer: 6500,
                         });
                     } else {
                         handleCreate(response.data.data);
@@ -170,6 +176,8 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     setTitle("");
                     setFirstName("");
                     setLastName("");
+                    setEmail("");
+                    setPhone("");
                     setDob("01/01/2000");
                     setStreet("");
                     setCity("");
@@ -315,6 +323,40 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                             {errors.lastName[0]}
                                         </div>
                                     )} */}
+                                    </div>
+
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="email">Email Address <span className="text-red-600">*</span></label>
+                                        <TextInput
+                                            id="email"
+                                            type="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="name@example.com"
+                                            required
+                                        />
+                                        {error && error.email && (
+                                            <div className="text-xs mt-1 font-medium text-red-600">
+                                                {error.email[0]}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="flex flex-col text-sm">
+                                        <label htmlFor="phone">Phone Number <span className="text-red-600">*</span></label>
+                                        <TextInput
+                                            id="phone"
+                                            type="text"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            placeholder="4915510686794"
+                                            required
+                                        />
+                                        {error && error.phone && (
+                                            <div className="text-xs mt-1 font-medium text-red-600">
+                                                {error.phone[0]}
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="flex flex-col text-sm">
@@ -933,6 +975,48 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                             {error && error.toTime && (
                                 <div className="text-xs mt-1 font-medium text-red-600">
                                     {error.toTime[0]}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col text-sm">
+                            <label htmlFor="time">
+                                For how many times{" "}
+                                <span className="text-red-600">*</span>
+                            </label>
+
+                            <select
+                                className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0
+                                focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
+                                value={times}
+                                required
+                                onChange={(e) => setTimes(e.target.value)}
+                            >
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                            </select>
+                            
+                            {error && error.times && (
+                                <div className="text-xs mt-1 font-medium text-red-600">
+                                    {error.times[0]}
                                 </div>
                             )}
                         </div>

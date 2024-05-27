@@ -35,6 +35,7 @@ return new class extends Migration
             $table->time('from_time');
             $table->time('to_time');
             $table->tinyInteger('status')->default(0)->comment('0=active,1=finished,2=cancelled');
+            $table->integer('times');
             $table->longText('comment')->nullable();
             $table->dateTime('start_date_time')->nullable();
             $table->dateTime('finish_date_time')->nullable();

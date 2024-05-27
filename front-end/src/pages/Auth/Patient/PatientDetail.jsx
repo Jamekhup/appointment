@@ -106,6 +106,22 @@ const PatientDetail = () => {
                                 </tr>
                                 <tr>
                                     <td className="border-b border-gray-200 px-3 py-1.5">
+                                        Email Address
+                                    </td>
+                                    <td className="border-b border-gray-200 px-3 py-1.5">
+                                        {patient.email}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="border-b border-gray-200 px-3 py-1.5">
+                                        Phone Number
+                                    </td>
+                                    <td className="border-b border-gray-200 px-3 py-1.5">
+                                        {patient.phone}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="border-b border-gray-200 px-3 py-1.5">
                                         House Doctor
                                     </td>
                                     <td className="border-b border-gray-200 px-3 py-1.5">
@@ -114,6 +130,13 @@ const PatientDetail = () => {
                                             : "-"}
                                     </td>
                                 </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <table className="w-full">
+                            <tbody>
                                 <tr>
                                     <td className="border-b border-gray-200 px-3 py-1.5">
                                         Recommended Doctor
@@ -124,12 +147,6 @@ const PatientDetail = () => {
                                             : "-"}
                                     </td>
                                 </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                        <table className="w-full">
-                            <tbody>
                                 <tr>
                                     <td className="border-b border-gray-200 px-3 py-1.5">
                                         Insurance Company

@@ -54,6 +54,8 @@ class PatientController extends Controller
             'title' => 'required|max:4',
             'firstName' => 'required|max:50',
             'lastName' => 'required|max:50',
+            'email' => 'required|email',
+            'phone' => 'required',
             'dob' => 'required',
             'street' => 'required',
             'houseNumber' => 'required',
@@ -70,6 +72,8 @@ class PatientController extends Controller
         $patient->title = $request->title;
         $patient->first_name = $request->firstName;
         $patient->last_name = $request->lastName;
+        $patient->email = $request->email;
+        $patient->phone = $request->phone;
         $patient->dob = Carbon::parse($request->dob)->addDay()->format('Y-m-d');
         $patient->street = $request->street;
         $patient->house_number = $request->houseNumber;
@@ -99,6 +103,8 @@ class PatientController extends Controller
             'title' => 'required|max:4',
             'firstName' => 'required|max:50',
             'lastName' => 'required|max:50',
+            'email' => 'required|email',
+            'phone' => 'required',
             'dob' => 'required',
             'street' => 'required',
             'houseNumber' => 'required',
@@ -116,6 +122,8 @@ class PatientController extends Controller
             $patient->title = $request->title;
             $patient->first_name = $request->firstName;
             $patient->last_name = $request->lastName;
+            $patient->email = $request->email;
+            $patient->phone = $request->phone;
             $patient->dob = Carbon::parse($request->dob)->addDay()->format('Y-m-d');
             $patient->street = $request->street;
             $patient->house_number = $request->houseNumber;

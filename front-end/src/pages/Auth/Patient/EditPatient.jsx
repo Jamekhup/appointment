@@ -23,6 +23,8 @@ const EditPatient = () => {
     const [title, setTitle] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
     const [dob, setDob] = useState("");
     const [street, setStreet] = useState("");
     const [houseNumber, setHouseNumber] = useState("");
@@ -48,6 +50,8 @@ const EditPatient = () => {
                     setTitle(res.data.patient.title);
                     setFirstName(res.data.patient.first_name);
                     setLastName(res.data.patient.last_name);
+                    setEmail(res.data.patient.email);
+                    setPhone(res.data.patient.phone);
                     setDob(res.data.patient.dob);
                     setStreet(res.data.patient.street);
                     setHouseNumber(res.data.patient.house_number);
@@ -83,6 +87,8 @@ const EditPatient = () => {
                         title,
                         firstName,
                         lastName,
+                        email,
+                        phone,
                         dob,
                         street,
                         houseNumber,
@@ -108,6 +114,8 @@ const EditPatient = () => {
                         setTitle("");
                         setFirstName("");
                         setLastName("");
+                        setEmail("");
+                        setPhone("");
                         setDob("");
                         setStreet("");
                         setHouseNumber("");
@@ -216,6 +224,40 @@ const EditPatient = () => {
                         {errors && errors.lastName && (
                             <div className="text-xs mt-1 font-medium text-red-600">
                                 {errors.lastName[0]}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col text-sm">
+                        <label htmlFor="email">Email Address <span className="text-red-600">*</span></label>
+                        <TextInput
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="name@example.com"
+                            required
+                        />
+                        {errors && errors.email && (
+                            <div className="text-xs mt-1 font-medium text-red-600">
+                                {errors.email[0]}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col text-sm">
+                        <label htmlFor="phone">Phone Number <span className="text-red-600">*</span></label>
+                        <TextInput
+                            id="phone"
+                            type="text"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            placeholder="4915510686794"
+                            required
+                        />
+                        {errors && errors.phone && (
+                            <div className="text-xs mt-1 font-medium text-red-600">
+                                {errors.phone[0]}
                             </div>
                         )}
                     </div>
