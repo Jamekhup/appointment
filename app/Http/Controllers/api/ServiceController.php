@@ -21,6 +21,8 @@ class ServiceController extends Controller
 
         $input = Validator::make($request->all(), [
             'name' => 'required|max:150',
+            'price' => 'required',
+            'homeVisitPrice' => 'required'
         ]);
 
         if ($input->fails()) {
@@ -30,6 +32,7 @@ class ServiceController extends Controller
         $service = new Service();
         $service->name = $request->name;
         $service->price = $request->price;
+        $service->home_visit_price = $request->homeVisitPrice;
         $service->description = $request->description;
         $service->created_by = Auth::user()->name;
 
@@ -44,10 +47,22 @@ class ServiceController extends Controller
     }
     public function update(Request $request, $id)
     {
+
+        $input = Validator::make($request->all(), [
+            'name' => 'required|max:150',
+            'price' => 'required',
+            'homeVisitPrice' => 'required'
+        ]);
+
+        if ($input->fails()) {
+            return response()->json(['status' => 'fail', 'message' => $input->errors()], 422);
+        }
+
         $service = Service::where('id', $id)->first();
         if ($service) {
             $service->name = $request->name;
             $service->price = $request->price;
+            $service->home_visit_price = $request->homeVisitPrice;
             $service->description = $request->description;
             $service->updated_by = Auth::user()->name;
             if ($service->save()) {

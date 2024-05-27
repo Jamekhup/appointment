@@ -24,6 +24,7 @@ class TherapistController extends Controller
             'email' => 'required|email|max:50',
             'role' => 'required',
             'password' => 'required|max:50',
+            'color' => 'required'
         ]);
 
         if ($input->fails()) {
@@ -44,9 +45,7 @@ class TherapistController extends Controller
             $employee->payment_record_access = $request->paymentAccess;
             $employee->service_access = $request->serviceAccess;
             $employee->employee_access = $request->employeeAccess;
-            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F');
-            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
-            $employee->color = $color;
+            $employee->color = $request->color;
             $employee->created_by = Auth::user()->name;
             if ($employee->save()) {
                 return response()->json($employee);
@@ -67,9 +66,7 @@ class TherapistController extends Controller
             $employee->payment_record_access = 1;
             $employee->service_access = 1;
             $employee->employee_access = 1;
-            $rand = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F');
-            $color = '#' . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)] . $rand[rand(0, 15)];
-            $employee->color = $color;
+            $employee->color = $request->color;
             $employee->created_by = Auth::user()->name;
             if ($employee->save()) {
                 return response()->json($employee);
@@ -106,6 +103,9 @@ class TherapistController extends Controller
                 $employee->payment_record_access = $request->paymentAccess;
                 $employee->service_access = $request->serviceAccess;
                 $employee->employee_access = $request->employeeAccess;
+                if ($request->color) {
+                    $employee->color = $request->color;
+                }
                 $employee->updated_by = Auth::user()->name;
                 $employee->updated_at = now();
                 if ($employee->save()) {

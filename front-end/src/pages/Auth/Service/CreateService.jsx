@@ -8,6 +8,7 @@ import useAuthContext from "../../../context/AuthContext";
 const CreateService = ({ show, close, maxWidth, handleCreate }) => {
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
+    const [homeVisitPrice, setHomeVisitPrice] = useState("");
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState(null);
@@ -22,6 +23,7 @@ const CreateService = ({ show, close, maxWidth, handleCreate }) => {
                 {
                     name,
                     price,
+                    homeVisitPrice,
                     description,
                 },
                 {
@@ -35,6 +37,7 @@ const CreateService = ({ show, close, maxWidth, handleCreate }) => {
                 setLoading(false);
                 setName("");
                 setPrice("");
+                setHomeVisitPrice("");
                 setDescription("");
                 close();
             })
@@ -56,7 +59,7 @@ const CreateService = ({ show, close, maxWidth, handleCreate }) => {
                 </div>
             </div>
             <form onSubmit={handleSubmit} className="p-3 text-sm">
-                <div className="grid md:grid-cols-2 gid-cols-1 gap-2.5 items-start">
+                <div className="grid md:grid-cols-3 gid-cols-1 gap-2.5 items-start">
                     <div className="flex flex-col">
                         <label htmlFor="name">Service Name <span className="text-red-600">*</span></label>
                         <TextInput
@@ -73,19 +76,39 @@ const CreateService = ({ show, close, maxWidth, handleCreate }) => {
                         )}
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="price">Price (optional)</label>
+                        <label htmlFor="price">Normal Price <span className="text-red-600">*</span></label>
                         <TextInput
                             id="price"
                             type="number"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            placeholder="Price"
+                            placeholder="Normal Price"
                             step="any"
                             min="1"
+                            required
                         />
                         {errors && errors.price && (
                             <div className="text-xs mt-1 font-medium text-red-600">
                                 {errors.price[0]}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col">
+                        <label htmlFor="home_visit_price">Home Visit Price <span className="text-red-600">*</span></label>
+                        <TextInput
+                            id="home_visit_price"
+                            type="number"
+                            value={homeVisitPrice}
+                            onChange={(e) => setHomeVisitPrice(e.target.value)}
+                            placeholder="Home Visit Price"
+                            step="any"
+                            min="1"
+                            required
+                        />
+                        {errors && errors.price && (
+                            <div className="text-xs mt-1 font-medium text-red-600">
+                                {errors.homeVisitPrice[0]}
                             </div>
                         )}
                     </div>

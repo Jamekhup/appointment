@@ -11,6 +11,7 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
     const [name, setName] = useState(editData?.name);
     const [email, setEmail] = useState(editData?.email);
     const [role, setRole] = useState(editData?.role);
+    const [color, setColor] = useState(editData?.color);
     const [dashboardAccess, setDashboardAccess] = useState(
         editData?.dashboard_access
     );
@@ -52,6 +53,7 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
                     email,
                     role,
                     password,
+                    color,
                     dashboardAccess,
                     appointmentAccess,
                     appointmentListAccess,
@@ -72,6 +74,8 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
                 setName("");
                 setEmail("");
                 setRole('');
+                setPassword("");
+                setColor("");
                 setDashboardAccess(1);
                 setAppointmentAccess(1);
                 setAppointmentListAccess(0);
@@ -200,6 +204,24 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
                         {errors && errors.password && (
                             <div className="text-xs mt-1 font-medium text-red-600">
                                 {errors.password[0]}
+                            </div>
+                        )}
+
+                    </div>
+
+                    <div className="flex flex-col">
+                        <label htmlFor="color">Select Color <span className="text-red-600">*</span></label>
+                        <TextInput
+                            id="color"
+                            type="color"
+                            value={color}
+                            onChange={(e) => setColor(e.target.value)}
+                            required
+                            className="p-1 h-10 w-full block bg-white border border-gray-200 
+                            cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-100 dark:border-neutral-100"/>
+                        {errors && errors.color && (
+                            <div className="text-xs mt-1 font-medium text-red-600">
+                                {errors.color[0]}
                             </div>
                         )}
 
@@ -341,7 +363,7 @@ const EditTherapist = ({show, close,maxWidth, editData,handleUpdate}) => {
                 
                 <PrimaryButton
                     type={loading ? "button" : "submit"}
-                    className="w-full md:w-1/2 xl:w-1/3 mt-4"
+                    className="px-4 mt-4"
                 >
                     {loading ? "Updating..." : "Update"}
                 </PrimaryButton>

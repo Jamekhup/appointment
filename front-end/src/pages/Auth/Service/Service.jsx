@@ -126,7 +126,10 @@ const Service = () => {
                                 Name
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                Price
+                                Normal Price
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Home Visit Price
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Description
@@ -158,6 +161,9 @@ const Service = () => {
                                         </td>
                                         <td className="border border-separate pl-2 font-mono">
                                             {ser.price ? "€ " + ser.price : "-"}
+                                        </td>
+                                        <td className="border border-separate pl-2 font-mono">
+                                            {ser.home_visit_price ? "€ " + ser.home_visit_price : "-"}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             {ser.description

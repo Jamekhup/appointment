@@ -110,6 +110,8 @@ class PaymentRecordController extends Controller
             $patient->title = $request->title;
             $patient->first_name = $request->firstName;
             $patient->last_name = $request->lastName;
+            $patient->email = $request->email;
+            $patient->phone = $request->phone;
             $patient->dob = $request->dob;
             $patient->street = $request->street;
             $patient->house_number = $request->houseNumber;

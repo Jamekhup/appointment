@@ -8,6 +8,7 @@ import useAuthContext from "../../../context/AuthContext";
 const EditService = ({ show, close, maxWidth, handleUpdate, editData }) => {
     const [name, setName] = useState(editData?.name);
     const [price, setPrice] = useState(editData?.price);
+    const [homeVisitPrice, setHomeVisitPrice] = useState(editData?.home_visit_price);
     const [description, setDescription] = useState(editData?.description);
 
     const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ const EditService = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 {
                     name,
                     price,
+                    homeVisitPrice,
                     description,
                 },
                 {
@@ -36,6 +38,7 @@ const EditService = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 setLoading(false);
                 setName("");
                 setPrice("");
+                setHomeVisitPrice("");
                 setDescription("");
                 close();
             })
@@ -56,7 +59,7 @@ const EditService = ({ show, close, maxWidth, handleUpdate, editData }) => {
                 </div>
             </div>
             <form onSubmit={handleSubmit} className="p-3 text-sm">
-                <div className="grid md:grid-cols-2 gid-cols-1 gap-2.5 items-start">
+                <div className="grid md:grid-cols-3 gid-cols-1 gap-2.5 items-start">
                     <div className="flex flex-col">
                         <label htmlFor="name">Service Name <span className="text-red-600">*</span></label>
                         <TextInput
@@ -86,6 +89,24 @@ const EditService = ({ show, close, maxWidth, handleUpdate, editData }) => {
                         {errors && errors.price && (
                             <div className="text-xs mt-1 font-medium text-red-600">
                                 {errors.price[0]}
+                            </div>
+                        )}
+                    </div>
+                    <div className="flex flex-col">
+                        <label htmlFor="home_visit_price">Home Visit Price <span className="text-red-600">*</span></label>
+                        <TextInput
+                            id="home_visit_price"
+                            type="number"
+                            value={homeVisitPrice}
+                            onChange={(e) => setHomeVisitPrice(e.target.value)}
+                            placeholder="Home Visit Price"
+                            step="any"
+                            min="1"
+                            required
+                        />
+                        {errors && errors.price && (
+                            <div className="text-xs mt-1 font-medium text-red-600">
+                                {errors.homeVisitPrice[0]}
                             </div>
                         )}
                     </div>

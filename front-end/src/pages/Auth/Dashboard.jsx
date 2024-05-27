@@ -154,7 +154,7 @@ const Dashboard = () => {
                                     Total Patient
                                 </p>
                                 <p className="text-sm font-mono">
-                                    {Number(totalPatient).toLocaleString()}
+                                    {Number(totalPatient).toLocaleString("es-ES")}
                                 </p>
                             </div>
                         </div>
@@ -171,7 +171,7 @@ const Dashboard = () => {
                                     Total Appointment
                                 </p>
                                 <p className="text-sm font-mono">
-                                    {Number(totalAppointment).toLocaleString()}
+                                    {Number(totalAppointment).toLocaleString("es-ES")}
                                 </p>
                             </div>
                         </div>
@@ -191,7 +191,7 @@ const Dashboard = () => {
                                     <p className="text-sm font-mono">
                                         {Number(
                                             totalPaymentRecord
-                                        ).toLocaleString()}
+                                        ).toLocaleString("es-ES")}
                                     </p>
                                 </div>
                             </div>
@@ -210,7 +210,7 @@ const Dashboard = () => {
                                     <p className="text-sm font-mono">
                                         {Number(
                                             yourAppointment
-                                        ).toLocaleString()}
+                                        ).toLocaleString("es-ES")}
                                     </p>
                                 </div>
                             </div>
@@ -229,7 +229,7 @@ const Dashboard = () => {
                                         Total Income
                                     </p>
                                     <p className="text-sm font-mono">
-                                        € {Number(totalIncome).toLocaleString()}
+                                        € {Number(totalIncome).toLocaleString("es-ES", {minimumFractionDigits: 2})}
                                     </p>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@ const Dashboard = () => {
                                         Therapist
                                     </p>
                                     <p className="text-sm font-mono">
-                                        {Number(therapists).toLocaleString()}
+                                        {Number(therapists).toLocaleString("es-ES")}
                                     </p>
                                 </div>
                             </div>
@@ -307,20 +307,20 @@ const Dashboard = () => {
                                     <tr className="font-normal">
                                         <td className="border border-separate py-1 pl-2">
                                             {filterTotalPatient &&
-                                                filterTotalPatient}
+                                                filterTotalPatient.toLocaleString("es-ES")}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             {filterTotalAppointment &&
-                                                filterTotalAppointment}
+                                                filterTotalAppointment.toLocaleString("es-ES")}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             {filterTotalPaymentRecord &&
-                                                filterTotalPaymentRecord}
+                                                filterTotalPaymentRecord.toLocaleString("es-ES")}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             €{" "}
                                             {filterTotalIncome &&
-                                                filterTotalIncome}
+                                                filterTotalIncome.toLocaleString("es-ES", {minimumFractionDigits: 2})}
                                         </td>
                                     </tr>
                                 ) : (
@@ -361,7 +361,10 @@ const Dashboard = () => {
                                         Date
                                     </th>
                                     <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Time
+                                        From
+                                    </th>
+                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                       To
                                     </th>
                                     <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                         Created By
@@ -392,7 +395,10 @@ const Dashboard = () => {
                                                 {convertDate(data.date)}
                                             </td>
                                             <td className="border border-separate pl-2">
-                                                {data.time}
+                                                {data.from_time}
+                                            </td>
+                                            <td className="border border-separate pl-2">
+                                                {data.to_time}
                                             </td>
                                             <td className="border border-separate pl-2 font-mono">
                                                 {data.created_by}
@@ -410,7 +416,7 @@ const Dashboard = () => {
                                 ) : (
                                     <tr className="font-normal">
                                         <td
-                                            colSpan={7}
+                                            colSpan={8}
                                             className="border border-separate py-1 pl-2 text-center"
                                         >
                                             No Data
