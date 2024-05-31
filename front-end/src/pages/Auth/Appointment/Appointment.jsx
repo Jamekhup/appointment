@@ -42,16 +42,6 @@ const Appointment = () => {
             });
     };
 
-    const handleCreate = (data) => {
-        const formattedEvent = {
-            ...data,
-            start: moment(data.start).toDate(),
-            end: moment(data.end).toDate(),
-        };
-
-        setEvent((prev) => [...prev, formattedEvent]);
-    };
-
     const handleReservationCreate = (data) => {
         const formattedEvent = {
             ...data,
@@ -191,7 +181,7 @@ const Appointment = () => {
                 show={openCreateModal}
                 close={() => setOpenCreateModal(false)}
                 maxWidth="w-full sm:w-5/6 md:w-2/3 mt-20 sm:-mt-12 md:-mt-20"
-                handleCreate={handleCreate}
+                handleCreate={getEvent}
             />
 
             {eventData && openEventModal && (

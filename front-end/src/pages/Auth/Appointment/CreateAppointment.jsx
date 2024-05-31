@@ -19,8 +19,8 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const [serviceId, setServiceId] = useState("select");
     const [date, setDate] = useState(new Date());
     // const [time, setTime] = useState(setHours(setMinutes(new Date(), 0), 8));
-    const [fromTime, setFromTime] = useState('');
-    const [toTime, setToTime] = useState('');
+    const [fromTime, setFromTime] = useState("");
+    const [toTime, setToTime] = useState("");
     const [times, setTimes] = useState(1);
     const [comment, setComment] = useState("");
     const [doctor, setDoctor] = useState("");
@@ -68,7 +68,6 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
     const [treatmentInSixMonth, setTreatmentInSixMonth] = useState("");
     const [privatePatient, setPrivatePatient] = useState("");
     const [specialNeed, setSpecialNeed] = useState("");
-
 
     const getPatients = () => {
         setFetching(true);
@@ -151,7 +150,6 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     }
                 )
                 .then((response) => {
-                    
                     if (response.data.status == "reserved") {
                         Swal.fire({
                             icon: "error",
@@ -160,7 +158,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                             timer: 6500,
                         });
                     } else {
-                        handleCreate(response.data.data);
+                        handleCreate(response.data);
                         close();
                     }
                     setComment("");
@@ -170,8 +168,8 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                     setSelectedPatient("");
                     setDate(new Date());
                     // setTime(setHours(setMinutes(new Date(), 0), 8));
-                    setFromTime('');
-                    setToTime('');
+                    setFromTime("");
+                    setToTime("");
                     setDoctor("");
                     setTitle("");
                     setFirstName("");
@@ -326,12 +324,19 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                     </div>
 
                                     <div className="flex flex-col text-sm">
-                                        <label htmlFor="email">Email Address <span className="text-red-600">*</span></label>
+                                        <label htmlFor="email">
+                                            Email Address{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
+                                        </label>
                                         <TextInput
                                             id="email"
                                             type="email"
                                             value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            onChange={(e) =>
+                                                setEmail(e.target.value)
+                                            }
                                             placeholder="name@example.com"
                                             required
                                         />
@@ -343,12 +348,19 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                     </div>
 
                                     <div className="flex flex-col text-sm">
-                                        <label htmlFor="phone">Phone Number <span className="text-red-600">*</span></label>
+                                        <label htmlFor="phone">
+                                            Phone Number{" "}
+                                            <span className="text-red-600">
+                                                *
+                                            </span>
+                                        </label>
                                         <TextInput
                                             id="phone"
                                             type="text"
                                             value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
+                                            onChange={(e) =>
+                                                setPhone(e.target.value)
+                                            }
                                             placeholder="4915510686794"
                                             required
                                         />
@@ -918,11 +930,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                 required
                                 onChange={(e) => setFromTime(e.target.value)}
                             >
-                                <option
-                                    value=""
-                                >
-                                    Select From Time
-                                </option>
+                                <option value="">Select From Time</option>
                                 {Times &&
                                     Times.map((t, i) => (
                                         <option
@@ -934,7 +942,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                         </option>
                                     ))}
                             </select>
-                            
+
                             {error && error.formTime && (
                                 <div className="text-xs mt-1 font-medium text-red-600">
                                     {error.formTime[0]}
@@ -944,8 +952,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
 
                         <div className="flex flex-col text-sm">
                             <label htmlFor="time">
-                                To Time{" "}
-                                <span className="text-red-600">*</span>
+                                To Time <span className="text-red-600">*</span>
                             </label>
 
                             <select
@@ -955,11 +962,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                 required
                                 onChange={(e) => setToTime(e.target.value)}
                             >
-                                <option
-                                    value=""
-                                >
-                                    Select To Time
-                                </option>
+                                <option value="">Select To Time</option>
                                 {Times &&
                                     Times.map((t, i) => (
                                         <option
@@ -971,7 +974,7 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                         </option>
                                     ))}
                             </select>
-                            
+
                             {error && error.toTime && (
                                 <div className="text-xs mt-1 font-medium text-red-600">
                                     {error.toTime[0]}
@@ -1013,14 +1016,13 @@ const CreateAppointment = ({ show, close, maxWidth, handleCreate }) => {
                                 <option value="19">19</option>
                                 <option value="20">20</option>
                             </select>
-                            
+
                             {error && error.times && (
                                 <div className="text-xs mt-1 font-medium text-red-600">
                                     {error.times[0]}
                                 </div>
                             )}
                         </div>
-
 
                         <div className="flex flex-col text-sm col-span-1 sm:col-span-2">
                             <label htmlFor="comment">Comment</label>
