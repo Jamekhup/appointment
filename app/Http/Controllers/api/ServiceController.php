@@ -30,6 +30,7 @@ class ServiceController extends Controller
         $service = new Service();
         $service->name = $request->name;
         $service->price = $request->price;
+        $service->home_visit_price = $request->price;
         $service->description = $request->description;
         $service->created_by = Auth::user()->name;
 
