@@ -6,10 +6,17 @@ import axios from "../../../axios";
 import useAuthContext from "../../../context/AuthContext";
 import Times from "../../../assets/Times.json";
 
-const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therapists }) => {
+const EditAppointment = ({
+    show,
+    close,
+    maxWidth,
+    handleUpdate,
+    editData,
+    therapists,
+}) => {
     const [patientId, setPatientId] = useState(editData.patient.id);
-    const [serviceId, setServiceId] = useState("");
-    const [therapistId, setTherapistId] = useState("");
+    const [serviceId, setServiceId] = useState(editData.service.id);
+    const [therapistId, setTherapistId] = useState(editData.user.id);
     const [patients, setPatients] = useState(null);
     const [services, setServices] = useState(null);
     const [date, setDate] = useState(editData.date);
@@ -73,6 +80,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
                 close();
             })
             .catch((error) => {
+                console.log(error);
                 setError(error.response.data.message);
                 setLoading(false);
             });
@@ -98,7 +106,9 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
                 className="p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-3 text-sm"
             >
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="services">Select Patient <span className="text-red-600">*</span></label>
+                    <label htmlFor="services">
+                        Select Patient <span className="text-red-600">*</span>
+                    </label>
                     <select
                         className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
@@ -122,7 +132,9 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
                 </div>
 
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="services">Select Therapist <span className="text-red-600">*</span></label>
+                    <label htmlFor="services">
+                        Select Therapist <span className="text-red-600">*</span>
+                    </label>
                     <select
                         className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
@@ -145,7 +157,9 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
                 </div>
 
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="services">Select Service <span className="text-red-600">*</span></label>
+                    <label htmlFor="services">
+                        Select Service <span className="text-red-600">*</span>
+                    </label>
                     <select
                         className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0
                         focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
@@ -184,7 +198,9 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
                     )}
                 </div>
                 <div className="flex flex-col text-sm">
-                    <label htmlFor="start_date">Appointment Date <span className="text-red-600">*</span></label>
+                    <label htmlFor="start_date">
+                        Appointment Date <span className="text-red-600">*</span>
+                    </label>
                     <TextInput
                         id="start_date"
                         type="date"
@@ -202,8 +218,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
 
                 <div className="flex flex-col text-sm">
                     <label htmlFor="time">
-                        From Time{" "}
-                        <span className="text-red-600">*</span>
+                        From Time <span className="text-red-600">*</span>
                     </label>
 
                     <select
@@ -213,7 +228,6 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
                         required
                         onChange={(e) => setFromTime(e.target.value)}
                     >
-                        
                         {Times &&
                             Times.map((t, i) => (
                                 <option
@@ -225,7 +239,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
                                 </option>
                             ))}
                     </select>
-                    
+
                     {error && error.formTime && (
                         <div className="text-xs mt-1 font-medium text-red-600">
                             {error.formTime[0]}
@@ -235,8 +249,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
 
                 <div className="flex flex-col text-sm">
                     <label htmlFor="time">
-                        To Time{" "}
-                        <span className="text-red-600">*</span>
+                        To Time <span className="text-red-600">*</span>
                     </label>
 
                     <select
@@ -246,7 +259,6 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
                         required
                         onChange={(e) => setToTime(e.target.value)}
                     >
-                      
                         {Times &&
                             Times.map((t, i) => (
                                 <option
@@ -258,7 +270,7 @@ const EditAppointment = ({ show, close, maxWidth, handleUpdate, editData, therap
                                 </option>
                             ))}
                     </select>
-                    
+
                     {error && error.toTime && (
                         <div className="text-xs mt-1 font-medium text-red-600">
                             {error.toTime[0]}

@@ -42,21 +42,12 @@ const Appointment = () => {
             });
     };
 
-    const handleCreate = (data) => {
-        const formattedEvent = {
-            ...data,
-            start: moment(data.start).toDate(),
-            end: moment(data.end).toDate(),
-        };
-
-        setEvent((prev) => [...prev, formattedEvent]);
-    };
-
     const handleReservationCreate = (data) => {
         const formattedEvent = {
             ...data,
             start: moment(data.start).toDate(),
             end: moment(data.end).toDate(),
+            isDraggable: false,
         };
         setEvent((prev) => [...prev, formattedEvent]);
     };
@@ -82,6 +73,9 @@ const Appointment = () => {
                 animation: event.status == 1 && "pulse 1.5s infinite",
                 border: event.status == 1 && event.backgroundColor,
             },
+            ...(event.isDraggable
+                ? { className: "nonDraggable" }
+                : { className: "isDraggable" }),
         }),
         []
     );
@@ -123,8 +117,24 @@ const Appointment = () => {
             .put(
                 "/appointment/dnd/" + data.id,
                 {
-                    start: data.start,
-                    end: data.end,
+                    startDate:
+                        data.start.getFullYear() +
+                        "-" +
+                        (data.start.getMonth() + 1) +
+                        "-" +
+                        data.start.getDate(),
+                    start:
+                        data.start.getHours() +
+                        ":" +
+                        data.start.getMinutes() +
+                        ":" +
+                        data.start.getSeconds(),
+                    end:
+                        data.end.getHours() +
+                        ":" +
+                        data.end.getMinutes() +
+                        ":" +
+                        data.end.getSeconds(),
                 },
                 {
                     headers: {
@@ -171,7 +181,7 @@ const Appointment = () => {
                 show={openCreateModal}
                 close={() => setOpenCreateModal(false)}
                 maxWidth="w-full sm:w-5/6 md:w-2/3 mt-20 sm:-mt-12 md:-mt-20"
-                handleCreate={handleCreate}
+                handleCreate={getEvent}
             />
 
             {eventData && openEventModal && (

@@ -12,12 +12,8 @@ import Times from "../../../assets/Times.json";
 
 const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
     const [date, setDate] = useState(new Date());
-    const [fromTime, setFromTime] = useState(
-        ''
-    );
-    const [toTime, setToTime] = useState(
-        ''
-    );
+    const [fromTime, setFromTime] = useState("");
+    const [toTime, setToTime] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -150,8 +146,7 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                             )}
                         </div> */}
 
-
-<div className="flex flex-col text-sm">
+                        <div className="flex flex-col text-sm">
                             <label htmlFor="time">
                                 From Time{" "}
                                 <span className="text-red-600">*</span>
@@ -164,11 +159,7 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                                 required
                                 onChange={(e) => setFromTime(e.target.value)}
                             >
-                                <option
-                                    value=""
-                                >
-                                    Select From Time
-                                </option>
+                                <option value="">Select From Time</option>
                                 {Times &&
                                     Times.map((t, i) => (
                                         <option
@@ -180,7 +171,7 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                                         </option>
                                     ))}
                             </select>
-                            
+
                             {error && error.formTime && (
                                 <div className="text-xs mt-1 font-medium text-red-600">
                                     {error.formTime[0]}
@@ -190,8 +181,7 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
 
                         <div className="flex flex-col text-sm">
                             <label htmlFor="time">
-                                To Time{" "}
-                                <span className="text-red-600">*</span>
+                                To Time <span className="text-red-600">*</span>
                             </label>
 
                             <select
@@ -201,11 +191,7 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                                 required
                                 onChange={(e) => setToTime(e.target.value)}
                             >
-                                <option
-                                    value=""
-                                >
-                                    Select To Time
-                                </option>
+                                <option value="">Select To Time</option>
                                 {Times &&
                                     Times.map((t, i) => (
                                         <option
@@ -217,7 +203,7 @@ const CreateReservation = ({ show, close, maxWidth, handleCreate }) => {
                                         </option>
                                     ))}
                             </select>
-                            
+
                             {error && error.toTime && (
                                 <div className="text-xs mt-1 font-medium text-red-600">
                                     {error.toTime[0]}

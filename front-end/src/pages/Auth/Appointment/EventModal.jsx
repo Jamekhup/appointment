@@ -166,7 +166,6 @@ const EventModal = ({
                                             ).toLocaleString("en-GB", options)}
                                         </td>
                                     </tr>
-                                    
                                 </tbody>
                             </table>
                         </div>
@@ -177,16 +176,30 @@ const EventModal = ({
                                     <div className="flex flex-col gap-1.5 text-sm text-gray-500">
                                         <div>
                                             Patient Name:{" "}
-                                            {
-                                            eventData.data.patient.title
-                                            + ' ' + eventData.data.patient.first_name 
-                                            + ' ' + eventData.data.patient.last_name
-                                            }
-                                            
+                                            {eventData.data.patient.title +
+                                                " " +
+                                                eventData.data.patient
+                                                    .first_name +
+                                                " " +
+                                                eventData.data.patient
+                                                    .last_name}{" "}
+                                            {new Date(eventData.data.date) <
+                                                new Date() && (
+                                                <span
+                                                    style={{
+                                                        color: eventData.data
+                                                            .user.color,
+                                                    }}
+                                                    className="font-semibold"
+                                                >
+                                                    (Patient's appointment{" "}
+                                                    {eventData.data.times} times
+                                                    left)
+                                                </span>
+                                            )}
                                         </div>
                                         <div>
-                                            Therapist Name : {" "}
-                                            {eventData.title}
+                                            Therapist Name : {eventData.title}
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-1.5 text-sm text-gray-500">
@@ -204,7 +217,6 @@ const EventModal = ({
                                         </div>
                                     </div>
                                 </div>
-                                
 
                                 <table className="w-5/6 mt-3">
                                     <tbody>
@@ -213,11 +225,11 @@ const EventModal = ({
                                                 House Doctor
                                             </td>
                                             <td>
-                                                {
-                                                    eventData.data.patient
-                                                        .house_doctor ? eventData.data.patient
-                                                        .house_doctor : '-'
-                                                }
+                                                {eventData.data.patient
+                                                    .house_doctor
+                                                    ? eventData.data.patient
+                                                          .house_doctor
+                                                    : "-"}
                                             </td>
                                         </tr>
                                         <tr className="border-b border-gray-300">
@@ -225,11 +237,11 @@ const EventModal = ({
                                                 Recommend Doctor
                                             </td>
                                             <td>
-                                                {
-                                                    eventData.data.patient
-                                                        .recommended_doctor ? eventData.data.patient
-                                                        .recommended_doctor : '-'
-                                                }
+                                                {eventData.data.patient
+                                                    .recommended_doctor
+                                                    ? eventData.data.patient
+                                                          .recommended_doctor
+                                                    : "-"}
                                             </td>
                                         </tr>
                                         <tr className="border-b border-gray-300">
@@ -237,11 +249,11 @@ const EventModal = ({
                                                 Special Need
                                             </td>
                                             <td>
-                                                {
-                                                    eventData.data.patient
-                                                        .special_need ? eventData.data.patient
-                                                        .special_need : '-'
-                                                }
+                                                {eventData.data.patient
+                                                    .special_need
+                                                    ? eventData.data.patient
+                                                          .special_need
+                                                    : "-"}
                                             </td>
                                         </tr>
                                         <tr className="border-b border-gray-300">
@@ -261,8 +273,10 @@ const EventModal = ({
                                             </td>
                                             <td>
                                                 {eventData.data.patient
-                                                    .health_insurance_company ? eventData.data.patient
-                                                    .health_insurance_company : '-' }
+                                                    .health_insurance_company
+                                                    ? eventData.data.patient
+                                                          .health_insurance_company
+                                                    : "-"}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -280,7 +294,9 @@ const EventModal = ({
                                     </div>
                                 </div>
                                 <div className="text-xs text-slate-300">
-                                    {eventData.data.service.description ? eventData.data.service.description : 'No Description'}
+                                    {eventData.data.service.description
+                                        ? eventData.data.service.description
+                                        : "No Description"}
                                 </div>
                             </div>
                         </div>
