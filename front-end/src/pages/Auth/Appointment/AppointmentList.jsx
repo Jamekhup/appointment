@@ -16,6 +16,7 @@ import Loading from "../../../components/Loading";
 import Pagination from "../../../components/Pagination";
 import ReactDatePicker from "react-datepicker";
 import { ExportToExcel } from "../PaymentRecord/ExportToExcel";
+import TextInput from "../../../components/TextInput";
 
 const AppointmentList = () => {
     const { user } = useAuthContext();
@@ -33,11 +34,18 @@ const AppointmentList = () => {
     const url = "/appointment-list";
     const [pagination, setPagination] = useState(null);
 
+    const [search, setSearch] = useState("");
+
+    const convertDate = (date) => {
+        let newDate = date.split("-");
+        return newDate[2] + "-" + newDate[1] + "-" + newDate[0];
+    };
+
     const getData = (url) => {
         setFetching(true);
         axios
             .get(url, {
-                params: { dateRange: dateRange },
+                params: { dateRange: dateRange, search: search},
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -57,7 +65,7 @@ const AppointmentList = () => {
                         data.patient.last_name,
                     "Doctor": data.doctor_name,
                     "Therapist": data.user?.name,
-                    "Appointment Date": data.date,
+                    "Appointment Date": convertDate(data.date),
                     "From": data.from_time,
                     "To": data.to_time,
                     "Status":
@@ -115,7 +123,7 @@ const AppointmentList = () => {
 
     useEffect(() => {
         getData(url);
-    }, [dateRange]);
+    }, [dateRange, search]);
 
     const handlePagination = (paginate_url) => {
         getData(paginate_url ?? url);
@@ -126,7 +134,7 @@ const AppointmentList = () => {
         <>
             <Header title="Appointment List" />
             <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center mb-2">
-                <div>
+                <div className="flex md:flex-row flex-col gap-2 items-center">
                     <ReactDatePicker
                         selectsRange={true}
                         startDate={startDate}
@@ -140,6 +148,13 @@ const AppointmentList = () => {
                         calendarIconClassname="react-date-range-picker"
                         className="bg-white h-[30px] rounded-md outline-none border border-slate-300 shadow-sm w-full cursor-pointer placeholder:text-sm placeholder:pl-1 focus:border-slate-400"
                         placeholderText=" Filter By Appointment Date"
+                    />
+                    <TextInput
+                        type="text"
+                        placeholder="Search by Patient or Therapist Name"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="!py-1 !mt-0 w-full"
                     />
                 </div>
                 <div className="flex justify-between items-center">
@@ -194,7 +209,7 @@ const AppointmentList = () => {
                 </div>
             </div>
 
-            <div className="overflow-x-hidden">
+            <div className="relative overflow-y-auto">
                 <table className="w-full table-auto">
                     <thead className="bg-[#4b4a4a] uppercase text-white border">
                         <tr className="h-7">

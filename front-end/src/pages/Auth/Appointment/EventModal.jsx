@@ -199,7 +199,7 @@ const EventModal = ({
                                             )}
                                         </div>
                                         <div>
-                                            Therapist Name : {eventData.title}
+                                            Therapist Name : {eventData.data.user.name}
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-1.5 text-sm text-gray-500">
@@ -289,8 +289,9 @@ const EventModal = ({
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <div>{eventData.data.service.name}</div>
-                                    <div className="font-mono">
-                                        € {eventData.data.service.price}
+                                    <div className="font-mono flex flex-col gap-y-1">
+                                       <span className="text-xs">Normal Price - € {Number(eventData.data.service.price).toLocaleString("es-ES", {minimumFractionDigits: 2})}</span>
+                                       <span className="text-xs">Home Visit Price - € {Number(eventData.data.service.price).toLocaleString("es-ES", {minimumFractionDigits: 2})}</span>
                                     </div>
                                 </div>
                                 <div className="text-xs text-slate-300">

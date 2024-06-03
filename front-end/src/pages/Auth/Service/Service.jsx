@@ -115,7 +115,7 @@ const Service = () => {
                     </PrimaryButton>
                 </div>
             </div>
-            <div className="w-full overflow-auto">
+            <div className="relative overflow-y-auto">
                 <table className="w-full table-fixed">
                     <thead className="bg-[#4b4a4a] uppercase text-white border">
                         <tr className="h-7">
@@ -160,10 +160,10 @@ const Service = () => {
                                             {ser.name}
                                         </td>
                                         <td className="border border-separate pl-2 font-mono">
-                                            {ser.price ? "€ " + ser.price : "-"}
+                                            {ser.price ? "€ " + Number(ser.price).toLocaleString("es-ES", {minimumFractionDigits: 2}) : "-"}
                                         </td>
                                         <td className="border border-separate pl-2 font-mono">
-                                            {ser.home_visit_price ? "€ " + ser.home_visit_price : "-"}
+                                            {ser.home_visit_price ? "€ " + Number(ser.home_visit_price).toLocaleString("es-ES", {minimumFractionDigits: 2}) : "-"}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             {ser.description

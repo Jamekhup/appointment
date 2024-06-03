@@ -275,66 +275,70 @@ const Dashboard = () => {
                             </div>
                             <div>
                                 {startDate == null && endDate == null ? (
-                                    <p className="text-slate-600 text-sm">
+                                    <p className="sm:block hidden text-slate-600 text-sm">
                                         Today Data
                                     </p>
                                 ) : (
-                                    <p className="text-slate-600 text-sm">
+                                    <p className="text-slate-600 text-sm sm:block hidden">
                                         {/* from {dateRange[0]} to {dateRange[1]} */}
                                     </p>
                                 )}
                             </div>
                         </div>
-                        <table className="w-full table-fixed">
-                            <thead className="bg-cyan-400 uppercase text-white border">
-                                <tr className="h-7">
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Patients
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Appointments
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Payment Records
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Income
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-slate-600 text-sm">
-                                {!loading ? (
-                                    <tr className="font-normal">
-                                        <td className="border border-separate py-1 pl-2">
-                                            {filterTotalPatient &&
-                                                filterTotalPatient.toLocaleString("es-ES")}
-                                        </td>
-                                        <td className="border border-separate pl-2">
-                                            {filterTotalAppointment &&
-                                                filterTotalAppointment.toLocaleString("es-ES")}
-                                        </td>
-                                        <td className="border border-separate pl-2">
-                                            {filterTotalPaymentRecord &&
-                                                filterTotalPaymentRecord.toLocaleString("es-ES")}
-                                        </td>
-                                        <td className="border border-separate pl-2">
-                                            €{" "}
-                                            {filterTotalIncome &&
-                                                filterTotalIncome.toLocaleString("es-ES", {minimumFractionDigits: 2})}
-                                        </td>
+                        <div className="relative overflow-x-auto">
+
+                            <table className="w-full">
+                                <thead className="bg-cyan-400 uppercase text-white border">
+                                    <tr className="h-7">
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Patients
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Appointments
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Payment Records
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Income
+                                        </th>
                                     </tr>
-                                ) : (
-                                    <tr className="font-normal">
-                                        <td
-                                            colSpan={4}
-                                            className="border border-separate py-1 pl-2 text-center"
-                                        >
-                                            No Data
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="text-slate-600 text-sm">
+                                    {!loading ? (
+                                        <tr className="font-normal">
+                                            <td className="border border-separate py-1 pl-2">
+                                                {filterTotalPatient &&
+                                                    filterTotalPatient.toLocaleString("es-ES")}
+                                            </td>
+                                            <td className="border border-separate pl-2">
+                                                {filterTotalAppointment &&
+                                                    filterTotalAppointment.toLocaleString("es-ES")}
+                                            </td>
+                                            <td className="border border-separate pl-2">
+                                                {filterTotalPaymentRecord &&
+                                                    filterTotalPaymentRecord.toLocaleString("es-ES")}
+                                            </td>
+                                            <td className="border border-separate pl-2">
+                                                €{" "}
+                                                {filterTotalIncome &&
+                                                    Number(filterTotalIncome).toLocaleString("es-ES", {minimumFractionDigits: 2})}
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        <tr className="font-normal">
+                                            <td
+                                                colSpan={4}
+                                                className="border border-separate py-1 pl-2 text-center"
+                                            >
+                                                No Data
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+
+                        </div>
                     </div>
                 ) : null}
 
@@ -343,153 +347,157 @@ const Dashboard = () => {
                         <p className="text-slate-600 text-sm border-b border-blue-100 mb-2">
                             Active Appointment Lists
                         </p>
-                        <table className="w-full table-fixed">
-                            <thead className="bg-[#4b4a4a] uppercase text-white border">
-                                <tr className="h-7">
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Patient Name
-                                    </th>
+                        <div className="relative overflow-y-auto">
+                            <table className="w-full">
+                                <thead className="bg-[#4b4a4a] uppercase text-white border">
+                                    <tr className="h-7">
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Patient Name
+                                        </th>
 
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Therapist
-                                    </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Therapist
+                                        </th>
 
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Doctor Name
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Date
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        From
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                       To
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Created By
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Created At
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-slate-600 text-sm">
-                                {activeAppointment &&
-                                activeAppointment.length > 0 ? (
-                                    activeAppointment.map((data, i) => (
-                                        <tr className="font-normal" key={i}>
-                                            <td className="border border-separate py-1 pl-2">
-                                                {data.patient.title}{" "}
-                                                {data.patient.first_name}{" "}
-                                                {data.patient.last_name}
-                                            </td>
-                                            <td className="border border-separate py-1 pl-2">
-                                                {data.doctor_name}
-                                            </td>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Doctor Name
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Date
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            From
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                        To
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Created By
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Created At
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-slate-600 text-sm">
+                                    {activeAppointment &&
+                                    activeAppointment.length > 0 ? (
+                                        activeAppointment.map((data, i) => (
+                                            <tr className="font-normal" key={i}>
+                                                <td className="border border-separate py-1 pl-2">
+                                                    {data.patient.title}{" "}
+                                                    {data.patient.first_name}{" "}
+                                                    {data.patient.last_name}
+                                                </td>
+                                                <td className="border border-separate py-1 pl-2">
+                                                    {data.doctor_name}
+                                                </td>
 
-                                            <td className="border border-separate py-1 pl-2">
-                                                {data.user.name}
-                                            </td>
-                                            <td className="border border-separate py-1 pl-2">
-                                                {convertDate(data.date)}
-                                            </td>
-                                            <td className="border border-separate pl-2">
-                                                {data.from_time}
-                                            </td>
-                                            <td className="border border-separate pl-2">
-                                                {data.to_time}
-                                            </td>
-                                            <td className="border border-separate pl-2 font-mono">
-                                                {data.created_by}
-                                            </td>
-                                            <td className="border border-separate pl-2">
-                                                {convertDate2(
-                                                    data.created_at.replace(
-                                                        /T|.000000Z/gi,
-                                                        " "
-                                                    )
-                                                )}
+                                                <td className="border border-separate py-1 pl-2">
+                                                    {data.user.name}
+                                                </td>
+                                                <td className="border border-separate py-1 pl-2">
+                                                    {convertDate(data.date)}
+                                                </td>
+                                                <td className="border border-separate pl-2">
+                                                    {data.from_time}
+                                                </td>
+                                                <td className="border border-separate pl-2">
+                                                    {data.to_time}
+                                                </td>
+                                                <td className="border border-separate pl-2 font-mono">
+                                                    {data.created_by}
+                                                </td>
+                                                <td className="border border-separate pl-2">
+                                                    {convertDate2(
+                                                        data.created_at.replace(
+                                                            /T|.000000Z/gi,
+                                                            " "
+                                                        )
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr className="font-normal">
+                                            <td
+                                                colSpan={8}
+                                                className="border border-separate py-1 pl-2 text-center"
+                                            >
+                                                No Data
                                             </td>
                                         </tr>
-                                    ))
-                                ) : (
-                                    <tr className="font-normal">
-                                        <td
-                                            colSpan={8}
-                                            className="border border-separate py-1 pl-2 text-center"
-                                        >
-                                            No Data
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div className="w-full">
                         <p className="text-slate-600 text-sm border-b border-blue-100 mb-2">
                             Reserved Date Time (This Week)
                         </p>
-                        <table className="w-full table-fixed">
-                            <thead className="bg-rose-400 uppercase text-white border">
-                                <tr className="h-7">
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Date
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        From
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        To
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Created By
-                                    </th>
-                                    <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                        Created At
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-slate-600 text-sm">
-                                {reservedDateTime &&
-                                reservedDateTime.length > 0 ? (
-                                    reservedDateTime.map((data, i) => (
-                                        <tr className="font-normal" key={i}>
-                                            <td className="border border-separate py-1 pl-2">
-                                                {convertDate(data.date)}
-                                            </td>
-                                            <td className="border border-separate pl-2">
-                                                {data.from_time}
-                                            </td>
-                                            <td className="border border-separate pl-2 font-mono">
-                                                {data.to_time}
-                                            </td>
-                                            <td className="border border-separate pl-2">
-                                                {data.created_by}
-                                            </td>
-                                            <td className="border border-separate pl-2">
-                                                {convertDate2(
-                                                    data.created_at.replace(
-                                                        /T|.000000Z/gi,
-                                                        " "
-                                                    )
-                                                )}
+                        <div className="relative overflow-y-auto">
+                            <table className="w-full table-fixed">
+                                <thead className="bg-rose-400 uppercase text-white border">
+                                    <tr className="h-7">
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Date
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            From
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            To
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Created By
+                                        </th>
+                                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                            Created At
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-slate-600 text-sm">
+                                    {reservedDateTime &&
+                                    reservedDateTime.length > 0 ? (
+                                        reservedDateTime.map((data, i) => (
+                                            <tr className="font-normal" key={i}>
+                                                <td className="border border-separate py-1 pl-2">
+                                                    {convertDate(data.date)}
+                                                </td>
+                                                <td className="border border-separate pl-2">
+                                                    {data.from_time}
+                                                </td>
+                                                <td className="border border-separate pl-2 font-mono">
+                                                    {data.to_time}
+                                                </td>
+                                                <td className="border border-separate pl-2">
+                                                    {data.created_by}
+                                                </td>
+                                                <td className="border border-separate pl-2">
+                                                    {convertDate2(
+                                                        data.created_at.replace(
+                                                            /T|.000000Z/gi,
+                                                            " "
+                                                        )
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr className="font-normal">
+                                            <td
+                                                colSpan={5}
+                                                className="border border-separate py-1 pl-2 text-center"
+                                            >
+                                                No Data
                                             </td>
                                         </tr>
-                                    ))
-                                ) : (
-                                    <tr className="font-normal">
-                                        <td
-                                            colSpan={5}
-                                            className="border border-separate py-1 pl-2 text-center"
-                                        >
-                                            No Data
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </>

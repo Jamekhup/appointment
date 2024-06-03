@@ -105,7 +105,7 @@ const Therapist = () => {
                     </PrimaryButton>
                 </div>
             </div>
-            <div className="overflow-x-hidden">
+            <div className="relative overflow-y-auto">
                 <table className="w-full table-auto">
                     <thead className="bg-[#4b4a4a] uppercase text-white border">
                         <tr className="h-7">

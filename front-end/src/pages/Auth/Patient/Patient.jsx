@@ -110,115 +110,117 @@ const Patient = () => {
                     </NavLink>
                 </div>
             </div>
-            <table className="w-[32rem] sm:w-full rounded-lg">
-                <thead className="bg-[#4b4a4a] uppercase text-white border">
-                    <tr className="h-7">
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            No
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Full Name
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Email
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Phone
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            DOB
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Address
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Detail
-                        </th>
+            <div className="relative overflow-y-auto">
+                <table className="w-full rounded-lg">
+                    <thead className="bg-[#4b4a4a] uppercase text-white border">
+                        <tr className="h-7">
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                No
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Full Name
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Email
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Phone
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                DOB
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Address
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Detail
+                            </th>
 
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Action
-                        </th>
-                    </tr>
-                </thead>
-                <tbody className="text-slate-600">
-                    {!loading ? (
-                        patients &&
-                        patients
-                            .filter(
-                                (s) =>
-                                    s.first_name
-                                        .toLowerCase()
-                                        .includes(search.toLowerCase()) ||
-                                    s.last_name
-                                        .toLowerCase()
-                                        .includes(search.toLowerCase())
-                            )
-                            .map((pa, i) => (
-                                <tr className="text-[15px] font-normal" key={i}>
-                                    <td className="border border-separate py-1 pl-2">
-                                        {i + 1}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {pa.first_name} {pa.last_name}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {pa.email} 
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {pa.phone} 
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {convertDate(pa.dob)}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {pa.street + ", "}
-                                        {pa.house_number + ", "}
-                                        {pa.city + ", "}
-                                        {pa.postal_code}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <NavLink
-                                            to={"/app/patient/detail/" + pa.id}
-                                            className="flex justify-start items-center gap-1
-                                    bg-amber-300 rounded-md px-2 py-[1px] w-fit text-xs"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faCircleInfo}
-                                            />
-                                            <span>Detail</span>
-                                        </NavLink>
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <NavLink
-                                            to={"/app/patient/edit/" + pa.id}
-                                        >
-                                            <span className="pr-4 cursor-pointer">
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-slate-600">
+                        {!loading ? (
+                            patients &&
+                            patients
+                                .filter(
+                                    (s) =>
+                                        s.first_name
+                                            .toLowerCase()
+                                            .includes(search.toLowerCase()) ||
+                                        s.last_name
+                                            .toLowerCase()
+                                            .includes(search.toLowerCase())
+                                )
+                                .map((pa, i) => (
+                                    <tr className="text-[15px] font-normal" key={i}>
+                                        <td className="border border-separate py-1 pl-2">
+                                            {i + 1}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {pa.first_name} {pa.last_name}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {pa.email} 
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {pa.phone} 
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {convertDate(pa.dob)}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {pa.street + ", "}
+                                            {pa.house_number + ", "}
+                                            {pa.city + ", "}
+                                            {pa.postal_code}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <NavLink
+                                                to={"/app/patient/detail/" + pa.id}
+                                                className="flex justify-start items-center gap-1
+                                        bg-amber-300 rounded-md px-2 py-[1px] w-fit text-xs"
+                                            >
                                                 <FontAwesomeIcon
-                                                    icon={faEdit}
+                                                    icon={faCircleInfo}
+                                                />
+                                                <span>Detail</span>
+                                            </NavLink>
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <NavLink
+                                                to={"/app/patient/edit/" + pa.id}
+                                            >
+                                                <span className="pr-4 cursor-pointer">
+                                                    <FontAwesomeIcon
+                                                        icon={faEdit}
+                                                    />
+                                                </span>
+                                            </NavLink>
+                                            <span
+                                                className="cursor-pointer"
+                                                onClick={() => deletePatient(pa.id)}
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={faTrashCan}
+                                                    className="text-rose-500"
                                                 />
                                             </span>
-                                        </NavLink>
-                                        <span
-                                            className="cursor-pointer"
-                                            onClick={() => deletePatient(pa.id)}
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faTrashCan}
-                                                className="text-rose-500"
-                                            />
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))
-                    ) : (
-                        <tr>
-                            <td colSpan={6}>
-                                <Loading />
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                                        </td>
+                                    </tr>
+                                ))
+                        ) : (
+                            <tr>
+                                <td colSpan={6}>
+                                    <Loading />
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
             {pagination && (
                 <Pagination onPaginate={handlePagination} data={pagination} />

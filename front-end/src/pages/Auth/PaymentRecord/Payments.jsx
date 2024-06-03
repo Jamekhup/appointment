@@ -297,133 +297,135 @@ const Payments = () => {
                     )}
                 </div>
             </div>
-            <table className="w-[32rem] sm:w-full rounded-lg">
-                <thead className="bg-[#4b4a4a] uppercase text-white border">
-                    <tr className="h-7">
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Patient Name
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Therapist
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            DOB
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Address
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Issue Date
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Received By
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Detail
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Print
-                        </th>
-                        <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                            Action
-                        </th>
-                    </tr>
-                </thead>
-                <tbody className="text-slate-600">
-                    {paymentRecord !== null ? (
-                        paymentRecord
-                            .filter(
-                                (s) =>
-                                    s.patient.first_name
-                                        .toLowerCase()
-                                        .includes(search.toLowerCase()) ||
-                                    s.patient.last_name
-                                        .toLowerCase()
-                                        .includes(search.toLowerCase())
-                            )
-                            .map((pr, i) => (
-                                <tr className="text-[15px] font-normal" key={i}>
-                                    <td className="border border-separate py-1 pl-2">
-                                        {pr.patient.title}{" "}
-                                        {pr.patient.first_name}{" "}
-                                        {pr.patient.last_name}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {pr.user.name}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {convertDate(pr.patient.dob)}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {pr.patient.street}
-                                        {", "}
-                                        {pr.patient.house_number}
-                                        {", "}
-                                        {pr.patient.city}
-                                        {", "}
-                                        {pr.patient.postal_code}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {convertDate(pr.issue_date)}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        {pr.received_by}
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <Link
-                                            to={`/app/payments/detail/${pr.id}`}
-                                            className="flex justify-start items-center gap-1 text-xs bg-gray-700 px-2 py-[2px] w-fit rounded-md"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faCircleInfo}
-                                                className="text-amber-300"
-                                            />
-                                            <p className="text-slate-100">
-                                                Detail
-                                            </p>
-                                        </Link>
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <a
-                                            href={`/app/payments/export/${pr.id}`}
-                                            target="_blank"
-                                            className="flex justify-start items-center gap-1 w-fit px-2 py-[2px] rounded-md bg-blue-300 text-xs"
-                                        >
-                                            <FontAwesomeIcon icon={faPrint} />
-                                            <p>Pdf</p>
-                                        </a>
-                                    </td>
-                                    <td className="border border-separate pl-2">
-                                        <Link
-                                            to={`/app/payments/edit/${pr.id}`}
-                                        >
-                                            <span className="pr-4 cursor-pointer">
+            <div className="relative overflow-y-auto">
+                <table className="w-[32rem] sm:w-full rounded-lg">
+                    <thead className="bg-[#4b4a4a] uppercase text-white border">
+                        <tr className="h-7">
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Patient Name
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Therapist
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                DOB
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Address
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Issue Date
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Received By
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Detail
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Print
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-slate-600">
+                        {paymentRecord !== null ? (
+                            paymentRecord
+                                .filter(
+                                    (s) =>
+                                        s.patient.first_name
+                                            .toLowerCase()
+                                            .includes(search.toLowerCase()) ||
+                                        s.patient.last_name
+                                            .toLowerCase()
+                                            .includes(search.toLowerCase())
+                                )
+                                .map((pr, i) => (
+                                    <tr className="text-[15px] font-normal" key={i}>
+                                        <td className="border border-separate py-1 pl-2">
+                                            {pr.patient.title}{" "}
+                                            {pr.patient.first_name}{" "}
+                                            {pr.patient.last_name}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {pr.user.name}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {convertDate(pr.patient.dob)}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {pr.patient.street}
+                                            {", "}
+                                            {pr.patient.house_number}
+                                            {", "}
+                                            {pr.patient.city}
+                                            {", "}
+                                            {pr.patient.postal_code}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {convertDate(pr.issue_date)}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {pr.received_by}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <Link
+                                                to={`/app/payments/detail/${pr.id}`}
+                                                className="flex justify-start items-center gap-1 text-xs bg-gray-700 px-2 py-[2px] w-fit rounded-md"
+                                            >
                                                 <FontAwesomeIcon
-                                                    icon={faEdit}
+                                                    icon={faCircleInfo}
+                                                    className="text-amber-300"
+                                                />
+                                                <p className="text-slate-100">
+                                                    Detail
+                                                </p>
+                                            </Link>
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <a
+                                                href={`/app/payments/export/${pr.id}`}
+                                                target="_blank"
+                                                className="flex justify-start items-center gap-1 w-fit px-2 py-[2px] rounded-md bg-blue-300 text-xs"
+                                            >
+                                                <FontAwesomeIcon icon={faPrint} />
+                                                <p>Pdf</p>
+                                            </a>
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            <Link
+                                                to={`/app/payments/edit/${pr.id}`}
+                                            >
+                                                <span className="pr-4 cursor-pointer">
+                                                    <FontAwesomeIcon
+                                                        icon={faEdit}
+                                                    />
+                                                </span>
+                                            </Link>
+                                            <span className="cursor-pointer">
+                                                <FontAwesomeIcon
+                                                    icon={faTrashCan}
+                                                    className="text-rose-500"
+                                                    onClick={() =>
+                                                        handleDelete(pr.id)
+                                                    }
                                                 />
                                             </span>
-                                        </Link>
-                                        <span className="cursor-pointer">
-                                            <FontAwesomeIcon
-                                                icon={faTrashCan}
-                                                className="text-rose-500"
-                                                onClick={() =>
-                                                    handleDelete(pr.id)
-                                                }
-                                            />
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))
-                    ) : (
-                        <tr>
-                            <td colSpan={7}>
-                                <StatusLoading />
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                                        </td>
+                                    </tr>
+                                ))
+                        ) : (
+                            <tr>
+                                <td colSpan={7}>
+                                    <StatusLoading />
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
             {pagination && (
                 <Pagination onPaginate={handlePagination} data={pagination} />

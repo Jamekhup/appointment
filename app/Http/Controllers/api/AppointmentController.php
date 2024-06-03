@@ -28,7 +28,7 @@ class AppointmentController extends Controller
                 'start' => date('Y-m-d H:i:s', strtotime($appointment['date'] . $appointment['from_time'])),
                 'end' => date('Y-m-d H:i:s', strtotime($appointment['date'] . $appointment['to_time'])),
                 'isDraggable' => true,
-                'title' => $appointment['user']['name'],
+                'title' => $appointment['patient']['title'] . ' ' . $appointment['patient']['first_name'] . ' ' . $appointment['patient']['last_name'],
                 'backgroundColor' => $appointment['user']['color'],
                 'status' => $appointment['status'],
                 'data' => $appointment
@@ -55,7 +55,17 @@ class AppointmentController extends Controller
             $appointments = Appointment::with('user', 'patient', 'service')->when($request->dateRange, function ($query, $date) {
                 $query->whereDate('date', '>=', Carbon::parse($date[0])->addDay()->format('Y-m-d'))
                     ->whereDate('date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
-            })->orderBy('created_at', 'DESC')->paginate(30);
+            })
+            ->when($request->search, function ($query, $search){
+                    $query->whereHas('patient', function($query) use ($search){
+                        $query->where('first_name', 'LIKE', '%'.$search.'%')
+                        ->orWhere('last_name', 'LIKE', '%'.$search.'%');
+                    })
+                    ->orWhereHas('user', function($query) use ($search){
+                        $query->where('name', 'LIKE', '%'.$search.'%');
+                    });
+                })
+            ->orderBy('created_at', 'DESC')->paginate(30);
 
             $therapists = User::where('role', 2)->get();
 
