@@ -24,7 +24,6 @@ const BigCalendar = ({
 
     const moveEvent = useCallback(
         ({ event, start, end }) => {
-            console.log(event);
             setMyEvents((prev) => {
                 const existing = prev.find((ev) => ev.id === event.id) ?? {};
                 const filtered = prev.filter((ev) => ev.id !== event.id);

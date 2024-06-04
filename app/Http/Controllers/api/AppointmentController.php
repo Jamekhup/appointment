@@ -56,16 +56,16 @@ class AppointmentController extends Controller
                 $query->whereDate('date', '>=', Carbon::parse($date[0])->addDay()->format('Y-m-d'))
                     ->whereDate('date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
             })
-            ->when($request->search, function ($query, $search){
-                    $query->whereHas('patient', function($query) use ($search){
-                        $query->where('first_name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('last_name', 'LIKE', '%'.$search.'%');
+                ->when($request->search, function ($query, $search) {
+                    $query->whereHas('patient', function ($query) use ($search) {
+                        $query->where('first_name', 'LIKE', '%' . $search . '%')
+                            ->orWhere('last_name', 'LIKE', '%' . $search . '%');
                     })
-                    ->orWhereHas('user', function($query) use ($search){
-                        $query->where('name', 'LIKE', '%'.$search.'%');
-                    });
+                        ->orWhereHas('user', function ($query) use ($search) {
+                            $query->where('name', 'LIKE', '%' . $search . '%');
+                        });
                 })
-            ->orderBy('created_at', 'DESC')->paginate(30);
+                ->orderBy('created_at', 'DESC')->paginate(30);
 
             $therapists = User::where('role', 2)->get();
 
@@ -296,15 +296,23 @@ class AppointmentController extends Controller
     public function dnd(Request $request, $id)
     {
         if (Auth::user()->appointment_access == 1) {
-            $appointment = Appointment::where('id', $id)->first();
-            if ($appointment) {
-                $appointment->date = new DateTime($request->startDate);
-                $appointment->from_time = $request->start;
-                $appointment->to_time = $request->end;
-                $appointment->updated_by = Auth::user()->name;
-                $appointment->save();
+            $reserved = ReserveAppointment::whereDate('date', $request->startDate)
+                ->whereTime('from_time', '<=', $request->start)
+                ->orWhereTime('to_time', '>=', $request->end)
+                ->first();
+            if ($reserved) {
+                return response()->json(['status' => 'reserved', 'data' => 'reserved']);
+            } else {
+                $appointment = Appointment::where('id', $id)->first();
+                if ($appointment) {
+                    $appointment->date = new DateTime($request->startDate);
+                    $appointment->from_time = $request->start;
+                    $appointment->to_time = $request->end;
+                    $appointment->updated_by = Auth::user()->name;
+                    $appointment->save();
 
-                return response()->json(201);
+                    return response()->json(201);
+                }
             }
         }
         abort(403);

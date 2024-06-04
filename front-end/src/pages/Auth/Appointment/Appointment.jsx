@@ -142,7 +142,12 @@ const Appointment = () => {
                     },
                 }
             )
-            .then((res) => console.log(res.data));
+            .then((res) => {
+                console.log(res.data);
+                if (res.data.status == "reserved") {
+                    getEvent();
+                }
+            });
     };
 
     useEffect(() => {
