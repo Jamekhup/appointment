@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     },
 
     patientInfo: {
-        backgroundColor: "#7CB9E8",
         marginTop: 8,
         fontSize: 10,
         padding: 5,
@@ -96,6 +95,12 @@ const styles = StyleSheet.create({
         padding: 4,
     },
 });
+
+const convertDate = (date) => {
+    let newDate = date.split("-");
+    return newDate[2] + "-" + newDate[1] + "-" + newDate[0];
+};
+
 const ExportPdf = ({ data }) => {
     return (
         <Document>
@@ -122,7 +127,7 @@ const ExportPdf = ({ data }) => {
 
                         <View style={styles.patient}>
                             <Text>Issue Date: </Text>
-                            <Text>{data.issue_date}</Text>
+                            <Text>{convertDate(data.issue_date)}</Text>
                         </View>
                     </View>
 
@@ -134,7 +139,7 @@ const ExportPdf = ({ data }) => {
 
                         <View style={styles.patient}>
                             <Text>Received At: </Text>
-                            <Text>{data.received_date}</Text>
+                            <Text>{convertDate(data.received_date)}</Text>
                         </View>
                     </View>
 
@@ -152,7 +157,19 @@ const ExportPdf = ({ data }) => {
                         <Text style={styles.descriptionSecond}>
                             Date Of Birth
                         </Text>
-                        <Text style={styles.qtySecond}>{data.patient.dob}</Text>
+                        <Text style={styles.qtySecond}>{convertDate(data.patient.dob)}</Text>
+                    </View>
+                    <View style={styles.rowSecond}>
+                        <Text style={styles.descriptionSecond}>
+                            Email Address
+                        </Text>
+                        <Text style={styles.qtySecond}>{data.patient.email}</Text>
+                    </View>
+                    <View style={styles.rowSecond}>
+                        <Text style={styles.descriptionSecond}>
+                            Phone Number
+                        </Text>
+                        <Text style={styles.qtySecond}>{data.patient.phone}</Text>
                     </View>
                     <View style={styles.rowSecond}>
                         <Text style={styles.descriptionSecond}>Address</Text>
@@ -210,7 +227,7 @@ const ExportPdf = ({ data }) => {
                     <Text style={styles.patientInfo}>Payment Record</Text>
                     <View style={styles.row}>
                         <Text style={styles.description}>Issue Date</Text>
-                        <Text style={styles.qty}>{data.issue_date}</Text>
+                        <Text style={styles.qty}>{convertDate(data.issue_date)}</Text>
                     </View>
                     <View style={styles.rowSecond}>
                         <Text style={styles.descriptionSecond}>Treatment</Text>
@@ -245,7 +262,7 @@ const ExportPdf = ({ data }) => {
                     <View style={styles.rowSecond}>
                         <Text style={styles.descriptionSecond}>Cost</Text>
                         <Text style={styles.qtySecond}>
-                            {data.cost ? "€ " + data.cost : "-"}
+                            {data.cost ? "€ " + Number(data.cost).toLocaleString("es-ES") : "-"}
                         </Text>
                     </View>
                     <View style={styles.rowSecond}>
@@ -254,7 +271,7 @@ const ExportPdf = ({ data }) => {
                         </Text>
                         <Text style={styles.qtySecond}>
                             {data.additional_payment
-                                ? "€ " + data.additional_payment
+                                ? "€ " + Number(data.additional_payment).toLocaleString("es-ES")
                                 : "-"}
                         </Text>
                     </View>
@@ -273,7 +290,7 @@ const ExportPdf = ({ data }) => {
                     <View style={styles.rowSecond}>
                         <Text style={styles.descriptionSecond}>Cost 3</Text>
                         <Text style={styles.qtySecond}>
-                            {data.cost3 ? "€ " + data.cost3 : "-"}
+                            {data.cost3 ? "€ " + Number(data.cost3).toLocaleString("es-ES") : "-"}
                         </Text>
                     </View>
                     <View style={styles.rowSecond}>
@@ -282,7 +299,7 @@ const ExportPdf = ({ data }) => {
                         </Text>
                         <Text style={styles.qtySecond}>
                             {data.additional_payment_4
-                                ? "€ " + data.additional_payment_4
+                                ? "€ " + Number(data.additional_payment_4).toLocaleString("es-ES")
                                 : "-"}
                         </Text>
                     </View>
@@ -293,7 +310,7 @@ const ExportPdf = ({ data }) => {
                         </Text>
                         <Text style={styles.qtySecond}>
                             {data.total_payment
-                                ? "€ " + data.total_payment
+                                ? "€ " + Number(data.total_payment).toLocaleString("es-ES")
                                 : "-"}
                         </Text>
                     </View>

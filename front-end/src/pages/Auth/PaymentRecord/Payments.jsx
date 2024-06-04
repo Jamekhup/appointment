@@ -78,7 +78,7 @@ const Payments = () => {
                 setServices(res.data.services);
 
                 const toExpot = res.data.payment.data.map((data, i) => ({
-                    "No": i + 1,
+                    "no": i + 1,
                     "Patient Name":
                         data.patient.title +
                         " " +
@@ -87,6 +87,8 @@ const Payments = () => {
                         data.patient.last_name,
 
                     "Date of Birth": convertDate(data.patient.dob),
+                    "Email Address": data.patient.email,
+                    "Phone Number": data.patient.phone,
                     "Address":
                         data.patient.house_number +
                         " " +
@@ -109,17 +111,17 @@ const Payments = () => {
                             ? "Yes"
                             : "No",
                     "Number": data.number,
-                    "Cost": "€ " + data.cost,
+                    "Cost": "€ " + Number(data.cost).toLocaleString("es-ES"),
                     "Additional Payment": data.additional_payment
-                        ? "€ " + data.additional_payment
+                        ? "€ " + Number(data.additional_payment).toLocaleString("es-ES")
                         : "-",
                     "Home Visit": data.home_visit == 1 ? "Yes" : "No",
                     "Number 2": data.number2,
-                    "Cost 3": "€ " + data.cost3,
+                    "Cost 3": data.cost3 ? "€ " + Number(data.cost3).toLocaleString("es-ES") : '-',
                     "Additional Payment 4": data.additional_payment_4
-                        ? "€ " + data.additional_payment_4
+                        ? "€ " + Number(data.additional_payment_4).toLocaleString("es-ES")
                         : "-",
-                    "Total Payment": "€ " + data.total_payment,
+                    "Total Payment": "€ " + Number(data.total_payment).toLocaleString("es-ES"),
                     "Received By": data.received_by,
                     "Received Date": convertDate(data.received_date),
                     "Remark": data.remark,
@@ -154,6 +156,8 @@ const Payments = () => {
                         data.patient.last_name,
 
                     "Date of Birth": convertDate(data.patient.dob),
+                    "Email Address": data.patient.email,
+                    "Phone Number": data.patient.phone,
                     "Address":
                         data.patient.house_number +
                         " " +
@@ -176,17 +180,17 @@ const Payments = () => {
                             ? "Yes"
                             : "No",
                     "Number": data.number,
-                    "Cost": "€ " + data.cost,
+                    "Cost": "€ " + Number(data.cost).toLocaleString("es-ES"),
                     "Additional Payment": data.additional_payment
-                        ? "€ " + data.additional_payment
+                        ? "€ " + Number(data.additional_payment).toLocaleString("es-ES")
                         : "-",
                     "Home Visit": data.home_visit == 1 ? "Yes" : "No",
                     "Number 2": data.number2,
-                    "Cost 3": "€ " + data.cost3,
+                    "Cost 3": data.cost3 ? "€ " + Number(data.cost3).toLocaleString("es-ES") : '-',
                     "Additional Payment 4": data.additional_payment_4
-                        ? "€ " + data.additional_payment_4
+                        ? "€ " + Number(data.additional_payment_4).toLocaleString("es-ES")
                         : "-",
-                    "Total Payment": "€ " + data.total_payment,
+                    "Total Payment": "€ " + Number(data.total_payment).toLocaleString("es-ES"),
                     "Received By": data.received_by,
                     "Received Date": convertDate(data.received_date),
                     "Remark": data.remark,
@@ -301,11 +305,18 @@ const Payments = () => {
                 <table className="w-[32rem] sm:w-full rounded-lg">
                     <thead className="bg-[#4b4a4a] uppercase text-white border">
                         <tr className="h-7">
+                            
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Therapist
+                            </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Patient Name
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                Therapist
+                                Email
+                            </th>
+                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                Phone
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 DOB
@@ -344,13 +355,20 @@ const Payments = () => {
                                 )
                                 .map((pr, i) => (
                                     <tr className="text-[15px] font-normal" key={i}>
+                                        
+                                        <td className="border border-separate pl-2">
+                                            {pr.user.name}
+                                        </td>
                                         <td className="border border-separate py-1 pl-2">
                                             {pr.patient.title}{" "}
                                             {pr.patient.first_name}{" "}
                                             {pr.patient.last_name}
                                         </td>
                                         <td className="border border-separate pl-2">
-                                            {pr.user.name}
+                                            {pr.patient.email}
+                                        </td>
+                                        <td className="border border-separate pl-2">
+                                            {pr.patient.phone}
                                         </td>
                                         <td className="border border-separate pl-2">
                                             {convertDate(pr.patient.dob)}

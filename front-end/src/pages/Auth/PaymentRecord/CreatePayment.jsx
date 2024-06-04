@@ -18,11 +18,11 @@ const CreatePayment = ({
     const [therapistId, setTherapistId] = useState("");
     const [doctorName, setDoctorName] = useState("");
     const [coveredByInsuranceCompany, setCoveredByInsuranceCompany] =
-        useState("");
+        useState(0);
     const [number, setNumber] = useState("");
-    const [cost, setCost] = useState("");
+    const [cost, setCost] = useState(0);
     const [additionalPayment, setAdditionalPayment] = useState("");
-    const [homeVisit, setHomeVisit] = useState("");
+    const [homeVisit, setHomeVisit] = useState(0);
     const [number2, setNumber2] = useState("");
     const [cost3, setCost3] = useState("");
     const [additionalPayment4, setAdditionalPayment4] = useState("");
@@ -239,6 +239,40 @@ const CreatePayment = ({
         setDob(newDate);
     };
 
+    //calculate existed
+    const selectExistedTreatment = (value) => {
+
+        let getValue = JSON.parse(value);
+        setTreatment(getValue.name.toString());
+        console.log(treatment);
+        setNumber(1);
+        
+        if(homeVisit == 0){
+            setCost(Number(getValue.price));
+            setTotalPayment(Number(getValue.price));
+        }
+
+        if(homeVisit == 1){
+            setCost(Number(getValue.home_visit_price));
+            setTotalPayment(getValue.home_visit_price);
+        }
+
+    }
+
+    const existedCoveredByInsuranceCompany = (value) => {
+        setCoveredByInsuranceCompany(
+          value
+        )
+
+        if(value == 1){
+            setTotalPayment(0);
+        }
+
+        if(value == 0){
+            
+        }
+    }
+
     return (
         <Modal show={show} onClose={close} maxWidth={maxWidth}>
             <div className="h-[500px] overflow-y-scroll">
@@ -411,9 +445,9 @@ const CreatePayment = ({
                                         <select
                                             className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
                                             focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                            value={treatment}
+                                            value={treatment.name}
                                             onChange={(e) =>
-                                                setTreatment(e.target.value)
+                                                selectExistedTreatment(e.target.value)
                                             }
                                             required
                                         >
@@ -425,7 +459,7 @@ const CreatePayment = ({
                                                     (service, i) => (
                                                         <option
                                                             key={i}
-                                                            value={service.name}
+                                                            value={JSON.stringify(service)}
                                                         >
                                                             {service.name}
                                                         </option>
@@ -499,9 +533,7 @@ const CreatePayment = ({
                                             className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
                                             value={coveredByInsuranceCompany}
                                             onChange={(e) =>
-                                                setCoveredByInsuranceCompany(
-                                                    e.target.value
-                                                )
+                                                existedCoveredByInsuranceCompany(e.target.value)
                                             }
                                             required
                                         >

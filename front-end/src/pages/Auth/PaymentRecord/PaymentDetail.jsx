@@ -96,6 +96,22 @@ const PaymentDetail = () => {
                                 </tr>
                                 <tr>
                                     <td className="border border-gray-200 px-3 py-1.5">
+                                        Email Address
+                                    </td>
+                                    <td className="border border-gray-200 px-3 py-1.5">
+                                        {payment.patient.email}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="border border-gray-200 px-3 py-1.5">
+                                        Phone Number
+                                    </td>
+                                    <td className="border border-gray-200 px-3 py-1.5">
+                                        {payment.patient.phone}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="border border-gray-200 px-3 py-1.5">
                                         Date Of Birth
                                     </td>
                                     <td className="border border-gray-200 px-3 py-1.5">

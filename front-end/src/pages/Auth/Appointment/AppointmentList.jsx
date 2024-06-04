@@ -147,7 +147,7 @@ const AppointmentList = () => {
                         showIcon
                         calendarIconClassname="react-date-range-picker"
                         className="bg-white h-[30px] rounded-md outline-none border border-slate-300 shadow-sm w-full cursor-pointer placeholder:text-sm placeholder:pl-1 focus:border-slate-400"
-                        placeholderText=" Filter By Appointment Date"
+                        placeholderText=" Filter By Date"
                     />
                     <TextInput
                         type="text"

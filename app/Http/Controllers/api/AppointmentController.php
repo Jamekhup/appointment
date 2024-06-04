@@ -298,7 +298,7 @@ class AppointmentController extends Controller
         if (Auth::user()->appointment_access == 1) {
             $reserved = ReserveAppointment::whereDate('date', $request->startDate)
                 ->whereTime('from_time', '<=', $request->start)
-                ->orWhereTime('to_time', '>=', $request->end)
+                ->whereTime('to_time', '>=', $request->end)
                 ->first();
             if ($reserved) {
                 return response()->json(['status' => 'reserved', 'data' => 'reserved']);
