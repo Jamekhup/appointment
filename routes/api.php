@@ -70,6 +70,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/setting', [SettingController::class, 'index']);
     Route::post('/setting/update-password', [SettingController::class, 'update_password']);
+    Route::post('/setting/create-service-charges', [SettingController::class, 'create_service_charges']);
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');

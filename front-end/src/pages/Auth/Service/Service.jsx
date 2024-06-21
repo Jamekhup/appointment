@@ -126,10 +126,10 @@ const Service = () => {
                                 Name
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                Normal Price
+                                Price By Patient
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
-                                Home Visit Price
+                                Price By Insurance Company
                             </th>
                             <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
                                 Description

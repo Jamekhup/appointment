@@ -76,13 +76,13 @@ const CreateService = ({ show, close, maxWidth, handleCreate }) => {
                         )}
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="price">Normal Price <span className="text-red-600">*</span></label>
+                        <label htmlFor="price">Price By Patient <span className="text-red-600">*</span></label>
                         <TextInput
                             id="price"
                             type="number"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            placeholder="Normal Price"
+                            placeholder="example - 89.50"
                             step="any"
                             min="1"
                             required
@@ -95,13 +95,13 @@ const CreateService = ({ show, close, maxWidth, handleCreate }) => {
                     </div>
 
                     <div className="flex flex-col">
-                        <label htmlFor="home_visit_price">Home Visit Price <span className="text-red-600">*</span></label>
+                        <label htmlFor="home_visit_price">Price By Insurance Company <span className="text-red-600">*</span></label>
                         <TextInput
                             id="home_visit_price"
                             type="number"
                             value={homeVisitPrice}
                             onChange={(e) => setHomeVisitPrice(e.target.value)}
-                            placeholder="Home Visit Price"
+                            placeholder="example - 89.50"
                             step="any"
                             min="1"
                             required
