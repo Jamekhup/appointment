@@ -183,20 +183,15 @@ const EventModal = ({
                                                 " " +
                                                 eventData.data.patient
                                                     .last_name}{" "}
-                                            {new Date(eventData.data.date) <
-                                                new Date() && (
+                                            
                                                 <span
-                                                    style={{
-                                                        color: eventData.data
-                                                            .user.color,
-                                                    }}
-                                                    className="font-semibold"
+                                                    className="font-semibold text-red-500 text-xs"
                                                 >
                                                     (Patient's appointment{" "}
-                                                    {eventData.data.times} times
+                                                    {eventData.data.times == 1 && '1'} time
                                                     left)
                                                 </span>
-                                            )}
+                                            
                                         </div>
                                         <div>
                                             Therapist Name : {eventData.data.user.name}

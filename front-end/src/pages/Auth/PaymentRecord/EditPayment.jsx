@@ -30,16 +30,7 @@ const EditPayment = () => {
     const [doctorName, setDoctorName] = useState("");
     const [coveredByInsuranceCompany, setCoveredByInsuranceCompany] =
         useState("");
-    const [number, setNumber] = useState("");
-    const [cost, setCost] = useState("");
-    const [additionalPayment, setAdditionalPayment] = useState("");
-    const [homeVisit, setHomeVisit] = useState("");
-    const [number2, setNumber2] = useState("");
-    const [cost3, setCost3] = useState("");
-    const [additionalPayment4, setAdditionalPayment4] = useState("");
-    const [totalPayment, setTotalPayment] = useState("");
-    const [remark, setRemark] = useState("");
-
+   
     const [searchPatient, setSearchPatient] = useState("");
     const [selectedPatient, setSelectedPatient] = useState("");
     const [controlPatientSearch, setControlPatientSearch] = useState(false);
@@ -75,37 +66,13 @@ const EditPayment = () => {
                         setTherapist(res.data.therapist);
                         setServices(res.data.services);
 
-                        setTreatment(res.data.payment.treatment);
+                        setTreatment(JSON.parse(res.data.payment.treatment));
                         setTherapistId(res.data.payment.user_id);
                         setDoctorName(res.data.payment.doctor_name);
                         setCoveredByInsuranceCompany(
                             res.data.payment.full_covered_by_insurance_company
                         );
-                        setNumber(res.data.payment.number);
-                        setCost(res.data.payment.cost);
-                        setAdditionalPayment(
-                            res.data.payment.additional_payment
-                                ? res.data.payment.additional_payment
-                                : ""
-                        );
-                        setHomeVisit(res.data.payment.home_visit);
-                        setCost3(res.data.payment.cost3);
-                        setNumber2(
-                            res.data.payment.number2
-                                ? res.data.payment.number2
-                                : ""
-                        );
-                        setAdditionalPayment4(
-                            res.data.payment.additional_payment_4
-                                ? res.data.payment.additional_payment_4
-                                : ""
-                        );
-                        setTotalPayment(res.data.payment.total_payment);
-                        setRemark(
-                            res.data.payment.remark
-                                ? res.data.payment.remark
-                                : ""
-                        );
+                       
                     }
 
                     if (res.data.status == "fail") {
@@ -139,15 +106,7 @@ const EditPayment = () => {
                         therapistId,
                         doctorName,
                         coveredByInsuranceCompany,
-                        number,
-                        cost,
-                        additionalPayment,
-                        homeVisit,
-                        number2,
-                        cost3,
-                        additionalPayment4,
-                        totalPayment,
-                        remark,
+                        
                     },
                     {
                         headers: {
@@ -162,16 +121,6 @@ const EditPayment = () => {
                         setTreatment("");
                         setDoctorName("");
                         setCoveredByInsuranceCompany("");
-                        setNumber("");
-                        setCost("");
-                        setAdditionalPayment("");
-                        setHomeVisit("");
-                        setNumber2("");
-                        setCost3("");
-                        setAdditionalPayment4("");
-                        setTotalPayment("");
-                        setRemark("");
-
                         navigate("/app/payments");
 
                         Swal.fire({
@@ -189,6 +138,103 @@ const EditPayment = () => {
         } catch (error) {
             console.log(error);
         }
+    };
+
+
+    const convertDate = (date) => {
+        let newDate = date.split("-");
+        return newDate[2] + "-" + newDate[1] + "-" + newDate[0];
+    };
+
+    //start calculation
+    const [toggleServiceSearch, setToggleServiceSearch] = useState(false);
+    const [search, setSearch] = useState('');
+
+    const addService = (e, service) => {
+        
+        if(treatment.length > 0){
+            const alreadyExist = treatment.find((p) => p.id == service.id);
+
+            if(alreadyExist){
+                Swal.fire({
+                    title: "This service is already added",
+                    icon: "warning",
+                    showCancelButton: false,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ok"
+                })
+            }else{
+                setTreatment((prevItem) => 
+                    [...prevItem, service]
+                )
+
+                
+            }
+
+            calculateTotal();
+        
+
+         }else{
+             setTreatment((prevItem) => 
+                 [...prevItem, service]
+             )
+
+             calculateTotal();
+         }
+
+         
+    }
+
+    const removeItem = (id) => {
+        treatment.map((t) => {
+            if(t.id == id){
+                setTreatment((prevItem) => 
+                    prevItem.filter((p) => p.id!== id)
+                )
+            }
+        })
+
+        calculateTotal();
+    }
+
+    const changeNumber = (value, id) => {
+        treatment.map((t) => {
+            if(t.id == id){
+                setTreatment((prevItem) => 
+                    prevItem.map((p) => {
+                        if(p.id == id){
+                            
+                            return {
+                               ...p,
+                                number: value,
+                                total_patient_price: Number(value) * Number(p.price),
+                                total_insurance_price: Number(value) * Number(p.home_visit_price),
+                            }
+                            
+                            
+                        }else{
+                            return p
+                        }
+
+                        
+                    })
+                    
+                )
+
+                
+            }
+            
+        })
+
+        calculateTotal();
+    }
+
+
+    const calculateTotal = () => {
+        let getTotal =  treatment.reduce((acc, item) =>  item.total_patient_price ? acc  + Number(item.total_patient_price) : acc + (1 * Number(item.price)), 0);
+        let toReturn = Number(getTotal) + Number(payment.charges);
+        return toReturn;
     };
 
     return (
@@ -212,40 +258,47 @@ const EditPayment = () => {
                             <div className="grid md:grid-cols-2 gid-cols-1 gap-2.5 items-start">
                                 <div className="flex flex-col">
                                     <label>
-                                        Treatment{" "}
+                                        Treatment Service{" "}
                                         <span className="text-red-600">
                                             *
                                         </span>
                                     </label>
-                                    <select
-                                        className="border px-1.5 py-[9px] text-sm border-gray-300 text-slate-600 focus:ring-0 
-                                        focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                        value={treatment}
-                                        onChange={(e) =>
-                                            setTreatment(e.target.value)
+                                    <div className="relative w-full">
+                                        <TextInput 
+                                            onClick={() => setToggleServiceSearch(!toggleServiceSearch)}
+                                            className="w-full"
+                                            onChange={(e) => setSearch(e.target.value)}
+                                            placeholder="Search ..."
+                                        />
+                                        {
+                                            toggleServiceSearch && (
+                                                <div className="absolute bg-slate-300 border border-gray-200 drop-shadow-md p-2 top-11 left-0 right-0 rounded-sm
+                                                h-[160px] overflow-y-scroll z-20">
+                                                    <div className="flex flex-col gap-y-1.5 text-sm">
+                                                        {
+                                                            services && services
+                                                            .filter(
+                                                                (s) =>
+                                                                    s.name
+                                                                        .toLowerCase()
+                                                                        .includes(search.toLowerCase())
+                                                            ).
+                                                            map((service, i) => (
+                                                                <div className="flex justify-between border-b border-slate-100 pb-1 items-center gap-2" key={i}>
+                                                                    <span>{service.name}</span>
+                                                                    <button
+                                                                    type="button"
+                                                                    className="bg-amber-200 text-xs px-2 py-[2px] rounded-md"
+                                                                        onClick={(e) => addService(e, service)}
+                                                                    >Select</button>
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                </div>
+                                            )
                                         }
-                                        required
-                                    >
-                                        <option value="">
-                                            Select Treatment
-                                        </option>
-                                        {services &&
-                                            services.map(
-                                                (service, i) => (
-                                                    <option
-                                                        key={i}
-                                                        value={service.name}
-                                                    >
-                                                        {service.name}
-                                                    </option>
-                                                )
-                                            )}
-                                    </select>
-                                    {errors && errors.treatment && (
-                                        <div className="text-xs mt-1 font-medium text-red-600">
-                                            {errors.treatment[0]}
-                                        </div>
-                                    )}
+                                    </div>
                                 </div>
 
                                 <div className="flex flex-col">
@@ -313,124 +366,110 @@ const EditPayment = () => {
                                         <option value="0">No</option>
                                     </select>
                                 </div>
-                                <div className="flex flex-col">
-                                    <label>Number</label>
-                                    <TextInput
-                                        type="number"
-                                        value={number}
-                                        onChange={(e) =>
-                                            setNumber(e.target.value)
-                                        }
-                                        placeholder="Number"
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <label>Cost</label>
-                                    <TextInput
-                                        type="number"
-                                        step="any"
-                                        value={cost}
-                                        onChange={(e) =>
-                                            setCost(e.target.value)
-                                        }
-                                        placeholder="Cost"
-                                        required
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <label>Additonal Payment (Optional)</label>
-                                    <TextInput
-                                        type="number"
-                                        step="any"
-                                        value={additionalPayment}
-                                        onChange={(e) =>
-                                            setAdditionalPayment(e.target.value)
-                                        }
-                                        placeholder="Additonal Payment"
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <label>Home Visit</label>
-                                    <select
-                                        className="border px-1.5 py-[8.5px] text-sm border-gray-300 text-slate-600 focus:ring-0 focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm "
-                                        value={homeVisit}
-                                        onChange={(e) =>
-                                            setHomeVisit(e.target.value)
-                                        }
-                                        required
-                                    >
-                                        <option value="">Select</option>
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
-                                    </select>
-                                </div>
-
-                                <div className="flex flex-col">
-                                    <label>Number 2 (Optional)</label>
-                                    <TextInput
-                                        type="number"
-                                        value={number2}
-                                        onChange={(e) =>
-                                            setNumber2(e.target.value)
-                                        }
-                                        placeholder="Number 2"
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <label>Cost 3 (Optional)</label>
-                                    <TextInput
-                                        type="number"
-                                        step="any"
-                                        value={cost3}
-                                        onChange={(e) =>
-                                            setCost3(e.target.value)
-                                        }
-                                        placeholder="Cost 3"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col">
-                                    <label>
-                                        Additonal Payment 4 (Optional)
-                                    </label>
-                                    <TextInput
-                                        type="number"
-                                        step="any"
-                                        value={additionalPayment4}
-                                        onChange={(e) =>
-                                            setAdditionalPayment4(
-                                                e.target.value
-                                            )
-                                        }
-                                        placeholder="Additonal Payment 4"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col">
-                                    <label>Total Payment</label>
-                                    <TextInput
-                                        type="number"
-                                        step="any"
-                                        value={totalPayment}
-                                        onChange={(e) =>
-                                            setTotalPayment(e.target.value)
-                                        }
-                                        placeholder="Total Payment"
-                                        required
-                                    />
-                                </div>
                             </div>
 
-                            <div className="mt-3">
-                                <label>Remark (optional)</label>
-                                <textarea
-                                    value={remark}
-                                    rows={7}
-                                    onChange={(e) => setRemark(e.target.value)}
-                                    className="border px-1.5 py-2 text-sm border-gray-300 text-slate-600 focus:ring-0 
-                      focus:outline-none focus:border-blue-300 mt-1 rounded-md shadow-sm w-full"
-                                ></textarea>
+                            <div className="mt-4">
+                                <label className="mb-3">
+                                    Selected Treatment Services
+                                </label>
+
+                                <div className="flex flex-col gap-y-3">
+                                    {
+                                        treatment != [] && treatment.length > 0 && (
+                                            <div className="relative overflow-y-auto">
+                                                <table className="w-[32rem] sm:w-full rounded-lg">
+                                                    <thead className="bg-[#4b4a4a] uppercase text-white border">
+                                                        <tr className="h-7">
+
+                                                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                                                #
+                                                            </th>
+                                                            
+                                                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                                                Treatment Service Name
+                                                            </th>
+                                                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                                                Price
+                                                            </th>
+                                                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                                                Number
+                                                            </th>
+                                                            <th className="border border-separate text-left pl-2 font-normal text-[11.8px]">
+                                                                Total Price
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="text-slate-600">
+                                                        
+                                                        {
+                                                            treatment.map((t,i) => (
+                                                                <tr className="text-[15px] font-normal" key={i}>
+
+                                                                    <td className="border border-separate pl-2">
+                                                                        <button
+                                                                        type="button"
+                                                                        className="bg-red-400 text-slate-100 text-xs px-2 py-[2px] rounded-md"
+                                                                            onClick={(e) => removeItem(t.id)}
+                                                                        >Remove</button>
+                                                                    </td>
+                                                            
+                                                                    <td className="border border-separate pl-2">
+                                                                        {t.name}
+                                                                    </td>
+                                                                    <td className="border border-separate py-1 pl-2">
+                                                                        {"€ " + Number(t.price).toLocaleString("es-ES")}
+                                                                    </td>
+                                                                    <td className="border border-separate px-2">
+                                                                        <select 
+                                                                            className="w-full outline-none border border-gray-200 rounded-md"
+                                                                            onChange = {(e) => changeNumber(e.target.value, t.id)}
+                                                                        >
+                                                                            <option value="1">1</option>
+                                                                            <option value="2">2</option>
+                                                                            <option value="3">3</option>
+                                                                            <option value="4">4</option>
+                                                                            <option value="5">5</option>
+                                                                            <option value="6">6</option>
+                                                                            <option value="7">7</option>
+                                                                            <option value="8">8</option>
+                                                                            <option value="9">9</option>
+                                                                            <option value="10">10</option>
+                                                                            <option value="11">11</option>
+                                                                            <option value="12">12</option>
+                                                                            <option value="13">13</option>
+                                                                            <option value="14">14</option>
+                                                                            <option value="15">15</option>
+                                                                            <option value="16">16</option>
+                                                                            <option value="17">17</option>
+                                                                            <option value="18">18</option>
+                                                                            <option value="19">19</option>
+                                                                            <option value="20">20</option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td className="border border-separate pl-2">
+                                                                        {t.total_patient_price ? "€ " + t.total_patient_price.toLocaleString("es-ES") : "€ " + t.price}
+                                                                    </td>
+                                                                    
+                                                                </tr>
+                                                            ))
+                                                        }
+
+                                                        <tr className="bg-gray-100">
+                                                            <td className="border border-separate text-center font-bold" colSpan={4}>
+                                                                Total + Service Charges ({"€ " + payment.charges})
+                                                            </td>
+                                                            <td className="border border-separate pl-2">
+                                                                { coveredByInsuranceCompany == 0 ?  "€ " + calculateTotal() : "€ " + 0}
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                            
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        )
+                                    }
+                                </div>
                             </div>
 
                             <PrimaryButton
@@ -537,7 +576,7 @@ const EditPayment = () => {
                                                 Date Of Birth
                                             </td>
                                             <td className="border border-gray-200 px-3 py-1.5">
-                                                {payment.patient.dob}
+                                                {convertDate(payment.patient.dob)}
                                             </td>
                                         </tr>
                                         <tr>

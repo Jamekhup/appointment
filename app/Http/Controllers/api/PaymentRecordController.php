@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\PaymentRecord;
 use App\Models\Service;
+use App\Models\ServiceCharge;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,13 +29,16 @@ class PaymentRecordController extends Controller
                 ->whereDate('issue_date', '<=', Carbon::parse($date[1])->addDay()->format('Y-m-d'));
         })->orderBy('created_at', 'DESC')->paginate(30);
 
+        $charges = ServiceCharge::first();
+
         if ($payment) {
             return response()->json(
                 ['status' => 'success', 
                 'patient' => $patient, 
                 'payment' => $payment, 
                 'therapist' => $therapist,
-                'services' => $services
+                'services' => $services,
+                'charges' => $charges
             ]);
         }
     }
@@ -73,18 +77,12 @@ class PaymentRecordController extends Controller
             $payment = new PaymentRecord();
             $payment->patient_id = $request->patient_id;
             $payment->issue_date = date('Y-m-d');
-            $payment->treatment = $request->treatment;
+            $payment->treatment = json_encode($request->treatment);
             $payment->user_id = $request->therapistId;
             $payment->doctor_name = $request->doctorName;
             $payment->full_covered_by_insurance_company = $request->coveredByInsuranceCompany;
-            $payment->number = $request->number;
-            $payment->cost = $request->cost;
-            $payment->additional_payment = $request->additionalPayment;
-            $payment->home_visit = $request->homeVisit;
-            $payment->number2 = $request->number2;
-            $payment->cost3 = $request->cost3;
-            $payment->additional_payment_4 = $request->additionalPayment4;
-            $payment->total_payment = $request->totalPayment;
+            $payment->total_payment = 0;
+            $payment->charges = $request->charges;
             $payment->received_by = Auth::user()->name;
             $payment->received_date = date('Y-m-d');
             $payment->remark = $request->remark;
@@ -94,67 +92,6 @@ class PaymentRecordController extends Controller
                 return response()->json(['status' => 'success', 'payment' => $payment]);
             }
         } catch (\Throwable $th) {
-            return response()->json($th);
-        }
-    }
-
-
-
-    public function create_new(Request $request)
-    {
-
-        try {
-            DB::beginTransaction();
-
-            $patient = new Patient();
-            $patient->title = $request->title;
-            $patient->first_name = $request->firstName;
-            $patient->last_name = $request->lastName;
-            $patient->email = $request->email;
-            $patient->phone = $request->phone;
-            $patient->dob = $request->dob;
-            $patient->street = $request->street;
-            $patient->house_number = $request->houseNumber;
-            $patient->city = $request->city;
-            $patient->postal_code = $request->postalCode;
-            $patient->house_doctor = $request->houseDoctor;
-            $patient->recommended_doctor = $request->recommendedDoctor;
-            $patient->health_insurance_company = $request->insuranceCompany;
-            $patient->payment_free = $request->paymentFree;
-            $patient->treatment_in_6_month = $request->treatmentInSixMonth;
-            $patient->private_patient = $request->privatePatient;
-            $patient->special_need = $request->specialNeed;
-            $patient->created_by = Auth::user()->name;
-
-            if ($patient->save()) {
-
-                $payment = new PaymentRecord();
-                $payment->patient_id = $patient->id;
-                $payment->issue_date = date('Y-m-d');
-                $payment->treatment = $request->newTreatment;
-                $payment->user_id = $request->therapistId;
-                $payment->doctor_name = $request->newDoctorName;
-                $payment->full_covered_by_insurance_company = $request->newCoveredByInsuranceCompany;
-                $payment->number = $request->newNumber;
-                $payment->cost = $request->newCost;
-                $payment->additional_payment = $request->newAdditionalPayment;
-                $payment->home_visit = $request->newHomeVisit;
-                $payment->number2 = $request->newNumber2;
-                $payment->cost3 = $request->newCost3;
-                $payment->additional_payment_4 = $request->newAdditionalPayment4;
-                $payment->total_payment = $request->newTotalPayment;
-                $payment->received_by = Auth::user()->name;
-                $payment->received_date = date('Y-m-d');
-                $payment->remark = $request->newRemark;
-                $payment->created_by = Auth::user()->name;
-
-                if ($payment->save()) {
-                    DB::commit();
-                    return response()->json(['status' => 'success',  'payment' => $payment]);
-                }
-            }
-        } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json($th);
         }
     }
@@ -172,7 +109,7 @@ class PaymentRecordController extends Controller
                 'payment' => $payment, 
                 'patient' => $patients, 
                 'therapist' => $therapist,
-                'services' => $services
+                'services' => $services,
             ]);
         } else {
             return response()->json(['status' => 'fail', 'message' => 'Something went wrong'], 422);
@@ -205,22 +142,10 @@ class PaymentRecordController extends Controller
                 if ($request->patient_id) {
                     $payment->patient_id = $request->patient_id;
                 }
-                $payment->issue_date = date('Y-m-d');
-                $payment->treatment = $request->treatment;
+                $payment->treatment = json_encode($request->treatment);
                 $payment->user_id = $request->therapistId;
                 $payment->doctor_name = $request->doctorName;
                 $payment->full_covered_by_insurance_company = $request->coveredByInsuranceCompany;
-                $payment->number = $request->number;
-                $payment->cost = $request->cost;
-                $payment->additional_payment = $request->additionalPayment;
-                $payment->home_visit = $request->homeVisit;
-                $payment->number2 = $request->number2;
-                $payment->cost3 = $request->cost3;
-                $payment->additional_payment_4 = $request->additionalPayment4;
-                $payment->total_payment = $request->totalPayment;
-                $payment->received_by = Auth::user()->name;
-                $payment->received_date = date('Y-m-d');
-                $payment->remark = $request->remark;
                 $payment->updated_by = Auth::user()->name;
                 $payment->updated_at = date('Y-m-d H:i:s');
 

@@ -27,6 +27,7 @@ const Payments = () => {
     const [patients, setPatients] = useState(null);
     const [therapist, setTherapist] = useState(null);
     const [services, setServices] = useState(null);
+    const [charges, setCharges] = useState(null);
 
     const [dataToExport, setDataToExport] = useState([]);
 
@@ -76,6 +77,7 @@ const Payments = () => {
                 setPatients(res.data.patient);
                 setTherapist(res.data.therapist);
                 setServices(res.data.services);
+                setCharges(res.data.charges);
 
                 const toExpot = res.data.payment.data.map((data, i) => ({
                     "no": i + 1,
@@ -110,21 +112,9 @@ const Payments = () => {
                         data.full_covered_by_insurance_company == 1
                             ? "Yes"
                             : "No",
-                    "Number": data.number,
-                    "Cost": "€ " + Number(data.cost).toLocaleString("es-ES"),
-                    "Additional Payment": data.additional_payment
-                        ? "€ " + Number(data.additional_payment).toLocaleString("es-ES")
-                        : "-",
-                    "Home Visit": data.home_visit == 1 ? "Yes" : "No",
-                    "Number 2": data.number2,
-                    "Cost 3": data.cost3 ? "€ " + Number(data.cost3).toLocaleString("es-ES") : '-',
-                    "Additional Payment 4": data.additional_payment_4
-                        ? "€ " + Number(data.additional_payment_4).toLocaleString("es-ES")
-                        : "-",
-                    "Total Payment": "€ " + Number(data.total_payment).toLocaleString("es-ES"),
+                   
                     "Received By": data.received_by,
                     "Received Date": convertDate(data.received_date),
-                    "Remark": data.remark,
                 }));
 
                 setLoading(false);
@@ -146,6 +136,7 @@ const Payments = () => {
                 setPatients(res.data.patient);
                 setTherapist(res.data.therapist);
                 setServices(res.data.services);
+                setCharges(res.data.charges);
                 const toExpot = res.data.payment.data.map((data, i) => ({
                     "no": i + 1,
                     "Patient Name":
@@ -179,21 +170,9 @@ const Payments = () => {
                         data.full_covered_by_insurance_company == 1
                             ? "Yes"
                             : "No",
-                    "Number": data.number,
-                    "Cost": "€ " + Number(data.cost).toLocaleString("es-ES"),
-                    "Additional Payment": data.additional_payment
-                        ? "€ " + Number(data.additional_payment).toLocaleString("es-ES")
-                        : "-",
-                    "Home Visit": data.home_visit == 1 ? "Yes" : "No",
-                    "Number 2": data.number2,
-                    "Cost 3": data.cost3 ? "€ " + Number(data.cost3).toLocaleString("es-ES") : '-',
-                    "Additional Payment 4": data.additional_payment_4
-                        ? "€ " + Number(data.additional_payment_4).toLocaleString("es-ES")
-                        : "-",
-                    "Total Payment": "€ " + Number(data.total_payment).toLocaleString("es-ES"),
+                    
                     "Received By": data.received_by,
                     "Received Date": convertDate(data.received_date),
-                    "Remark": data.remark,
                 }));
 
                 setLoading(false);
@@ -292,13 +271,13 @@ const Payments = () => {
                         <FontAwesomeIcon icon={faPlus} className="mr-2" />
                         <span>Add New Payment Record</span>
                     </PrimaryButton>
-
+{/* 
                     {paymentRecord && (
                         <ExportToExcel
                             apiData={dataToExport}
                             fileName={"payment_record"}
                         />
-                    )}
+                    )} */}
                 </div>
             </div>
             <div className="relative overflow-y-auto">
@@ -457,6 +436,7 @@ const Payments = () => {
                 patient={patients}
                 therapist={therapist}
                 services={services}
+                charges={charges}
             />
         </>
     );

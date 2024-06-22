@@ -63,7 +63,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/payment-record', [PaymentRecordController::class, 'index']);
     Route::get('/payment-record/detail/{id}', [PaymentRecordController::class, 'detail']);
     Route::post('/payment-record/create/existed', [PaymentRecordController::class, 'create_existed']);
-    Route::post('/payment-record/create/new', [PaymentRecordController::class, 'create_new']);
     Route::get('/payment-record/edit/{id}', [PaymentRecordController::class, 'edit']);
     Route::put('/payment-record/update/{id}', [PaymentRecordController::class, 'update']);
     Route::delete('/payment-record/delete/{id}', [PaymentRecordController::class, 'delete']);

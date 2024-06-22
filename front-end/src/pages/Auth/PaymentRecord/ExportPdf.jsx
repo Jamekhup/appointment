@@ -6,6 +6,7 @@ import {
     View,
     StyleSheet,
 } from "@react-pdf/renderer";
+import { useState } from "react";
 
 const styles = StyleSheet.create({
     page: {
@@ -94,6 +95,48 @@ const styles = StyleSheet.create({
         borderRightWidth: 1,
         padding: 4,
     },
+
+    service: {
+        flexDirection: "row",
+        alignItems: "center",
+        height: 24,
+        fontSize: 10,
+        marginBottom: '-4px',
+    },
+
+    total: {
+        flexDirection: "row",
+        alignItems: "center",
+        height: 24,
+        fontSize: 10,
+        marginBottom: '-4px',
+        marginTop: '-4px',
+    },
+
+    totalTxt: {
+        width: "79%",
+        borderBottomColor: "#bfb5b5",
+        borderLeftColor: "#bfb5b5",
+        borderRightColor: "#bfb5b5",
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        paddingTop: 8,
+        paddingBottom: 4,
+        textAlign:'center'
+    },
+    totalPrice: {
+        width: "22.5%",
+        borderBottomColor: "#bfb5b5",
+        borderLeftColor: "#bfb5b5",
+        borderRightColor: "#bfb5b5",
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        paddingTop: 8,
+        paddingBottom: 4,
+        paddingLeft: 3,
+    }
 });
 
 const convertDate = (date) => {
@@ -101,7 +144,15 @@ const convertDate = (date) => {
     return newDate[2] + "-" + newDate[1] + "-" + newDate[0];
 };
 
+
 const ExportPdf = ({ data }) => {
+    
+    const calculateTotal = () => {
+        let getTotal =  JSON.parse(data.treatment).reduce((acc, item) =>  item.total_patient_price ? acc  + Number(item.total_patient_price) : acc + (1 * Number(item.price)), 0);
+        let toReturn = Number(getTotal) + Number(data.charges);
+        return toReturn;
+    };
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -230,10 +281,6 @@ const ExportPdf = ({ data }) => {
                         <Text style={styles.qty}>{convertDate(data.issue_date)}</Text>
                     </View>
                     <View style={styles.rowSecond}>
-                        <Text style={styles.descriptionSecond}>Treatment</Text>
-                        <Text style={styles.qtySecond}>{data.treatment}</Text>
-                    </View>
-                    <View style={styles.rowSecond}>
                         <Text style={styles.descriptionSecond}>Therapist</Text>
                         <Text style={styles.qtySecond}>{data.user.name}</Text>
                     </View>
@@ -243,6 +290,7 @@ const ExportPdf = ({ data }) => {
                         </Text>
                         <Text style={styles.qtySecond}>{data.doctor_name ? data.doctor_name : '-'}</Text>
                     </View>
+
                     <View style={styles.rowSecond}>
                         <Text style={styles.descriptionSecond}>
                             Full Covered By Insurance Company
@@ -253,66 +301,31 @@ const ExportPdf = ({ data }) => {
                                 : "No"}
                         </Text>
                     </View>
-                    <View style={styles.rowSecond}>
-                        <Text style={styles.descriptionSecond}>Number</Text>
-                        <Text style={styles.qtySecond}>
-                            {data.number ? data.number : "-"}
-                        </Text>
-                    </View>
-                    <View style={styles.rowSecond}>
-                        <Text style={styles.descriptionSecond}>Cost</Text>
-                        <Text style={styles.qtySecond}>
-                            {data.cost ? "€ " + Number(data.cost).toLocaleString("es-ES") : "-"}
-                        </Text>
-                    </View>
-                    <View style={styles.rowSecond}>
-                        <Text style={styles.descriptionSecond}>
-                            Additional Payment
-                        </Text>
-                        <Text style={styles.qtySecond}>
-                            {data.additional_payment
-                                ? "€ " + Number(data.additional_payment).toLocaleString("es-ES")
-                                : "-"}
-                        </Text>
-                    </View>
-                    <View style={styles.rowSecond}>
-                        <Text style={styles.descriptionSecond}>Home Visit</Text>
-                        <Text style={styles.qtySecond}>
-                            {data.home_visit == 1 ? "Yes" : "No"}
-                        </Text>
-                    </View>
-                    <View style={styles.rowSecond}>
-                        <Text style={styles.descriptionSecond}>Number 2</Text>
-                        <Text style={styles.qtySecond}>
-                            {data.number2 ? data.number2 : "-"}
-                        </Text>
-                    </View>
-                    <View style={styles.rowSecond}>
-                        <Text style={styles.descriptionSecond}>Cost 3</Text>
-                        <Text style={styles.qtySecond}>
-                            {data.cost3 ? "€ " + Number(data.cost3).toLocaleString("es-ES") : "-"}
-                        </Text>
-                    </View>
-                    <View style={styles.rowSecond}>
-                        <Text style={styles.descriptionSecond}>
-                            Additional Payment 4
-                        </Text>
-                        <Text style={styles.qtySecond}>
-                            {data.additional_payment_4
-                                ? "€ " + Number(data.additional_payment_4).toLocaleString("es-ES")
-                                : "-"}
-                        </Text>
-                    </View>
 
-                    <View style={styles.rowSecond}>
-                        <Text style={styles.descriptionSecond}>
-                            Total Payment
-                        </Text>
-                        <Text style={styles.qtySecond}>
-                            {data.total_payment
-                                ? "€ " + Number(data.total_payment).toLocaleString("es-ES")
-                                : "-"}
-                        </Text>
+                    {/* treatment service info */}
+                    <Text style={styles.patientInfo}>Treatment Service Information</Text>
+
+                    <View style={styles.service}>
+                        <Text style={styles.description}>Treatment Service Name</Text>
+                        <Text style={styles.qty}>Price</Text>
+                        <Text style={styles.qty}>Number</Text>
+                        <Text style={styles.qty}>Total Pirce</Text>
+                    </View>
+                    {
+                        JSON.parse(data.treatment).map((t,i) => (
+
+                            <View style={styles.service} key={i}>
+                                <Text style={styles.description}>{t.name}</Text>
+                                <Text style={styles.qty}>{"€ " + Number(t.price).toLocaleString("es-ES")}</Text>
+                                <Text style={styles.qty}>{t.number ? t.number : 1}</Text>
+                                <Text style={styles.qty}>{t.total_patient_price ? "€ " + Number(t.total_patient_price).toLocaleString("es-ES") : "€ " + Number(t.price).toLocaleString("es-ES")}</Text>
+                            </View>
+                        ))
+                    }
+
+                    <View style={styles.total}>
+                        <Text style={styles.totalTxt}>Total + Service Charges ({"€ " + data.charges})</Text>
+                        <Text style={styles.totalPrice}>{data.full_covered_by_insurance_company == 1 ? "€ " + 0 : "€ " + calculateTotal()}</Text>
                     </View>
                 </View>
             </Page>

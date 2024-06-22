@@ -24,17 +24,11 @@ return new class extends Migration
                 ->on('users')
                 ->onDelete('cascade');
             $table->date('issue_date');
-            $table->string('treatment')->nullable();
+            $table->json('treatment');
             $table->string('doctor_name')->nullable();
             $table->tinyInteger('full_covered_by_insurance_company')->comment('0=no,1=yes');
-            $table->integer('number');
-            $table->decimal('cost',8,2);
-            $table->decimal('additional_payment',8,2)->nullable();
-            $table->tinyInteger('home_visit')->comment('0=no,1=yes');
-            $table->integer('number2')->nullable();
-            $table->decimal('cost3',8,2)->nullable();
-            $table->decimal('additional_payment_4',8,2)->nullable();
             $table->decimal('total_payment',8,2);
+            $table->integer('charges');
             $table->string('received_by');
             $table->date('received_date');
             $table->longText('remark')->nullable();
