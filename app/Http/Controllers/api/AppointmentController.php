@@ -20,6 +20,7 @@ class AppointmentController extends Controller
     {
         $appointments = Appointment::with('patient', 'user', 'service')->where('status', 0)->get();
         $reserved = ReserveAppointment::all();
+        $resources = $appointments->pluck('user')->unique('id');
 
         $events = [];
         foreach ($appointments as $appointment) {
@@ -28,6 +29,7 @@ class AppointmentController extends Controller
                 'start' => date('Y-m-d H:i:s', strtotime($appointment['date'] . $appointment['from_time'])),
                 'end' => date('Y-m-d H:i:s', strtotime($appointment['date'] . $appointment['to_time'])),
                 'isDraggable' => true,
+                'resourceId' => $appointment->user->id,
                 'title' => $appointment['patient']['title'] . ' ' . $appointment['patient']['first_name'] . ' ' . $appointment['patient']['last_name'],
                 'backgroundColor' => $appointment['user']['color'],
                 'status' => $appointment['status'],
@@ -41,12 +43,21 @@ class AppointmentController extends Controller
                 'start' => date('Y-m-d H:i:s', strtotime($reserve['date'] . $reserve['from_time'])),
                 'end' => date('Y-m-d H:i:s', strtotime($reserve['date'] . $reserve['to_time'])),
                 'isDraggable' => false,
+                'resourceId' => 1,
                 'title' => "Reserved",
                 'backgroundColor' => "red",
             ];
         }
 
-        return response()->json(['events' => $events]);
+        $formattedResources = [];
+        foreach ($resources as $resource) {
+            $formattedResources[] = [
+                'id' => $resource['id'],
+                'title' => $resource['name'],
+            ];
+        }
+
+        return response()->json(['events' => $events, 'resources' => $formattedResources]);
     }
 
     public function appointmentList(Request $request)
@@ -327,19 +338,5 @@ class AppointmentController extends Controller
             }
         }
         abort(403);
-    }
-
-    private function event($appointment)
-    {
-        $event = [
-            'id' => $appointment['id'],
-            'start' => date('Y-m-d H:i:s', strtotime($appointment['date'] . $appointment['from_time'])),
-            'end' => date('Y-m-d H:i:s', strtotime($appointment['date'] . $appointment['to_time'])),
-            'title' => $appointment['user']['name'],
-            'backgroundColor' => $appointment['user']['color'],
-            'status' => $appointment['status'],
-            'data' => $appointment
-        ];
-        return $event;
     }
 }

@@ -69,6 +69,8 @@ class ReservationController extends Controller
             'start' => date('Y-m-d H:i:s', strtotime($reserved['date'] . $reserved['from_time'])),
             'end' => date('Y-m-d H:i:s', strtotime($reserved['date'] . $reserved['to_time'])),
             'title' => "Reserved",
+            'isDraggable' => false,
+            'resourceId' => 1,
             'backgroundColor' => "red",
         ];
         return $event;

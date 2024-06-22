@@ -18,6 +18,7 @@ const Appointment = () => {
     const [openReserveModal, setOpenReserveModal] = useState(false);
     const [eventData, setEventData] = useState(null);
     const [event, setEvent] = useState(null);
+    const [resource, setResource] = useState(null);
     const [fetching, setFetching] = useState(false);
     const { user } = useAuthContext();
 
@@ -38,6 +39,13 @@ const Appointment = () => {
                 }));
 
                 setEvent(formattedEvents);
+                const resourcesFromApi = res.data.resources;
+                const updatedResources = [
+                    ...resourcesFromApi,
+                    { id: 1, title: "All Therapists" },
+                ];
+                console.log(res.data);
+                setResource(updatedResources);
                 setFetching(false);
             });
     };
@@ -175,6 +183,7 @@ const Appointment = () => {
                     <BigCalendar
                         sendEventDataToBackend={(data) => handleDragDrop(data)}
                         event={event}
+                        resource={resource}
                         handleSelectEvent={handleSelectEvent}
                         eventPropGetter={eventPropGetter}
                     />
@@ -185,7 +194,7 @@ const Appointment = () => {
                 show={openCreateModal}
                 close={() => setOpenCreateModal(false)}
                 maxWidth="w-full sm:w-5/6 md:w-2/3 mt-20 sm:-mt-12 md:-mt-20"
-                handleCreate={getEvent}
+                handleCreate={() => getEvent()}
             />
 
             {eventData && openEventModal && (
