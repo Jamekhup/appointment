@@ -10,11 +10,13 @@ const localizer = momentLocalizer(moment);
 
 const BigCalendar = ({
     event,
+    resource,
     handleSelectEvent,
     eventPropGetter,
     sendEventDataToBackend,
 }) => {
     const [myEvents, setMyEvents] = useState(event);
+    const [currentView, setCurrentView] = useState("week");
 
     const formats = {
         timeGutterFormat: "HH:mm",
@@ -50,6 +52,10 @@ const BigCalendar = ({
         setMyEvents(event);
     }, [event]);
 
+    const handleViewChange = useCallback((view) => {
+        setCurrentView(view);
+    }, []);
+
     return (
         <DnDCalendar
             localizer={localizer}
@@ -70,6 +76,11 @@ const BigCalendar = ({
             timeslots={5}
             step={4}
             formats={formats}
+            onView={handleViewChange}
+            resources={currentView === "day" ? resource : null}
+            resourceAccessor={currentView === "day" ? "resourceId" : null}
+            resourceIdAccessor={currentView === "day" ? "id" : null}
+            resourceTitleAccessor={currentView === "day" ? "title" : null}
         />
     );
 };
