@@ -36,27 +36,19 @@ const ExcelImport = ({show ,close, maxWidth,handleCreate}) => {
                 }
             })
 
-            if(response){
-                    handleCreate();
-                    close();
-                    setLoading(false);
-                    Swal.fire({
-                        icon: "success",
-                        title: "Import Successful",
-                        text: "Successfully imported patient list.",
-                    });
-            }
+            
+            handleCreate();
+            close();
+            setLoading(false);
+            
             
         } catch (error) {
 
-            console.log(error.response)            
+            handleCreate();
+            close();
+
             if(error.response.status == 422){
                 
-                Swal.fire({
-                    icon: "error",
-                    text: "Unsupported file type or something went wrong, please try again",
-                });
-            }else{
                 Swal.fire({
                     icon: "error",
                     text: "Unsupported file type or something went wrong, please try again",

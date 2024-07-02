@@ -95,6 +95,7 @@ const Patient = () => {
     //handle excel popup and upload
     const [toggleExcel, setToggleExcel] = useState(false);
     const handleExcelCreate = (data) => {
+        getPatients(url);
         Swal.fire({
             title: "Success!",
             text: "Patient List imported Successfully!",

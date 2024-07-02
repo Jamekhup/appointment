@@ -118,26 +118,30 @@ class PatientController extends Controller
 
 
         foreach ($data as $key => $row) {
-            $patient = new Patient();
-            $patient->title = $row[0];
-            $patient->first_name = $row[1];
-            $patient->last_name = $row[2];
-            $patient->email = $row[3];
-            $patient->phone = $row[4];
-            $patient->dob = $row[5];
-            $patient->street = $row[6];
-            $patient->house_number = $row[7];
-            $patient->city = $row[8];
-            $patient->postal_code = $row[9];
-            $patient->house_doctor = $row[10];
-            $patient->recommended_doctor = $row[11];
-            $patient->health_insurance_company = $row[12];
-            $patient->payment_free = $row[13];
-            $patient->treatment_in_6_month = $row[14];
-            $patient->private_patient = $row[15];
-            $patient->special_need = $row[16];
-            $patient->created_by = Auth::user()->name;
-            $patient->save();
+            if($key > 0){
+                $patient = new Patient();
+                $patient->title = $row[0];
+                $patient->first_name = $row[1];
+                $patient->last_name = $row[2];
+                $patient->email = $row[3];
+                $patient->phone = $row[4];
+                $patient->dob = $row[5];
+                $patient->street = $row[6];
+                $patient->house_number = $row[7];
+                $patient->city = $row[8];
+                $patient->postal_code = $row[9];
+                $patient->house_doctor = $row[10];
+                $patient->recommended_doctor = $row[11];
+                $patient->health_insurance_company = $row[12];
+                $patient->payment_free = $row[13];
+                $patient->treatment_in_6_month = $row[14];
+                $patient->private_patient = $row[15];
+                $patient->special_need = $row[16];
+                $patient->created_by = Auth::user()->name;
+                $patient->save();
+            }else{
+                continue;
+            }
         }
 
         return response()->json(['status' => 'success', 'message' => 'Patient File imported successfully']);
