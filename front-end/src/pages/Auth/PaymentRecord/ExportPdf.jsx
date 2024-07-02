@@ -11,7 +11,7 @@ import { useState } from "react";
 const styles = StyleSheet.create({
     page: {
         flexDirection: "row",
-        backgroundColor: "#E4E4E4",
+        backgroundColor: "#ffffff",
     },
     section: {
         margin: 10,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         fontSize: 10,
         padding: 5,
         textAlign: "center",
-        borderRadius: 4,
+        backgroundColor:'#A5f3fC'
     },
 
     row: {
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
         borderColor: "#bfb5b5",
         borderWidth: 1,
         padding: 4,
+        
     },
     qty: {
         width: "40%",

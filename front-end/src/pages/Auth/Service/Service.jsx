@@ -100,13 +100,13 @@ const Service = () => {
     return (
         <>
             <Header title="Service" />
-            <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center mb-2">
+            <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center mb-2 md:mb-0">
                 <TextInput
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search Service by Name"
-                    className="!py-1 md:w-[30%] w-full"
+                    className="!py-2 md:w-[30%] w-full mb-2"
                 />
                 <div className="flex justify-end items-center gap-x-2">
                     <PrimaryButton onClick={() => setOpenCreateModal(true)}>

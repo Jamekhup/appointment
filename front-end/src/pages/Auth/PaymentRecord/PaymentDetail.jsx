@@ -63,7 +63,7 @@ const PaymentDetail = () => {
 
     const calculateInsuranceTotal = () => {
         let getTotal =  JSON.parse(payment.treatment).reduce((acc, item) =>  item.total_insurance_price ? acc  + Number(item.total_insurance_price) : acc + (1 * Number(item.home_visit_price)), 0);
-        let toReturn = Number(getTotal) + Number(payment.charges);
+        let toReturn = Number(getTotal);
         return toReturn;
     }
 
@@ -298,7 +298,7 @@ const PaymentDetail = () => {
                                             colSpan={4}
                                             className="border border-gray-200 px-3 py-1.5 bg-green-200"
                                         >
-                                            Treatment Service Information
+                                            Treatment Service Information By Patients
                                         </th>
                                     </tr>
                                 </thead>
@@ -360,7 +360,7 @@ const PaymentDetail = () => {
                                         colSpan={4}
                                         className="border border-gray-200 px-3 py-1.5 bg-red-200"
                                     >
-                                        Treatment Service Information by Insurance
+                                        Treatment Service Information By Insurance
                                     </th>
                                 </tr>
                             </thead>
@@ -401,11 +401,11 @@ const PaymentDetail = () => {
 
                                 <tr>
                                     <td className="border border-gray-200 px-3 py-1.5 font-semibold text-center" colSpan={3}>
-                                        Total + Service Charges ({"€ " + payment.charges})
+                                        Total
                                     </td>
                                     
                                     <td className="border border-gray-200 px-3 py-1.5 font-semibold">
-                                        {payment.full_covered_by_insurance_company == 1 ? "€ " + 0 : "€ " + calculateInsuranceTotal()}
+                                        { "€ " + calculateInsuranceTotal()}
                                     </td>
                                 </tr>
                                 

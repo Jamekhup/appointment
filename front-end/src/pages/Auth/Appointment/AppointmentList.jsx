@@ -146,7 +146,7 @@ const AppointmentList = () => {
                         isClearable={true}
                         showIcon
                         calendarIconClassname="react-date-range-picker"
-                        className="bg-white h-[30px] rounded-md outline-none border border-slate-300 shadow-sm w-full cursor-pointer placeholder:text-sm placeholder:pl-1 focus:border-slate-400"
+                        className="bg-white h-[38px] rounded-md outline-none border border-slate-300 shadow-sm w-full cursor-pointer placeholder:text-sm placeholder:pl-1 focus:border-slate-400"
                         placeholderText=" Filter By Date"
                     />
                     <TextInput
@@ -154,7 +154,7 @@ const AppointmentList = () => {
                         placeholder="Search by Patient or Therapist Name"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="!py-1 !mt-0 w-full"
+                        className="!py-2 !mt-0 w-full"
                     />
                 </div>
                 <div className="flex justify-between items-center">

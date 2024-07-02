@@ -240,8 +240,8 @@ const Payments = () => {
         <>
             <Header title="Payment Records" />
 
-            <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center mb-2">
-                <div className="flex md:flex-row flex-col justify-normal items-center gap-3">
+            <div className="flex md:flex-row flex-col md:justify-between justify-start gap-3 items-center md:mb-0 mb-2">
+                <div className="flex md:flex-row flex-col justify-normal items-center gap-3 mb-2">
                     <ReactDatePicker
                         selectsRange={true}
                         startDate={startDate}
@@ -253,7 +253,7 @@ const Payments = () => {
                         isClearable={true}
                         showIcon
                         calendarIconClassname="react-date-range-picker"
-                        className="bg-white h-[30px] rounded-md outline-none border border-slate-300 shadow-sm w-full cursor-pointer placeholder:text-sm placeholder:pl-1 focus:border-slate-400"
+                        className="bg-white h-[38px] rounded-md outline-none border border-slate-300 shadow-sm w-full cursor-pointer placeholder:text-sm placeholder:pl-1 focus:border-slate-400"
                         placeholderText=" Filter By Issue Date"
                     />
 
@@ -262,7 +262,7 @@ const Payments = () => {
                         placeholder="Search by Patient Name"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="!py-1 !mt-0"
+                        className="!py-2 !mt-0"
                     />
                 </div>
 

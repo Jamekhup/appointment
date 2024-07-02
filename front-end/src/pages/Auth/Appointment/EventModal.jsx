@@ -183,14 +183,17 @@ const EventModal = ({
                                                 " " +
                                                 eventData.data.patient
                                                     .last_name}{" "}
-                                            
-                                                <span
-                                                    className="font-semibold text-red-500 text-xs"
-                                                >
-                                                    (Patient's appointment{" "}
-                                                    {eventData.data.times == 1 && '1'} time
-                                                    left)
-                                                </span>
+                                                
+                                                {
+                                                    eventData.data.times == 1 && (
+                                                        <span
+                                                            className="font-semibold text-red-500 text-xs"
+                                                        >
+                                                            Only 1 time left
+                                                        </span>
+                                                    )
+                                                    
+                                                }
                                             
                                         </div>
                                         <div>

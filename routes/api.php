@@ -57,6 +57,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/patient/get-all', [PatientController::class, 'get_all']);
     Route::get('/patient/detail/{id}', [PatientController::class, 'detail']);
     Route::post('/patient/create', [PatientController::class, 'create']);
+    Route::post('/patient/create/excel-upload', [PatientController::class, 'excel_upload']);
     Route::put('/patient/update/{id}', [PatientController::class, 'update']);
     Route::delete('/patient/delete/{id}', [PatientController::class, 'delete']);
 
