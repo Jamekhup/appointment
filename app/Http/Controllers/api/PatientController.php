@@ -99,7 +99,8 @@ class PatientController extends Controller
     }
 
 
-    public function excel_upload(Request $request){
+    public function excel_upload(Request $request)
+    {
 
         $input = Validator::make($request->all(), [
             'file' => 'required|mimes:xlsx,xls|max:5120',
@@ -115,29 +116,28 @@ class PatientController extends Controller
         $worksheet = $spreadsheet->getActiveSheet();
         $data = $worksheet->toArray();
 
+
         foreach ($data as $key => $row) {
-            if($key > 0){
-                $patient = new Patient();
-                $patient->title = $row[0];
-                $patient->first_name = $row[1];
-                $patient->last_name = $row[2];
-                $patient->email = $row[3];
-                $patient->phone = $row[4];
-                $patient->dob = Carbon::parse($row[5])->addDay()->format('Y-m-d');
-                $patient->street = $row[6];
-                $patient->house_number = $row[7];
-                $patient->city = $row[8];
-                $patient->postal_code = $row[9];
-                $patient->house_doctor = $row[10];
-                $patient->recommended_doctor = $row[11];
-                $patient->health_insurance_company = $row[12];
-                $patient->payment_free = $row[13];
-                $patient->treatment_in_6_month = $row[14];
-                $patient->private_patient = $row[15];
-                $patient->special_need = $row[16];
-                $patient->created_by = Auth::user()->name;
-                $patient->save();
-            }
+            $patient = new Patient();
+            $patient->title = $row[0];
+            $patient->first_name = $row[1];
+            $patient->last_name = $row[2];
+            $patient->email = $row[3];
+            $patient->phone = $row[4];
+            $patient->dob = $row[5];
+            $patient->street = $row[6];
+            $patient->house_number = $row[7];
+            $patient->city = $row[8];
+            $patient->postal_code = $row[9];
+            $patient->house_doctor = $row[10];
+            $patient->recommended_doctor = $row[11];
+            $patient->health_insurance_company = $row[12];
+            $patient->payment_free = $row[13];
+            $patient->treatment_in_6_month = $row[14];
+            $patient->private_patient = $row[15];
+            $patient->special_need = $row[16];
+            $patient->created_by = Auth::user()->name;
+            $patient->save();
         }
 
         return response()->json(['status' => 'success', 'message' => 'Patient File imported successfully']);
