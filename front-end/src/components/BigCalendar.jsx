@@ -74,7 +74,7 @@ const BigCalendar = ({
             eventPropGetter={eventPropGetter}
             draggableAccessor="isDraggable"
             timeslots={5}
-            step={4}
+            step={5}
             formats={formats}
             onView={handleViewChange}
             resources={currentView === "day" ? resource : null}
